@@ -83,7 +83,57 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
     }
 
     if ((strcmp(arg[iarg],"torque") == 0) ||
-	(strcmp(arg[iarg],"energy_per_turn") == 0)) {
+        (strcmp(arg[iarg],"energy_per_turn") == 0))
+    {
+      if (iarg+6 > narg) 
+          error->all(FLERR,"Illegal fix twist command");
+      ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
+      ids[ntwist][1] = force->inumeric(FLERR,arg[iarg+2]);
+      ids[ntwist][2] = force->inumeric(FLERR,arg[iarg+3]);
+      ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
+
+      k[ntwist] = -1.0; //any negative value will do.  k isn't used in this case
+
+      param_start[ntwist]= force->numeric(FLERR,arg[iarg+5]);//energy per radian
+      param_stop[ntwist] = param_start[ntwist];
+      if (strcmp(arg[iarg],"energy_per_turn") == 0) {
+        param_start[ntwist] /= MY_2PI;
+        param_stop[ntwist] /= MY_2PI;
+      }
+
+      // phi_prev[ntwist]=the number of times the motor has already been twisted
+
+      // NOTE: When applying constant torque, there isn't a need to keep track
+      // of how many times the motor has already been twisted (in phi) because
+      // the applied torque is independent of torsion angle phi.  So I don't
+      // provide a way for the user to specify this number.  COMMENTING OUT:
+      //  double phi_prev_in_radians = force->numeric(FLERR,arg[iarg+7]); 
+      //  phi_prev[ntwist] = MY_2PI*floor((phi_prev_in_radians+MY_PI) / MY_2PI);
+
+      phi_prev[ntwist] = 0; //<- just set it to 0
+
+      tagint i_central_atom = ids[ntwist][1];
+
+      set<tagint> reserved_atoms;
+      if (reserved_atoms.find(i_central_atom) != reserved_atoms.end()) {
+        char err_msg[1024];
+        sprintf(err_msg,
+                "Illegal fix twist command:\n"
+                "    No atom can appear as the central atom (2nd atom) in the\n"
+                "    list of twist interactions more than once.\n"
+                "    However atom " TAGINT_FORMAT " has already been used\n"
+                "    before the %dth interaction.)\n",
+                i_central_atom, ntwist);
+        error->all(FLERR,err_msg);
+      }
+      reserved_atoms.insert(i_central_atom);
+
+      iarg += 6;
+    }
+
+    else if ((strcmp(arg[iarg],"torque_changing") == 0) ||
+             (strcmp(arg[iarg],"energy_per_turn_changing") == 0))
+    {
       if (iarg+7 > narg) 
           error->all(FLERR,"Illegal fix twist command");
       ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
@@ -91,29 +141,31 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
       ids[ntwist][2] = force->inumeric(FLERR,arg[iarg+3]);
       ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
 
-      param_start[ntwist]= force->numeric(FLERR,arg[iarg+5]);//energy per radian
-      if (strcmp(arg[iarg],"energy_per_turn") == 0) 
-	param_start[ntwist] /= MY_2PI;
+      k[ntwist] = -1.0; //any negative value will do.  k isn't used in this case
 
-      //phi_prev[ntwist] = MY_2PI*force->inumeric(FLERR,arg[iarg+6]);
-      double phi_prev_in_radians = force->numeric(FLERR,arg[iarg+6]); 
-      phi_prev[ntwist] = MY_2PI*floor((phi_prev_in_radians+MY_PI) / MY_2PI);
-      //param_stop[ntwist]  = force->numeric(FLERR,arg[iarg+6]);
-      param_stop[ntwist] = param_start[ntwist]; //(gets ignored later anyway)
-      k[ntwist] = -1000.0; //any negative value will do
+      param_start[ntwist]= force->numeric(FLERR,arg[iarg+5]);  //initial torque
+      param_stop[ntwist]  = force->numeric(FLERR,arg[iarg+6]); //final torque
+      if (strcmp(arg[iarg],"energy_per_turn_changing") == 0) {
+        param_start[ntwist] /= MY_2PI;
+        param_stop[ntwist] /= MY_2PI;
+      }
+
+      // phi_prev[ntwist]=the number of times the motor has already been twisted
+
+      // NOTE: When applying constant torque, there isn't a need to keep track
+      // of how many times the motor has already been twisted (in phi) because
+      // the applied torque is independent of torsion angle phi.  So I don't
+      // provide a way for the user to specify this number.  COMMENTING OUT:
+      //  double phi_prev_in_radians = force->numeric(FLERR,arg[iarg+7]); 
+      //  phi_prev[ntwist] = MY_2PI*floor((phi_prev_in_radians+MY_PI) / MY_2PI);
+
+      phi_prev[ntwist] = 0; //<- just set it to 0
 
       tagint i_central_atom = ids[ntwist][1];
 
       set<tagint> reserved_atoms;
       if (reserved_atoms.find(i_central_atom) != reserved_atoms.end()) {
         char err_msg[1024];
-        //stringstream err_msg("Illegal fix twist command: \n");
-        //err_msg << 
-        //  "    No atom can appear as the central atom (2nd atom) in the\n"
-        //  "    list of twist interactions more than once.\n"
-        //  "    (However atom " <<i_central_atom<< " has already been used.\n" 
-        //  "     in the " << phi_prev[i_central_atom] << "th interaction.)\n";
-        //error->all(FLERR,err_msg.str().c_str());
         sprintf(err_msg,
                 "Illegal fix twist command:\n"
                 "    No atom can appear as the central atom (2nd atom) in the\n"
@@ -127,7 +179,8 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
 
       iarg += 7;
     }
-    else if (strcmp(arg[iarg],"rate") == 0) {
+
+    else if (strcmp(arg[iarg],"constrain") == 0) {
       if (iarg+9 > narg) 
         error->all(FLERR,"Illegal fix twist command");
       ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
@@ -136,23 +189,60 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
       ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
       k[ntwist] = force->numeric(FLERR,arg[iarg+5]);
       if (k[ntwist] < 0.0) {
-	error->all(FLERR,"Illegal fix twist command: k must be >= 0.0");
+        error->all(FLERR,"Illegal fix twist command: k must be >= 0.0");
       }
-      param_start[ntwist] = force->numeric(FLERR,arg[iarg+6]);
-      param_stop[ntwist]  = force->numeric(FLERR,arg[iarg+7]);
-      param_start[ntwist] *= MY_PI/180.0;
-      param_stop[ntwist] *= MY_PI/180.0;
-      //phi_prev[ntwist] = MY_2PI*force->inumeric(FLERR,arg[iarg+8]);
-      double phi_prev_in_radians = force->numeric(FLERR,arg[iarg+8]); 
-      phi_prev[ntwist] = MY_2PI*floor((phi_prev_in_radians+MY_PI) / MY_2PI);
-      iarg += 9;
+      double phi_a =  force->numeric(FLERR,arg[iarg+6]); //phi_a
+      double phi_b  = force->numeric(FLERR,arg[iarg+7]); //phi_b
+      phi_a *= MY_PI/180.0;
+      phi_b *= MY_PI/180.0;
+
+      // If phi_a is not in the range from -pi...pi, then absorb the 
+      // extra multiples of 2*pi into phi_prev.
+      double phi_a_ntwists = floor((param_start[ntwist]-(-MY_PI)) / MY_2PI);
+      double phi_a_ntwists_x_2PI = phi_a_ntwists * MY_2PI;
+      double phi_a_npi_to_pi = //phi_a periodically mapped between -pi,pi
+        phi_a - phi_a_ntwists_x_2PI;
+      phi_a -= phi_a_ntwists_x_2PI;  // (equivalently, phi_a = phi_a_npi_to_pi)
+      phi_b -= phi_a_ntwists_x_2PI;
+
+      // phi_prev[ntwist] = an offset added to the initial phi angle at the
+      //                 beginning of the simulation run (t=update->beginstep).
+      // When using a windable spring, you do need to keep track of this because
+      // the Hooke's law torque/force is proportional to the difference between
+      // phi and phi0, which depends on time.
+      phi_prev[ntwist] = -phi_a_ntwists_x_2PI;
+
+      param_start[ntwist] = phi_a;
+      param_stop[ntwist] = phi_b;
+
+      iarg += 7;
     }
+
+    //else if (strcmp(arg[iarg],"constrain_phi0") == 0) {
+    //  if (iarg+9 > narg) 
+    //    error->all(FLERR,"Illegal fix twist command");
+    //  ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
+    //  ids[ntwist][1] = force->inumeric(FLERR,arg[iarg+2]);
+    //  ids[ntwist][2] = force->inumeric(FLERR,arg[iarg+3]);
+    //  ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
+    //  k[ntwist] = force->numeric(FLERR,arg[iarg+5]);
+    //  if (k[ntwist] < 0.0) {
+    //    error->all(FLERR,"Illegal fix twist command: k must be >= 0.0");
+    //  }
+    //  param_start[ntwist] = force->numeric(FLERR,arg[iarg+6]);
+    //  param_stop[ntwist]  = force->numeric(FLERR,arg[iarg+7]);
+    //  param_start[ntwist] *= MY_PI/180.0;
+    //  param_stop[ntwist] *= MY_PI/180.0;
+    //
+    //  phi_prev[ntwist] = force->numeric(FLERR,arg[iarg+8]) * MY_PI / 180.0; 
+    //  iarg += 9;
+    //}
+
     else
       error->all(FLERR,"Illegal fix twist command");
 
     ntwist++;
   }
-
   // require atom map to lookup atom IDs
 
   if (atom->map_style == 0)
@@ -524,15 +614,15 @@ void FixTwist::compute_force(tagint m)
   // be -179.5 degrees.  If torque is positive, then will appear as 
   // though the energy increased by almost torque*2PI because the angle
   // suddenly decreased by almost 2PI.  However in reality the angle 
-  // increased by a tiny amount.  So we check the magnitude of the change 
-  // in angle between invocations to try and correct for this issue.
+  // increased by a tiny amount.  So we check the magnitude of the change in
+  // angle between invocations to avoid discontinuous jumps in the phi angle.
 
-  double phi_prev_ntwists = floor(phi_prev[icentral_atom] / MY_2PI);
+  double phi_prev_ntwists = floor(phi_prev[icentral_atom]-(-MY_PI) / MY_2PI);
   double phi_prev_ntwists_x_2PI = phi_prev_ntwists * MY_2PI;
-  double phi_prev_0_to_2pi = //phi_prev periodically mapped between 0 2pi.
+  double phi_prev_npi_to_pi = //phi_prev periodically mapped between -pi,pi
     phi_prev[icentral_atom] - phi_prev_ntwists_x_2PI;
-                            //this number should be similar to the current phi
-  double delta_phi = phi - phi_prev_0_to_2pi;
+                             //this number should be similar to the current phi
+  double delta_phi = phi - phi_prev_npi_to_pi;
   phi += phi_prev_ntwists_x_2PI;
   if (delta_phi < -MY_PI)
     phi += MY_2PI;
@@ -567,7 +657,7 @@ void FixTwist::compute_force(tagint m)
     // If k[m] < 0.0, then we assume the user wants to to apply a constant
     // torque to these atoms. 
 
-    double torque = param_start[m];
+    double torque = param_start[m] + frac_time * (param_stop[m]-param_start[m]);
 
     dUdphi = -torque;
 
