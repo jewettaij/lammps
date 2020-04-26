@@ -101,7 +101,8 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
         param_stop[ntwist] /= MY_2PI;
       }
 
-      // phi_prev[ntwist]=the number of times the motor has already been twisted
+      // phi_prev[ntwist] = 2pi x the number of times the motor has already
+      //                          been twisted before the simulation begins
 
       // NOTE: When applying constant torque, there isn't a need to keep track
       // of how many times the motor has already been twisted (in phi) because
@@ -150,7 +151,8 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
         param_stop[ntwist] /= MY_2PI;
       }
 
-      // phi_prev[ntwist]=the number of times the motor has already been twisted
+      // phi_prev[ntwist] = 2pi x the number of times the motor has already
+      //                          been twisted before the simulation begins
 
       // NOTE: When applying constant torque, there isn't a need to keep track
       // of how many times the motor has already been twisted (in phi) because
@@ -181,7 +183,7 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
     }
 
     else if (strcmp(arg[iarg],"constrain") == 0) {
-      if (iarg+9 > narg) 
+      if (iarg+8 > narg) 
         error->all(FLERR,"Illegal fix twist command");
       ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
       ids[ntwist][1] = force->inumeric(FLERR,arg[iarg+2]);
@@ -205,17 +207,17 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
       phi_a -= phi_a_ntwists_x_2PI;  // (equivalently, phi_a = phi_a_npi_to_pi)
       phi_b -= phi_a_ntwists_x_2PI;
 
-      // phi_prev[ntwist] = an offset added to the initial phi angle at the
-      //                 beginning of the simulation run (t=update->beginstep).
+      // phi_prev[ntwist] = 2pi x the number of times the motor has already
+      //                          been twisted before the simulation begins
       // When using a windable spring, you do need to keep track of this because
       // the Hooke's law torque/force is proportional to the difference between
-      // phi and phi0, which depends on time.
+      // phi and phi0
       phi_prev[ntwist] = -phi_a_ntwists_x_2PI;
 
       param_start[ntwist] = phi_a;
       param_stop[ntwist] = phi_b;
 
-      iarg += 7;
+      iarg += 8;
     }
 
     //else if (strcmp(arg[iarg],"constrain_phi0") == 0) {
@@ -617,7 +619,7 @@ void FixTwist::compute_force(tagint m)
   // increased by a tiny amount.  So we check the magnitude of the change in
   // angle between invocations to avoid discontinuous jumps in the phi angle.
 
-  double phi_prev_ntwists = floor(phi_prev[icentral_atom]-(-MY_PI) / MY_2PI);
+  double phi_prev_ntwists = floor((phi_prev[icentral_atom]-(-MY_PI)) / MY_2PI);
   double phi_prev_ntwists_x_2PI = phi_prev_ntwists * MY_2PI;
   double phi_prev_npi_to_pi = //phi_prev periodically mapped between -pi,pi
     phi_prev[icentral_atom] - phi_prev_ntwists_x_2PI;
@@ -641,9 +643,9 @@ void FixTwist::compute_force(tagint m)
     // at a constant rate determined by param_start[m] and param_stop[m]
     double phi0 = param_start[m] + frac_time * (param_stop[m]-param_start[m]);
     // (In most usage scenarios, I expect that param_start[m] != param_stop[m]
-    //  Otherwise, most users would probably just use "fix restrain" instead.)
+    //  Otherwise, users could use "fix restrain" instead.)
 
-    //U = 0.5*k[m]*(1.0-cos(phi - phi0));
+    //U = 0.5*k[m]*(1.0-cos(phi - phi0));  old code from fix_restraint.cpp
     //dUdphi = 0.5*k[m]*sin(phi - phi0);
     double Dphi = phi-phi0;
     U = 0.5*k[m]*Dphi*Dphi;

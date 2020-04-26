@@ -14,7 +14,7 @@ Syntax
 * ID, group-ID are documented in :doc:`fix <fix>` command
 * twist = style name of this fix command
 * one or more keyword/arg pairs may be appended
-* keyword = *torque* or *constraint* or *torque_changing* or *per_turn* or *per_turn_changing*
+* keyword = *torque* or *constrain* or *torque_changing* or *per_turn* or *per_turn_changing*
   
   .. parsed-literal::
   
@@ -22,7 +22,7 @@ Syntax
          atom1,atom2,atom3,atom4 = IDs of 4 atoms in dihedral in linear order
          tau = torque (in units of energy/radian) applied to these 4 atoms.
   
-       *constraint* args = atom1 atom2 atom3 atom4 k phi_a phi_b
+       *constrain* args = atom1 atom2 atom3 atom4 k phi_a phi_b
          atom1,atom2,atom3,atom4 = IDs of 4 atoms in dihedral in linear order
          k = harmonic spring constant (in units of energy per radian^2)
          phi_a = rest angle at the beginning of the simulation
@@ -66,7 +66,7 @@ Examples
 
    # Apply a constant torque to atoms 1 2 3 4, AND force
    # atoms 3 4 5 6 to spin around their central axis at a constant rate
-   fix TWIST all twist torque 1 2 3 4 1.50 constraint 3 4 5 6 20.0 -60 7800.0
+   fix TWIST all twist torque 1 2 3 4 1.50 constrain 3 4 5 6 20.0 -60 7800.0
 
 
 Description
