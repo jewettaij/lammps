@@ -87,14 +87,14 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
     {
       if (iarg+6 > narg) 
           error->all(FLERR,"Illegal fix twist command");
-      ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
-      ids[ntwist][1] = force->inumeric(FLERR,arg[iarg+2]);
-      ids[ntwist][2] = force->inumeric(FLERR,arg[iarg+3]);
-      ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
+      ids[ntwist][0] = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
+      ids[ntwist][1] = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
+      ids[ntwist][2] = utils::inumeric(FLERR,arg[iarg+3],false,lmp);
+      ids[ntwist][3] = utils::inumeric(FLERR,arg[iarg+4],false,lmp);
 
       k[ntwist] = -1.0; //any negative value will do.  k isn't used in this case
 
-      param_start[ntwist]= force->numeric(FLERR,arg[iarg+5]);//energy per radian
+      param_start[ntwist]= utils::numeric(FLERR,arg[iarg+5],false,lmp);//energy per radian
       param_stop[ntwist] = param_start[ntwist];
       if (strcmp(arg[iarg],"energy_per_turn") == 0) {
         param_start[ntwist] /= MY_2PI;
@@ -108,7 +108,7 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
       // of how many times the motor has already been twisted (in phi) because
       // the applied torque is independent of torsion angle phi.  So I don't
       // provide a way for the user to specify this number.  COMMENTING OUT:
-      //  double phi_prev_in_radians = force->numeric(FLERR,arg[iarg+7]); 
+      //  double phi_prev_in_radians = utils::numeric(FLERR,arg[iarg+7],false,lmp);
       //  phi_prev[ntwist] = MY_2PI*floor((phi_prev_in_radians+MY_PI) / MY_2PI);
 
       phi_prev[ntwist] = 0; //<- just set it to 0
@@ -137,15 +137,15 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
     {
       if (iarg+7 > narg) 
           error->all(FLERR,"Illegal fix twist command");
-      ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
-      ids[ntwist][1] = force->inumeric(FLERR,arg[iarg+2]);
-      ids[ntwist][2] = force->inumeric(FLERR,arg[iarg+3]);
-      ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
+      ids[ntwist][0] = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
+      ids[ntwist][1] = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
+      ids[ntwist][2] = utils::inumeric(FLERR,arg[iarg+3],false,lmp);
+      ids[ntwist][3] = utils::inumeric(FLERR,arg[iarg+4],false,lmp);
 
       k[ntwist] = -1.0; //any negative value will do.  k isn't used in this case
 
-      param_start[ntwist]= force->numeric(FLERR,arg[iarg+5]);  //initial torque
-      param_stop[ntwist]  = force->numeric(FLERR,arg[iarg+6]); //final torque
+      param_start[ntwist]= utils::numeric(FLERR,arg[iarg+5],false,lmp); //initial torque
+      param_stop[ntwist]  = utils::numeric(FLERR,arg[iarg+6],false,lmp); //final torque
       if (strcmp(arg[iarg],"energy_per_turn_changing") == 0) {
         param_start[ntwist] /= MY_2PI;
         param_stop[ntwist] /= MY_2PI;
@@ -158,7 +158,7 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
       // of how many times the motor has already been twisted (in phi) because
       // the applied torque is independent of torsion angle phi.  So I don't
       // provide a way for the user to specify this number.  COMMENTING OUT:
-      //  double phi_prev_in_radians = force->numeric(FLERR,arg[iarg+7]); 
+      //  double phi_prev_in_radians = utils::numeric(FLERR,arg[iarg+7],false,lmp);
       //  phi_prev[ntwist] = MY_2PI*floor((phi_prev_in_radians+MY_PI) / MY_2PI);
 
       phi_prev[ntwist] = 0; //<- just set it to 0
@@ -185,16 +185,16 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
     else if (strcmp(arg[iarg],"constrain") == 0) {
       if (iarg+8 > narg) 
         error->all(FLERR,"Illegal fix twist command");
-      ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
-      ids[ntwist][1] = force->inumeric(FLERR,arg[iarg+2]);
-      ids[ntwist][2] = force->inumeric(FLERR,arg[iarg+3]);
-      ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
-      k[ntwist] = force->numeric(FLERR,arg[iarg+5]);
+      ids[ntwist][0] = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
+      ids[ntwist][1] = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
+      ids[ntwist][2] = utils::inumeric(FLERR,arg[iarg+3],false,lmp);
+      ids[ntwist][3] = utils::inumeric(FLERR,arg[iarg+4],false,lmp);
+      k[ntwist] = utils::numeric(FLERR,arg[iarg+5],false,lmp);
       if (k[ntwist] < 0.0) {
         error->all(FLERR,"Illegal fix twist command: k must be >= 0.0");
       }
-      double phi_a =  force->numeric(FLERR,arg[iarg+6]); //phi_a
-      double phi_b  = force->numeric(FLERR,arg[iarg+7]); //phi_b
+      double phi_a =  utils::numeric(FLERR,arg[iarg+6],false,lmp); //phi_a
+      double phi_b  = utils::numeric(FLERR,arg[iarg+7],false,lmp); //phi_b
       phi_a *= MY_PI/180.0;
       phi_b *= MY_PI/180.0;
 
@@ -223,20 +223,20 @@ FixTwist::FixTwist(LAMMPS *lmp, int narg, char **arg) :
     //else if (strcmp(arg[iarg],"constrain_phi0") == 0) {
     //  if (iarg+9 > narg) 
     //    error->all(FLERR,"Illegal fix twist command");
-    //  ids[ntwist][0] = force->inumeric(FLERR,arg[iarg+1]);
-    //  ids[ntwist][1] = force->inumeric(FLERR,arg[iarg+2]);
-    //  ids[ntwist][2] = force->inumeric(FLERR,arg[iarg+3]);
-    //  ids[ntwist][3] = force->inumeric(FLERR,arg[iarg+4]);
-    //  k[ntwist] = force->numeric(FLERR,arg[iarg+5]);
+    //  ids[ntwist][0] = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
+    //  ids[ntwist][1] = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
+    //  ids[ntwist][2] = utils::inumeric(FLERR,arg[iarg+3],false,lmp);
+    //  ids[ntwist][3] = utils::inumeric(FLERR,arg[iarg+4],false,lmp);
+    //  k[ntwist] = utils::numeric(FLERR,arg[iarg+5],false,lmp);
     //  if (k[ntwist] < 0.0) {
     //    error->all(FLERR,"Illegal fix twist command: k must be >= 0.0");
     //  }
-    //  param_start[ntwist] = force->numeric(FLERR,arg[iarg+6]);
-    //  param_stop[ntwist]  = force->numeric(FLERR,arg[iarg+7]);
+    //  param_start[ntwist] = utils::numeric(FLERR,arg[iarg+6],false,lmp);
+    //  param_stop[ntwist]  = utils::numeric(FLERR,arg[iarg+7],false,lmp);
     //  param_start[ntwist] *= MY_PI/180.0;
     //  param_stop[ntwist] *= MY_PI/180.0;
     //
-    //  phi_prev[ntwist] = force->numeric(FLERR,arg[iarg+8]) * MY_PI / 180.0; 
+    //  phi_prev[ntwist] = utils::numeric(FLERR,arg[iarg+8],false,lmp) * MY_PI / 180.0; 
     //  iarg += 9;
     //}
 
