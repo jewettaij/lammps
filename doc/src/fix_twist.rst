@@ -48,25 +48,21 @@ Examples
 .. code-block:: LAMMPS
 
    # Apply a constant torque (1.5 energy units per radian)
-   fix TWIST all twist torque 1001 1002 1003 1004 1.50
+   fix TWIST all twist torque 1001 1002 1003 1004 1.5
 
-   # Apply a constant torque in units of energy units per 360 degree turn
-   fix TWIST all twist per_turn 1001 1002 1003 1004 10.0
-
-   # Apply a torque that increases from 0 to 1.5 over the simulation run
-   fix TWIST all twist torque_changing 1001 1002 1003 1004 0.0 1.50
-
-   # Apply a torque that increases from 0.0 to 10.0 (energy per 360 turn)
-   fix TWIST all twist per_turn_changing 1001 1002 1003 1004 0.0 10.0
+   # Apply a constant torque of 1.5 to atoms 1 2 3 4 and 6 7 8 9
+   fix TWIST all twist torque 1 2 3 4 1.5 torque 6 7 8 9 1.5
 
    # Apply a harmonic constraint (spring constant 20.0) that forces the atoms
    # to rotate around their central axis at a constant rate, increasing the
    # torsion angle from -60 to 7800 degrees during the simulation run
-   fix TWIST all twist velocity 1001 1002 1003 1004 20.0 -60.0 7800.0
+   fix TWIST all twist constrain 1001 1002 1003 1004 20.0 -60.0 7800.0
 
-   # Apply a constant torque to atoms 1 2 3 4, AND force
-   # atoms 3 4 5 6 to spin around their central axis at a constant rate
-   fix TWIST all twist torque 1 2 3 4 1.50 constrain 3 4 5 6 20.0 -60 7800.0
+   # Apply a torque that increases from 0 to 1.5 over the simulation run
+   fix TWIST all twist torque_changing 1001 1002 1003 1004 0.0 1.50
+
+   # Apply a torque in units of energy per (360 degree) turn.
+   fix TWIST all twist energy_per_turn 1001 1002 1003 1004 10.0
 
 
 Description
@@ -79,12 +75,16 @@ of a dihedral interaction whose strength or direction can vary over time
 during a simulation.
 This is functionally similar to creating dihedral for the same atoms in a data
 file, as specified by the :doc:`read_data <read_data>` command, albeit
-with a time-varying pre-factor coefficient, and except for exclusion
-rules, as explained below.
+with a pre-factor coefficient that can vary over time, and except for exclusion
+rules, as explained below.  Unlike most dihedral interactions, the forces
+exerted by this fix do not conserve energy.
 
 Use this fix to temporarily force atoms to twist around an axis.
-Alternatively, you can use the :doc:`dihedral_style table <dihedral_table>`
-command (along with the "linear" keyword) to apply this torque permanently.
+Alternatively, to apply constant torque to four atoms permanently, you can
+use the :doc:`dihedral_style table <dihedral_table>` command, and include
+these atoms in the Dihedrals section of your data file.
+*(Details: You must provide a table with only 2 entries at 0 and 180 degrees,
+with the same number, the torque, listed in the 4th column for both entries.)*
 
 The group-ID specified by this fix is ignored.
 
@@ -204,6 +204,9 @@ Restrictions
 """"""""""""
  none
 
-**Related commands:** :doc:`dihedral_style table <dihedral table>`, :doc:`fix_modify <fix_modify>`
+Related commands
+""""""""""""""""
+
+:doc:`dihedral_style table <dihedral table>`, :doc:`fix_modify <fix_modify>`, :doc:`fix restrain <fix_restrain>`
 
 **Default:** none

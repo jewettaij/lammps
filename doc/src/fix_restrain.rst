@@ -258,8 +258,7 @@ Restrictions
 Related commands
 """"""""""""""""
 
-none
-
+:doc:`fix twist <fix_twist>`
 
 Default
 """""""
