@@ -12,7 +12,7 @@
 ------------------------------------------------------------------------- */
 
 /* ----------------------------------------------------------------------
-   Contributing author: Andrew Jewett (jewett@caltech.edu)
+   Contributing author: Andrew Jewett (jewett.aij@gmail.com)
 ------------------------------------------------------------------------- */
 
 #include <cmath>
@@ -70,7 +70,7 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
   MPI_Comm_rank(world,&me);
   MPI_Comm_size(world,&nprocs);
 
-  nevery = force->inumeric(FLERR,arg[3]);
+  nevery = utils::inumeric(FLERR,arg[3],false,lmp);
   if (nevery <= 0) error->all(FLERR,"Illegal fix bond/modify command");
   nevery_delay = 0;
 
@@ -152,31 +152,31 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
     }
     else if (strcmp(arg[iarg],"delay") == 0) {
       if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-      nevery_delay = force->inumeric(FLERR,arg[iarg+1]);
+      nevery_delay = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       iarg += 2;
     }
     else if (strcmp(arg[iarg],"prob") == 0) {
       if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-      prob_transition = force->numeric(FLERR,arg[iarg+1]);
+      prob_transition = utils::numeric(FLERR,arg[iarg+1],false,lmp);
       if (prob_transition < 0.0 || prob_transition > 1.0)
         error->all(FLERR,"Illegal fix bond/modify command");
       iarg += 2;
     }
     else if (strcmp(arg[iarg],"seed") == 0) {
       if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-      seed = force->inumeric(FLERR,arg[iarg+1]);
+      seed = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       if (seed <= 0) error->all(FLERR,"Illegal fix bond/modify command");
       iarg += 2;
     }
     else if (strcmp(arg[iarg],"distance") == 0) {
       if (iarg+2 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
       if (strcmp(arg[iarg+1],">=") == 0) {
-        bond_rminsq = force->numeric(FLERR,arg[iarg+2]);
+        bond_rminsq = utils::numeric(FLERR,arg[iarg+2],false,lmp);
         bond_rminsq *= bond_rminsq;
         prioritize_long_bonds = true;
       }
       else if (strcmp(arg[iarg+1],"<=") == 0) {
-        bond_rmaxsq = force->numeric(FLERR,arg[iarg+2]);
+        bond_rmaxsq = utils::numeric(FLERR,arg[iarg+2],false,lmp);
         bond_rmaxsq *= bond_rmaxsq;
         prioritize_long_bonds = false;
       }
@@ -186,7 +186,7 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
     //else if (strcmp(arg[iarg],"bondrmin") == 0) {
     //  check_bonded_atoms = true;
     //  if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-    //  bond_rminsq = force->numeric(FLERR,arg[iarg+1]);
+    //  bond_rminsq = utils::numeric(FLERR,arg[iarg+1],false,lmp);
     //  if (bond_rminsq < 0.0) error->all(FLERR,"Illegal fix bond/modify command");
     //  bond_rminsq *= bond_rminsq;
     //  iarg += 2;
@@ -194,7 +194,7 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
     //else if (strcmp(arg[iarg],"bondrmax") == 0) {
     //  check_bonded_atoms = true;
     //  if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-    //  bond_rmaxsq = force->numeric(FLERR,arg[iarg+1]);
+    //  bond_rmaxsq = utils::numeric(FLERR,arg[iarg+1],false,lmp);
     //  if (bond_rmaxsq < 0.0) error->all(FLERR,"Illegal fix bond/modify command");
     //  bond_rmaxsq *= bond_rmaxsq;
     //  iarg += 2;
@@ -211,10 +211,11 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
           //btypenew = BONDBREAK;
         }
         else
-          btypenew = force->inumeric(FLERR,arg[iarg+1]);
+          btypenew = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       }
       else
-        force->bounds(FLERR,arg[iarg+1],atom->nbondtypes,btypeold_lo,btypeold_hi);
+        utils::bounds(FLERR,arg[iarg+1], 1,
+                      atom->nbondtypes, btypeold_lo, btypeold_hi, error);
       iarg += 2;
     }
     else if (strcmp(arg[iarg],"atoms") == 0) {
@@ -225,16 +226,18 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
             (strcmp(arg[iarg+1],"NULL")==0)||(strcmp(arg[iarg+1],"*")==0))
           atype1new = -1; //(disables)
         else
-          atype1new = force->inumeric(FLERR,arg[iarg+1]);
+          atype1new = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
         if ((strcmp(arg[iarg+2],"SAME")==0)||(strcmp(arg[iarg+2],"same")==0)||
             (strcmp(arg[iarg+2],"NULL")==0)||(strcmp(arg[iarg+2],"*")==0))
           atype2new = -1; //(disables)
         else
-          atype2new = force->inumeric(FLERR,arg[iarg+2]);
+          atype2new = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
       }
       else {
-        force->bounds(FLERR,arg[iarg+1],atom->ntypes,atype1old_lo,atype1old_hi);
-        force->bounds(FLERR,arg[iarg+2],atom->ntypes,atype2old_lo,atype2old_hi);
+        utils::bounds(FLERR,arg[iarg+1], 1,
+                      atom->ntypes, atype1old_lo, atype1old_hi, error);
+        utils::bounds(FLERR,arg[iarg+2], 1,
+                      atom->ntypes, atype2old_lo, atype2old_hi, error);
       }
       iarg += 3;
     }
@@ -242,16 +245,16 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
       check_bonded_atoms = true;
       if (read_new_params) {
         if (iarg+2 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-        qnew1 = force->numeric(FLERR,arg[iarg+1]);
-        qnew2 = force->numeric(FLERR,arg[iarg+2]);
+        qnew1 = utils::numeric(FLERR,arg[iarg+1],false,lmp);
+        qnew2 = utils::numeric(FLERR,arg[iarg+2],false,lmp);
         iarg += 3;
       }
       else {
         if (iarg+4 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-        qold1_lo = force->numeric(FLERR,arg[iarg+1]);
-        qold1_hi = force->numeric(FLERR,arg[iarg+2]);
-        qold2_lo = force->numeric(FLERR,arg[iarg+3]);
-        qold2_hi = force->numeric(FLERR,arg[iarg+4]);
+        qold1_lo = utils::numeric(FLERR,arg[iarg+1],false,lmp);
+        qold1_hi = utils::numeric(FLERR,arg[iarg+2],false,lmp);
+        qold2_lo = utils::numeric(FLERR,arg[iarg+3],false,lmp);
+        qold2_hi = utils::numeric(FLERR,arg[iarg+4],false,lmp);
         iarg += 5;
       }
     }
@@ -277,9 +280,10 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
       check_bonded_atoms = false;
       if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
       if (read_new_params)
-        atypenew = force->inumeric(FLERR,arg[iarg+1]);
+        atypenew = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       else
-        force->bounds(FLERR,arg[iarg+1],atom->ntypes, atypeold_lo, atypeold_hi);
+        utils::bounds(FLERR,arg[iarg+1], 1,
+                      atom->ntypes, atypeold_lo, atypeold_hi, error);
       iarg += 2;
     }
     else if (strcmp(arg[iarg],"charge") == 0) {
@@ -287,13 +291,13 @@ FixBondModify::FixBondModify(LAMMPS *lmp, int narg, char **arg) :
       check_bonded_atoms = false;
       if (read_new_params) {
         if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-        qnew = force->numeric(FLERR,arg[iarg+1]);
+        qnew = utils::numeric(FLERR,arg[iarg+1],false,lmp);
         iarg += 2;
       }
       else {
         if (iarg+2 >= narg) error->all(FLERR,"Illegal fix bond/modify command");
-        qold_lo = force->numeric(FLERR,arg[iarg+1]);
-        qold_hi = force->numeric(FLERR,arg[iarg+2]);
+        qold_lo = utils::numeric(FLERR,arg[iarg+1],false,lmp);
+        qold_hi = utils::numeric(FLERR,arg[iarg+2],false,lmp);
         iarg += 3;
       }
     }

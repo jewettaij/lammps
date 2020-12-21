@@ -12,7 +12,7 @@
 ------------------------------------------------------------------------- */
 
 /* ----------------------------------------------------------------------
-   Contributing author: Andrew Jewett (jewett@caltech.edu)
+   Contributing author: Andrew Jewett (jewett.aij@gmail.com)
 ------------------------------------------------------------------------- */
 
 #include <math.h>
@@ -51,7 +51,7 @@ FixBondNew::FixBondNew(LAMMPS *lmp, int narg, char **arg) :
 
   MPI_Comm_rank(world,&me);
 
-  nevery = force->inumeric(FLERR,arg[3]);
+  nevery = utils::inumeric(FLERR,arg[3],false,lmp);
   if (nevery <= 0) error->all(FLERR,"Illegal fix bond/new command");
   nevery_delay = 0;
 
@@ -62,10 +62,10 @@ FixBondNew::FixBondNew(LAMMPS *lmp, int narg, char **arg) :
   global_freq = 1;
   extvector = 0;
 
-  iatomtype = force->inumeric(FLERR,arg[4]);
-  jatomtype = force->inumeric(FLERR,arg[5]);
-  double cutoff = force->numeric(FLERR,arg[6]);
-  btype = force->inumeric(FLERR,arg[7]);
+  iatomtype = utils::inumeric(FLERR,arg[4],false,lmp);
+  jatomtype = utils::inumeric(FLERR,arg[5],false,lmp);
+  double cutoff = utils::numeric(FLERR,arg[6],false,lmp);
+  btype = utils::inumeric(FLERR,arg[7],false,lmp);
 
   if (iatomtype < 1 || iatomtype > atom->ntypes ||
       jatomtype < 1 || jatomtype > atom->ntypes)
@@ -92,58 +92,58 @@ FixBondNew::FixBondNew(LAMMPS *lmp, int narg, char **arg) :
   while (iarg < narg) {
     if (strcmp(arg[iarg],"iparam") == 0) {
       if (iarg+3 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      imaxbond = force->inumeric(FLERR,arg[iarg+1]);
-      inewtype = force->inumeric(FLERR,arg[iarg+2]);
+      imaxbond = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
+      inewtype = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
       if (imaxbond < 0) error->all(FLERR,"Illegal fix bond/new command");
       if (inewtype < 1 || inewtype > atom->ntypes)
         error->all(FLERR,"Invalid atom type in fix bond/new command");
       iarg += 3;
     } else if (strcmp(arg[iarg],"jparam") == 0) {
       if (iarg+3 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      jmaxbond = force->inumeric(FLERR,arg[iarg+1]);
-      jnewtype = force->inumeric(FLERR,arg[iarg+2]);
+      jmaxbond = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
+      jnewtype = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
       if (jmaxbond < 0) error->all(FLERR,"Illegal fix bond/new command");
       if (jnewtype < 1 || jnewtype > atom->ntypes)
         error->all(FLERR,"Invalid atom type in fix bond/new command");
       iarg += 3;
     } else if (strcmp(arg[iarg],"inew") == 0) {
       if (iarg+2 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      inewtype_override = force->inumeric(FLERR,arg[iarg+1]);
+      inewtype_override = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       if (inewtype_override < 1 || inewtype_override > atom->ntypes)
         error->all(FLERR,"Invalid atom type in fix bond/new command");
       iarg += 2;
     } else if (strcmp(arg[iarg],"jnew") == 0) {
       if (iarg+2 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      jnewtype_override = force->inumeric(FLERR,arg[iarg+1]);
+      jnewtype_override = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       if (jnewtype_override < 1 || jnewtype_override > atom->ntypes)
         error->all(FLERR,"Invalid atom type in fix bond/new command");
       iarg += 2;
     } else if (strcmp(arg[iarg],"prob") == 0) {
       if (iarg+3 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      prob_transition = force->numeric(FLERR,arg[iarg+1]);
-      seed = force->inumeric(FLERR,arg[iarg+2]);
+      prob_transition = utils::numeric(FLERR,arg[iarg+1],false,lmp);
+      seed = utils::inumeric(FLERR,arg[iarg+2],false,lmp);
       if (prob_transition < 0.0 || prob_transition > 1.0)
         error->all(FLERR,"Illegal fix bond/new command");
       if (seed <= 0) error->all(FLERR,"Illegal fix bond/new command");
       iarg += 3;
     } else if (strcmp(arg[iarg],"atype") == 0) {
       if (iarg+2 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      atype = force->inumeric(FLERR,arg[iarg+1]);
+      atype = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       if (atype < 0) error->all(FLERR,"Illegal fix bond/new command");
       iarg += 2;
     } else if (strcmp(arg[iarg],"dtype") == 0) {
       if (iarg+2 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      dtype = force->inumeric(FLERR,arg[iarg+1]);
+      dtype = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       if (dtype < 0) error->all(FLERR,"Illegal fix bond/new command");
       iarg += 2;
     } else if (strcmp(arg[iarg],"itype") == 0) {
       if (iarg+2 > narg) error->all(FLERR,"Illegal fix bond/new command");
-      itype = force->inumeric(FLERR,arg[iarg+1]);
+      itype = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       if (itype < 0) error->all(FLERR,"Illegal fix bond/new command");
       iarg += 2;
     } else if (strcmp(arg[iarg],"delay") == 0) {
       if (iarg+1 >= narg) error->all(FLERR,"Illegal fix bond/change command");
-      nevery_delay = force->inumeric(FLERR,arg[iarg+1]);
+      nevery_delay = utils::inumeric(FLERR,arg[iarg+1],false,lmp);
       iarg += 2;
     }
     else

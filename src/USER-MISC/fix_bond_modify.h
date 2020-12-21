@@ -12,7 +12,7 @@
 ------------------------------------------------------------------------- */
 
 /* ----------------------------------------------------------------------
-   Contributing author: Andrew Jewett (jewett@caltech.edu)
+   Contributing author: Andrew Jewett (jewett.aij@gmail.com)
 ------------------------------------------------------------------------- */
 
 #define ALLOW_BOND_MODIFY_SINGLE_ATOMS
