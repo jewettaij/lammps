@@ -21,7 +21,7 @@ Syntax
 * color = atom attribute that determines color of each atom
 * diameter = atom attribute that determines size of each atom
 * zero or more keyword/value pairs may be appended
-* keyword = *atom* or *adiam* or *bond* or *line* or *tri* or *body* or *fix* or *size* or *view* or *center* or *up* or *zoom* or *persp* or *box* or *axes* or *subbox* or *shiny* or *ssao*
+* keyword = *atom* or *adiam* or *bond* or *line* or *tri* or *body* or *fix* or *size* or *view* or *center* or *up* or *zoom* or *box* or *axes* or *subbox* or *shiny* or *ssao*
 
   .. parsed-literal::
 
@@ -62,9 +62,6 @@ Syntax
        *zoom* value = zfactor = size that simulation box appears in image
          zfactor = scale image size by factor > 1 to enlarge, factor < 1 to shrink
          zfactor can be a variable (see below)
-       *persp* value = pfactor = amount of "perspective" in image
-         pfactor = amount of perspective (0 = none, < 1 = some, > 1 = highly skewed)
-         pfactor can be a variable (see below)
        *box* values = yes/no diam = draw outline of simulation box
          yes/no = do or do not draw simulation box lines
          diam = diameter of box lines as fraction of shortest box length
@@ -87,9 +84,9 @@ Examples
 
 .. code-block:: LAMMPS
 
-   dump d0 all image 100 dump.\*.jpg type type
-   dump d1 mobile image 500 snap.\*.png element element ssao yes 4539 0.6
-   dump d2 all image 200 img-\*.ppm type type zoom 2.5 adiam 1.5 size 1280 720
+   dump d0 all image 100 dump.*.jpg type type
+   dump d1 mobile image 500 snap.*.png element element ssao yes 4539 0.6
+   dump d2 all image 200 img-*.ppm type type zoom 2.5 adiam 1.5 size 1280 720
    dump m0 all movie 1000 movie.mpg type type size 640 480
    dump m1 all movie 1000 movie.avi type type size 640 480
    dump m2 all movie 100 movie.m4v type type zoom 1.8 adiam v_value size 1280 720
@@ -156,7 +153,7 @@ framerate can be set using the :doc:`dump_modify <dump_modify>` command.
 To write out JPEG and PNG format files, you must build LAMMPS with
 support for the corresponding JPEG or PNG library. To convert images
 into movies, LAMMPS has to be compiled with the -DLAMMPS_FFMPEG
-flag. See the :doc:`Build settings <Build_settings>` doc page for
+flag. See the :doc:`Build settings <Build_settings>` page for
 details.
 
 .. note::
@@ -264,7 +261,7 @@ The *atom* keyword allow you to turn off the drawing of all atoms, if
 the specified value is *no*\ .  Note that this will not turn off the
 drawing of particles that are represented as lines, triangles, or
 bodies, as discussed below.  These particles can be drawn separately
-if the *line*\ , *tri*\ , or *body* keywords are used.
+if the *line*, *tri*, or *body* keywords are used.
 
 The *adiam* keyword allows you to override the *diameter* setting to
 set a single numeric *size*\ .  All atoms will be drawn with that
@@ -321,7 +318,7 @@ The *line* keyword can be used when :doc:`atom_style line <atom_style>`
 is used to define particles as line segments, and will draw them as
 lines.  If this keyword is not used, such particles will be drawn as
 spheres, the same as if they were regular atoms.  The only setting
-currently allowed for the *color* value is *type*\ , which will color
+currently allowed for the *color* value is *type*, which will color
 the lines according to the atom type of the particle.  By default the
 mapping of types to colors is as follows:
 
@@ -348,7 +345,7 @@ or edges (3 lines) or both, depending on the setting for *tflag*\ .  If
 edges are drawn, the *width* setting determines the diameters of the
 line segments.  If this keyword is not used, triangle particles will
 be drawn as spheres, the same as if they were regular atoms.  The only
-setting currently allowed for the *color* value is *type*\ , which will
+setting currently allowed for the *color* value is *type*, which will
 color the triangles according to the atom type of the particle.  By
 default the mapping of types to colors is as follows:
 
@@ -370,7 +367,7 @@ is used to define body particles with internal state
 body style.  If this keyword is not used, such particles will be drawn
 as spheres, the same as if they were regular atoms.
 
-The :doc:`Howto body <Howto_body>` doc page describes the body styles
+The :doc:`Howto body <Howto_body>` page describes the body styles
 LAMMPS currently supports, and provides more details as to the kind of
 body particles they represent and how they are drawn by this dump
 image command.  For all the body styles, individual atoms can be
@@ -378,10 +375,10 @@ either a body particle or a usual point (non-body) particle.  Non-body
 particles will be drawn the same way they would be as a regular atom.
 The *bflag1* and *bflag2* settings are numerical values which are
 passed to the body style to affect how the drawing of a body particle
-is done.  See the :doc:`Howto body <Howto_body>` doc page for a
+is done.  See the :doc:`Howto body <Howto_body>` page for a
 description of what these parameters mean for each body style.
 
-The only setting currently allowed for the *color* value is *type*\ ,
+The only setting currently allowed for the *color* value is *type*,
 which will color the body particles according to the atom type of the
 particle.  By default the mapping of types to colors is as follows:
 
@@ -402,10 +399,10 @@ objects to be drawn.
 
 The *fflag1* and *fflag2* settings are numerical values which are
 passed to the fix to affect how the drawing of its objects is done.
-See the individual fix doc page for a description of what these
+See the individual fix page for a description of what these
 parameters mean for a particular fix.
 
-The only setting currently allowed for the *color* value is *type*\ ,
+The only setting currently allowed for the *color* value is *type*,
 which will color the fix objects according to their type.  By default
 the mapping of types to colors is as follows:
 
@@ -426,13 +423,14 @@ i.e. the number of pixels in each direction.
 
 ----------
 
-The *view*\ , *center*\ , *up*\ , *zoom*\ , and *persp* values determine how
+The *view*, *center*, *up*, and *zoom* values determine how
 3d simulation space is mapped to the 2d plane of the image.  Basically
 they control how the simulation box appears in the image.
 
-All of the *view*\ , *center*\ , *up*\ , *zoom*\ , and *persp* values can be
+All of the *view*, *center*, *up*, and *zoom* values can be
 specified as numeric quantities, whose meaning is explained below.
-Any of them can also be specified as an :doc:`equal-style variable <variable>`, by using v_name as the value, where "name" is
+Any of them can also be specified as an :doc:`equal-style variable <variable>`,
+by using v_name as the value, where "name" is
 the variable name.  In this case the variable will be evaluated on the
 timestep each image is created to create a new value.  If the
 equal-style variable is time-dependent, this is a means of changing
@@ -449,13 +447,13 @@ specified via variables, then the variable values should be in
 degrees.
 
 The *center* keyword determines the point in simulation space that
-will be at the center of the image.  *Cx*\ , *Cy*\ , and *Cz* are
+will be at the center of the image.  *Cx*, *Cy*, and *Cz* are
 specified as fractions of the box dimensions, so that (0.5,0.5,0.5) is
 the center of the simulation box.  These values do not have to be
 between 0.0 and 1.0, if you want the simulation box to be offset from
 the center of the image.  Note, however, that if you choose strange
-values for *Cx*\ , *Cy*\ , or *Cz* you may get a blank image.  Internally,
-*Cx*\ , *Cy*\ , and *Cz* are converted into a point in simulation space.
+values for *Cx*, *Cy*, or *Cz* you may get a blank image.  Internally,
+*Cx*, *Cy*, and *Cz* are converted into a point in simulation space.
 If *flag* is set to "s" for static, then this conversion is done once,
 at the time the dump command is issued.  If *flag* is set to "d" for
 dynamic then the conversion is performed every time a new image is
@@ -482,19 +480,6 @@ in the image.  The default *zfactor* value of 1 should display an
 image mostly filled by the atoms in the simulation box.  A *zfactor* >
 1 will make the simulation box larger; a *zfactor* < 1 will make it
 smaller.  *Zfactor* must be a value > 0.0.
-
-The *persp* keyword determines how much depth perspective is present
-in the image.  Depth perspective makes lines that are parallel in
-simulation space appear non-parallel in the image.  A *pfactor* value
-of 0.0 means that parallel lines will meet at infinity (1.0/pfactor),
-which is an orthographic rendering with no perspective.  A *pfactor*
-value between 0.0 and 1.0 will introduce more perspective.  A *pfactor*
-value > 1 will create a highly skewed image with a large amount of
-perspective.
-
-.. note::
-
-   The *persp* keyword is not yet supported as an option.
 
 ----------
 
@@ -605,8 +590,8 @@ Play the movie:
      % mplayer foo.mpg
      % ffplay bar.avi
 
-* c) Use the `Pizza.py <https://pizza.sandia.gov>`_
-  `animate tool <https://pizza.sandia.gov/doc/animate.html>`_,
+* c) Use the `Pizza.py <https://lammps.github.io/pizza>`_
+  `animate tool <https://lammps.github.io/pizza/doc/animate.html>`_,
   which works directly on a series of image files.
 
   .. code-block:: python
@@ -622,7 +607,7 @@ Play the movie:
 
 ----------
 
-See the :doc:`Modify <Modify>` doc page for information on how to add
+See the :doc:`Modify <Modify>` page for information on how to add
 new compute and fix styles to LAMMPS to calculate per-atom quantities
 which could then be output into dump files.
 
@@ -641,7 +626,7 @@ building LAMMPS and have the FFmpeg executable available on the
 machine where LAMMPS is being run.  Typically it's name is lowercase,
 i.e. ffmpeg.
 
-See the :doc:`Build settings <Build_settings>` doc page for details.
+See the :doc:`Build settings <Build_settings>` page for details.
 
 Note that since FFmpeg is run as an external program via a pipe,
 LAMMPS has limited control over its execution and no knowledge about
@@ -692,7 +677,6 @@ The defaults for the keywords are as follows:
 * up = 0 0 1 (for 3d)
 * up = 0 1 0 (for 2d)
 * zoom = 1.0
-* persp = 0.0
 * box = yes 0.02
 * axes = no 0.0 0.0
 * subbox no 0.0

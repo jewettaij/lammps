@@ -21,7 +21,7 @@ Syntax
 
   .. parsed-literal::
 
-     keyword = *mol*\ , *region*\ , *full_energy*, *charge*\ , *intra_energy*
+     keyword = *mol*, *region*, *full_energy*, *charge*, *intra_energy*
        *mol* value = template-ID
          template-ID = ID of molecule template specified in a separate :doc:`molecule <molecule>` command
        *region* value = region-ID
@@ -85,11 +85,6 @@ special neighbor information for the molecule can be specified in the
 molecule file.  See the :doc:`molecule <molecule>` command for details.
 The only settings required to be in this file are the coordinates and
 types of atoms in the molecule.
-
-If you wish to insert molecules via the *mol* keyword, that will have
-their bonds or angles constrained via SHAKE, use the *shake* keyword,
-specifying as its value the ID of a separate :doc:`fix shake
-<fix_shake>` command which also appears in your input script.
 
 Note that fix widom does not use configurational bias MC or any other
 kind of sampling of intramolecular degrees of freedom.  Inserted
@@ -160,11 +155,11 @@ Restart, fix_modify, output, run start/stop, minimize info
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 This fix writes the state of the fix to :doc:`binary restart files
-<restart>`.  This includes information about the random number generator
-seed, the next timestep for Widom insertions etc.  See the
-:doc:`read_restart <read_restart>` command for info on how to re-specify
-a fix in an input script that reads a restart file, so that the
-operation of the fix continues in an uninterrupted fashion.
+<restart>`.  This includes information about the random number
+generator seed, the next timestep for Widom insertions etc.  See the
+:doc:`read_restart <read_restart>` command for info on how to
+re-specify a fix in an input script that reads a restart file, so that
+the operation of the fix continues in an uninterrupted fashion.
 
 .. note::
 

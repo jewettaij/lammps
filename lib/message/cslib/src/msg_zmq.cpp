@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
    CSlib - Client/server library for code coupling
-   http://cslib.sandia.gov, Sandia National Laboratories
+   https://cslib.sandia.gov/, Sandia National Laboratories
    Steve Plimpton, sjplimp@sandia.gov
 
    Copyright 2018 National Technology & Engineering Solutions of
@@ -65,7 +65,7 @@ void MsgZMQ::init(char *port)
     char *socket_name = new char[n];
     strcpy(socket_name,"tcp://");
     strcat(socket_name,port);
-  
+
     if (client) {
       context = zmq_ctx_new();
       socket = zmq_socket(context,ZMQ_REQ);

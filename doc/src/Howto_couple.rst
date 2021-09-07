@@ -42,7 +42,7 @@ context of your application.
    stand-alone code could communicate with LAMMPS through files that the
    command writes and reads.
 
-   See the :doc:`Modify command <Modify_command>` doc page for info on how
+   See the :doc:`Modify command <Modify_command>` page for info on how
    to add a new command to LAMMPS.
 
 .. spacer
@@ -54,7 +54,7 @@ context of your application.
    invoked with minimal overhead (no setup or clean-up) if you wish to
    do multiple short runs, driven by another program.  Details about
    using the library interface are given in the :doc:`library API
-   <pg_library>` documentation.
+   <Library>` documentation.
 
 .. spacer
 
