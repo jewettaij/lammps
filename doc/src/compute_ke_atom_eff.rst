@@ -6,7 +6,6 @@ compute ke/atom/eff command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID ke/atom/eff
@@ -16,7 +15,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -53,7 +51,6 @@ of freedom in eFF.
    thermodynamic output by using the :doc:`thermo_modify <thermo_modify>`
    command, as shown in the following example:
 
-
 .. code-block:: LAMMPS
 
    compute         effTemp all temp/eff
@@ -63,11 +60,12 @@ of freedom in eFF.
 The value of the kinetic energy will be 0.0 for atoms (nuclei or
 electrons) not in the specified compute group.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a scalar quantity for each atom, which can be
 accessed by any command that uses per-atom computes as input.  See the
-:doc:`Howto output <Howto_output>` doc page for an overview of LAMMPS
+:doc:`Howto output <Howto_output>` page for an overview of LAMMPS
 output options.
 
 The per-atom vector values will be in energy :doc:`units <units>`.
@@ -75,13 +73,15 @@ The per-atom vector values will be in energy :doc:`units <units>`.
 Restrictions
 """"""""""""
 
-
-This compute is part of the USER-EFF package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+This compute is part of the EFF package.  It is only enabled if
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
 
 :doc:`dump custom <dump>`
 
-**Default:** none
+Default
+"""""""
+
+none

@@ -6,16 +6,15 @@ python command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    python func keyword args ...
 
 * func = name of Python function
 * one or more keyword/args pairs must be appended
-  
+
   .. parsed-literal::
-  
+
      keyword = *invoke* or *input* or *return* or *format* or *length* or *file* or *here* or *exists* or *source*
        *invoke* arg = none = invoke the previously defined Python function
        *input* args = N i1 i2 ... iN
@@ -44,11 +43,8 @@ Syntax
          inline = one or more lines of Python code which will be executed immediately
                   must be a single argument, typically enclosed between triple quotes
 
-
-
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -110,9 +106,7 @@ A broader overview of how Python can be used with LAMMPS is given on
 the :doc:`Python <Python_head>` doc page.  There is an examples/python
 directory which illustrates use of the python command.
 
-
 ----------
-
 
 The *func* setting specifies the name of the Python function.  The
 code for the function is defined using the *file* or *here* keywords
@@ -145,14 +139,14 @@ itself.  This enables the function to call back to LAMMPS through its
 library interface as explained below.  This allows the Python function
 to query or set values internal to LAMMPS which can affect the
 subsequent execution of the input script.  A LAMMPS variable can also
-be used as an argument, specified as v\_name, where "name" is the name
+be used as an argument, specified as v_name, where "name" is the name
 of the variable.  Any style of LAMMPS variable can be used, as defined
 by the :doc:`variable <variable>` command.  Each time the Python
 function is invoked, the LAMMPS variable is evaluated and its value is
 passed to the Python function.
 
 The *return* keyword is only needed if the Python function returns a
-value.  The specified *varReturn* must be of the form v\_name, where
+value.  The specified *varReturn* must be of the form v_name, where
 "name" is the name of a python-style LAMMPS variable, defined by the
 :doc:`variable <variable>` command.  The Python function can return a
 numeric or string value, as specified by the *format* keyword.
@@ -161,7 +155,6 @@ As explained on the :doc:`variable <variable>` doc page, the definition
 of a python-style variable associates a Python function name with the
 variable.  This must match the *func* setting for this command.  For
 example these two commands would be self-consistent:
-
 
 .. code-block:: LAMMPS
 
@@ -192,14 +185,12 @@ output as a string, then the default maximum length of that string is
 a longer string, the *length* keyword can be specified with its *Nlen*
 value set to a larger number (the code allocates space for Nlen+1 to
 include the string terminator).  If the Python function generates a
-string longer than the default 63 or the specified *Nlen*\ , it will be
+string longer than the default 63 or the specified *Nlen*, it will be
 truncated.
-
 
 ----------
 
-
-Either the *file*\ , *here*\ , or *exists* keyword must be used, but only
+Either the *file*, *here*, or *exists* keyword must be used, but only
 one of them.  These keywords specify what Python code to load into the
 Python interpreter.  The *file* keyword gives the name of a file,
 which should end with a ".py" suffix, which contains Python code.  The
@@ -226,9 +217,7 @@ later invoked, the function code must match the *input* and
 *return* and *format* keywords specified by the python command.
 Otherwise Python will generate an error.
 
-
 ----------
-
 
 This section describes how Python code can be written to work with
 LAMMPS.
@@ -242,7 +231,7 @@ conflict with the triple-quote parsing that the LAMMPS input script
 performs.
 
 All the Python code you specify via one or more python commands is
-loaded into the Python "main" module, i.e. \__main\__.  The code can
+loaded into the Python "main" module, i.e. __main__.  The code can
 define global variables or statements that are outside of function
 definitions.  It can contain multiple functions, only one of which
 matches the *func* setting in the python command.  This means you can
@@ -260,7 +249,6 @@ different commands in a LAMMPS input script that access the returned
 python-style variable associated with the function.  For example,
 consider this function loaded with two global variables defined
 outside the function:
-
 
 .. code-block:: python
 
@@ -313,20 +301,17 @@ LAMMPS with that library.
 
 Third, if your Python code calls back to LAMMPS (discussed in the
 next section) and causes LAMMPS to perform an MPI operation requires
-global communication (e.g. via MPI\_Allreduce), such as computing the
+global communication (e.g. via MPI_Allreduce), such as computing the
 global temperature of the system, then you must insure all your Python
 functions (running independently on different processors) call back to
 LAMMPS.  Otherwise the code may hang.
 
-
 ----------
-
 
 Your Python function can "call back" to LAMMPS through its
 library interface, if you use the SELF input to pass Python
 a pointer to LAMMPS.  The mechanism for doing this in your
 Python function is as follows:
-
 
 .. code-block:: python
 
@@ -338,15 +323,14 @@ Python function is as follows:
 
 The function definition must include a variable (lmpptr in this case)
 which corresponds to SELF in the python command.  The first line of the
-function imports the Python module lammps.py in the python directory of
-the distribution.  The second line creates a Python object "lmp" which
+function imports the :doc:`"lammps" Python module <Python_module>`.
+The second line creates a Python object ``lmp`` which
 wraps the instance of LAMMPS that called the function.  The "ptr=lmpptr"
 argument is what makes that happen.  The third line invokes the
 command() function in the LAMMPS library interface.  It takes a single
 string argument which is a LAMMPS input script command for LAMMPS to
 execute, the same as if it appeared in your input script.  In this case,
 LAMMPS should output
-
 
 .. parsed-literal::
 
@@ -356,18 +340,17 @@ to the screen and log file.  Note that since the LAMMPS print command
 itself takes a string in quotes as its argument, the Python string
 must be delimited with a different style of quotes.
 
-The :doc:`Python library <Python_library>` doc page describes the syntax
+The :doc:`Python_head` page describes the syntax
 for how Python wraps the various functions included in the LAMMPS
 library interface.
 
 A more interesting example is in the examples/python/in.python script
 which loads and runs the following function from examples/python/funcs.py:
 
-
 .. code-block:: python
 
    def loop(N,cut0,thresh,lmpptr):
-     print "LOOP ARGS",N,cut0,thresh,lmpptr
+     print("LOOP ARGS", N, cut0, thresh, lmpptr)
      from lammps import lammps
      lmp = lammps(ptr=lmpptr)
      natoms = lmp.get_natoms()
@@ -382,13 +365,12 @@ which loads and runs the following function from examples/python/funcs.py:
        lmp.command("pair_coeff * * 1.0 1.0")       # ditto
        lmp.command("run 10")                       # ditto
        pe = lmp.extract_compute("thermo_pe",0,0)   # extract total PE from LAMMPS
-       print "PE",pe/natoms,thresh
+       print("PE", pe/natoms, thresh)
        if pe/natoms < thresh: return
 
 with these input script commands:
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    python          loop input 4 10 1.0 -4.0 SELF format iffp file funcs.py
    python          loop invoke
@@ -402,15 +384,15 @@ with complex logic, much more so than can be created using the LAMMPS
 :doc:`jump <jump>` and :doc:`if <if>` commands.
 
 Several LAMMPS library functions are called from the loop function.
-Get\_natoms() returns the number of atoms in the simulation, so that it
+Get_natoms() returns the number of atoms in the simulation, so that it
 can be used to normalize the potential energy that is returned by
-extract\_compute() for the "thermo\_pe" compute that is defined by
-default for LAMMPS thermodynamic output.  Set\_variable() sets the
+extract_compute() for the "thermo_pe" compute that is defined by
+default for LAMMPS thermodynamic output.  Set_variable() sets the
 value of a string variable defined in LAMMPS.  This library function
 is a useful way for a Python function to return multiple values to
 LAMMPS, more than the single value that can be passed back via a
 return statement.  This cutoff value in the "cut" variable is then
-substituted (by LAMMPS) in the pair\_style command that is executed
+substituted (by LAMMPS) in the pair_style command that is executed
 next.  Alternatively, the "LAMMPS command option" line could be used
 in place of the 2 preceding lines, to have Python insert the value
 into the LAMMPS command string.
@@ -440,9 +422,7 @@ being attempted.
 The same applies to Python functions called during a simulation run at
 each time step using :doc:`fix python/invoke <fix_python_invoke>`.
 
-
 ----------
-
 
 If you run Python code directly on your workstation, either
 interactively or by using Python to launch a Python script stored in a
@@ -456,7 +436,6 @@ logic errors, you may get an error from Python pointing to the
 offending line, or you may get one of these generic errors from
 LAMMPS:
 
-
 .. parsed-literal::
 
    Could not process Python file
@@ -464,7 +443,6 @@ LAMMPS:
 
 When the Python function is invoked, if it does not return properly,
 you will typically get this generic error from LAMMPS:
-
 
 .. parsed-literal::
 
@@ -485,7 +463,6 @@ Third, use Python exception handling.  For example, say this statement
 in your Python function is failing, because you have not initialized the
 variable foo:
 
-
 .. code-block:: python
 
    foo += 1
@@ -493,18 +470,16 @@ variable foo:
 If you put one (or more) statements inside a "try" statement,
 like this:
 
-
 .. code-block:: python
 
    import exceptions
-   print "Inside simple function"
+   print("Inside simple function")
    try:
      foo += 1      # one or more statements here
-   except Exception, e:
-     print "FOO error:",e
+   except Exception as e:
+     print("FOO error:", e)
 
 then you will get this message printed to the screen:
-
 
 .. parsed-literal::
 
@@ -514,38 +489,36 @@ If there is no error in the try statements, then nothing is printed.
 Either way the function continues on (unless you put a return or
 sys.exit() in the except clause).
 
-
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 This command is part of the PYTHON package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Building LAMMPS with the PYTHON package will link LAMMPS with the
 Python library on your system.  Settings to enable this are in the
 lib/python/Makefile.lammps file.  See the lib/python/README file for
 information on those settings.
 
-If you use Python code which calls back to LAMMPS, via the SELF input
-argument explained above, there is an extra step required when
-building LAMMPS.  LAMMPS must also be built as a shared library and
-your Python function must be able to load the Python module in
-python/lammps.py that wraps the LAMMPS library interface.  These are
-the same steps required to use Python by itself to wrap LAMMPS.
-Details on these steps are explained on the :doc:`Python <Python_head>`
-doc page.  Note that it is important that the stand-alone LAMMPS
-executable and the LAMMPS shared library be consistent (built from the
-same source code files) in order for this to work.  If the two have
-been built at different times using different source files, problems
-may occur.
+If you use Python code which calls back to LAMMPS, via the SELF input argument
+explained above, there is an extra step required when building LAMMPS.  LAMMPS
+must also be built as a shared library and your Python function must be able to
+load the :doc:`"lammps" Python module <Python_module>` that wraps the LAMMPS
+library interface.  These are the same steps required to use Python by itself
+to wrap LAMMPS.  Details on these steps are explained on the :doc:`Python
+<Python_head>` doc page.  Note that it is important that the stand-alone LAMMPS
+executable and the LAMMPS shared library be consistent (built from the same
+source code files) in order for this to work.  If the two have been built at
+different times using different source files, problems may occur.
 
 Related commands
 """"""""""""""""
 
 :doc:`shell <shell>`, :doc:`variable <variable>`, :doc:`fix python/invoke <fix_python_invoke>`
 
-**Default:** none
+Default
+"""""""
+
+none

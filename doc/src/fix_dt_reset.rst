@@ -6,7 +6,6 @@ fix dt/reset command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID dt/reset N Tmin Tmax Xmax keyword values ...
@@ -20,7 +19,6 @@ Syntax
 * zero or more keyword/value pairs may be appended
 * keyword = *emax* or *units*
 
-
 .. parsed-literal::
 
      *emax* value = Emax
@@ -32,8 +30,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix 5 all dt/reset 10 1.0e-5 0.01 0.1
    fix 5 all dt/reset 10 0.01 2.0 0.2 units box
@@ -62,7 +59,7 @@ displace *Xmax* on the next integration step, as a function of its
 current velocity and force.  Since performing this calculation exactly
 would require the solution to a quartic equation, a cheaper estimate
 is generated.  The estimate is conservative in that the atom's
-displacement is guaranteed not to exceed *Xmax*\ , though it may be
+displacement is guaranteed not to exceed *Xmax*, though it may be
 smaller.
 
 In addition if the *emax* keyword is used, the specified *Emax* value
@@ -75,7 +72,7 @@ across all atoms is computed.  Then the *Tmin* and *Tmax* bounds are
 applied, if specified.  If one (or both) is specified as NULL, it is
 not applied.
 
-When the :doc:`run style <run_style>` is *respa*\ , this fix resets the
+When the :doc:`run style <run_style>` is *respa*, this fix resets the
 outer loop (largest) timestep, which is the same timestep that the
 :doc:`timestep <timestep>` command sets.
 
@@ -83,7 +80,8 @@ Note that the cumulative simulation time (in time units), which
 accounts for changes in the timestep size as a simulation proceeds,
 can be accessed by the :doc:`thermo_style time <thermo_style>` keyword.
 
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 No information about this fix is written to :doc:`binary restart files <restart>`.  None of the :doc:`fix_modify <fix_modify>` options
 are relevant to this fix.

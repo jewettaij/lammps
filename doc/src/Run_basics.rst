@@ -5,14 +5,13 @@ LAMMPS is run from the command line, reading commands from a file via
 the -in command line flag, or from standard input.
 Using the "-in in.file" variant is recommended:
 
-
 .. code-block:: bash
 
    $ lmp_serial -in in.file
    $ lmp_serial < in.file
    $ /path/to/lammps/src/lmp_serial -i in.file
    $ mpirun -np 4 lmp_mpi -in in.file
-   $ mpirun -np 8 /path/to//lammps/src/lmp_mpi -in in.file
+   $ mpirun -np 8 /path/to/lammps/src/lmp_mpi -in in.file
    $ mpirun -np 6 /usr/local/bin/lmp -in in.file
 
 You normally run the LAMMPS command in the directory where your input
@@ -28,11 +27,11 @@ executable itself can be placed elsewhere.
 
 As LAMMPS runs it prints info to the screen and a logfile named
 *log.lammps*\ .  More info about output is given on the
-:doc:`Run output <Run_output>` doc page.
+:doc:`screen and logfile output <Run_output>` page.
 
 If LAMMPS encounters errors in the input script or while running a
 simulation it will print an ERROR message and stop or a WARNING
-message and continue.  See the :doc:`Errors <Errors>` doc page for a
+message and continue.  See the :doc:`Common Problems <Errors>` page for a
 discussion of the various kinds of errors LAMMPS can or can't detect,
 a list of all ERROR and WARNING messages, and what to do about them.
 
@@ -43,7 +42,7 @@ single processor.  In theory you should get identical answers on any
 number of processors and on any machine.  In practice, numerical
 round-off due to using floating-point math can cause slight differences
 and an eventual divergence of molecular dynamics trajectories.  See the
-:doc:`Errors common <Errors_common>` doc page for discussion of this.
+:doc:`Errors common <Errors_common>` page for discussion of this.
 
 LAMMPS can run as large a problem as will fit in the physical memory of
 one or more processors.  If you run out of memory, you must run on more
@@ -66,8 +65,7 @@ or "-bind-to core" (MPICH) can be used.
 
 If the LAMMPS command(s) you are using support multi-threading, you
 can set the number of threads per MPI task via the environment
-variable OMP\_NUM\_THREADS, before you launch LAMMPS:
-
+variable OMP_NUM_THREADS, before you launch LAMMPS:
 
 .. code-block:: bash
 
@@ -80,9 +78,7 @@ package command.  See the :doc:`package <package>` command or
 :doc:`Speed <Speed>` doc pages for more details about which accelerator
 packages and which commands support multi-threading.
 
-
 ----------
-
 
 You can experiment with running LAMMPS using any of the input scripts
 provided in the examples or bench directory.  Input scripts are named

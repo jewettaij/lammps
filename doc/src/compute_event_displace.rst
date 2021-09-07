@@ -6,7 +6,6 @@ compute event/displace command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID event/displace threshold
@@ -18,8 +17,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all event/displace 0.5
 
@@ -45,11 +43,12 @@ further than the threshold distance.
    then this compute will not be able to distinguish that motion from
    local atom displacements and may generate "false positives."
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a global scalar (the flag).  This value can be
 used by any command that uses a global scalar value from a compute as
-input.  See the :doc:`Howto output <Howto_output>` doc page for an
+input.  See the :doc:`Howto output <Howto_output>` page for an
 overview of LAMMPS output options.
 
 The scalar value calculated by this compute is "intensive".  The
@@ -57,7 +56,6 @@ scalar value will be a 0 or 1 as explained above.
 
 Restrictions
 """"""""""""
-
 
 This command can only be used if LAMMPS was built with the REPLICA
 package.  See the :doc:`Build package <Build_package>` doc
@@ -68,4 +66,7 @@ Related commands
 
 :doc:`prd <prd>`, :doc:`tad <tad>`
 
-**Default:** none
+Default
+"""""""
+
+none

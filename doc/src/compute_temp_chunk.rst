@@ -6,7 +6,6 @@ compute temp/chunk command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID temp/chunk chunkID value1 value2 ... keyword value ...
@@ -16,18 +15,18 @@ Syntax
 * chunkID = ID of :doc:`compute chunk/atom <compute_chunk_atom>` command
 * zero or more values can be listed as value1,value2,etc
 * value = *temp* or *kecom* or *internal*
-  
+
   .. parsed-literal::
-  
+
        temp = temperature of each chunk
        kecom = kinetic energy of each chunk based on velocity of center of mass
        internal = internal kinetic energy of each chunk
 
 * zero or more keyword/value pairs may be appended
 * keyword = *com* or *bias* or *adof* or *cdof*
-  
+
   .. parsed-literal::
-  
+
        *com* value = *yes* or *no*
          yes = subtract center-of-mass velocity from each chunk before calculating temperature
          no = do not subtract center-of-mass velocity
@@ -38,13 +37,10 @@ Syntax
        *cdof* value = dof_per_chunk
          dof_per_chunk = define this many degrees-of-freedom per chunk
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 fluid temp/chunk molchunk
    compute 1 fluid temp/chunk molchunk temp internal
@@ -116,9 +112,7 @@ chunk.  The interal KE is summed over the atoms in the chunk using an
 internal "thermal" velocity for each atom, which is its velocity minus
 the center-of-mass velocity of the chunk.
 
-
 ----------
-
 
 Note that currently the global and per-chunk temperatures calculated
 by this compute only include translational degrees of freedom for each
@@ -155,16 +149,13 @@ calculating the temperature; fix ave/chunk does not.
 The simplest way to output the per-chunk results of the compute
 temp/chunk calculation to a file is to use the :doc:`fix ave/time <fix_ave_time>` command, for example:
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute cc1 all chunk/atom molecule
    compute myChunk all temp/chunk cc1 temp
-   fix 1 all ave/time 100 1 100 c_myChunk file tmp.out mode vector
-
+   fix 1 all ave/time 100 1 100 c_myChunk[1] file tmp.out mode vector
 
 ----------
-
 
 The keyword/value option pairs are used in the following ways.
 
@@ -181,7 +172,7 @@ allows calculation of the global or per-chunk temperature using only
 the thermal temperature of atoms in each chunk after the translational
 kinetic energy components have been altered in a prescribed way,
 e.g. to remove a velocity profile.  It also applies to the calculation
-of the other per-chunk values, such as *kecom* or *internal*\ , which
+of the other per-chunk values, such as *kecom* or *internal*, which
 involve the center-of-mass velocity of each chunk, which is calculated
 after the velocity bias is removed from each atom.  Note that the
 temperature compute will apply its bias globally to the entire system,
@@ -208,16 +199,15 @@ set to the remaining degrees of freedom for the entire molecule
 (entire chunk in this case), e.g. 6 for 3d, or 3 for 2d, for a rigid
 molecule.
 
-
 ----------
 
-
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a global scalar (the temperature) and a global
 vector of length 6 (KE tensor), which can be accessed by indices 1-6.
 These values can be used by any command that uses global scalar or
-vector values from a compute as input.  See the :doc:`Howto output <Howto_output>` doc page for an overview of LAMMPS output
+vector values from a compute as input.  See the :doc:`Howto output <Howto_output>` page for an overview of LAMMPS output
 options.
 
 This compute also optionally calculates a global array, if one or more
@@ -239,7 +229,6 @@ energy :doc:`units <units>` for the *kecom* and *internal* values.
 
 Restrictions
 """"""""""""
-
 
 The *com* and *bias* keywords cannot be used together.
 

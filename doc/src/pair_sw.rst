@@ -1,23 +1,16 @@
 .. index:: pair_style sw
+.. index:: pair_style sw/gpu
+.. index:: pair_style sw/intel
+.. index:: pair_style sw/kk
+.. index:: pair_style sw/omp
 
 pair_style sw command
 =====================
 
-pair_style sw/gpu command
-=========================
-
-pair_style sw/intel command
-===========================
-
-pair_style sw/kk command
-========================
-
-pair_style sw/omp command
-=========================
+Accelerator Variants: *sw/gpu*, *sw/intel*, *sw/kk*, *sw/omp*
 
 Syntax
 """"""
-
 
 .. code-block:: LAMMPS
 
@@ -40,44 +33,43 @@ potential for the energy E of a system of atoms as
 
 .. math::
 
-   E & =  \sum_i \sum_{j > i} \phi_2 (r_{ij}) + 
-          \sum_i \sum_{j \neq i} \sum_{k > j} 
+   E & =  \sum_i \sum_{j > i} \phi_2 (r_{ij}) +
+          \sum_i \sum_{j \neq i} \sum_{k > j}
           \phi_3 (r_{ij}, r_{ik}, \theta_{ijk}) \\
-  \phi_2(r_{ij}) & =  A_{ij} \epsilon_{ij} \left[ B_{ij} (\frac{\sigma_{ij}}{r_{ij}})^{p_{ij}} - 
-                    (\frac{\sigma_{ij}}{r_{ij}})^{q_{ij}} \right] 
+  \phi_2(r_{ij}) & =  A_{ij} \epsilon_{ij} \left[ B_{ij} (\frac{\sigma_{ij}}{r_{ij}})^{p_{ij}} -
+                    (\frac{\sigma_{ij}}{r_{ij}})^{q_{ij}} \right]
                     \exp \left( \frac{\sigma_{ij}}{r_{ij} - a_{ij} \sigma_{ij}} \right) \\
-  \phi_3(r_{ij},r_{ik},\theta_{ijk}) & = \lambda_{ijk} \epsilon_{ijk} \left[ \cos \theta_{ijk} - 
+  \phi_3(r_{ij},r_{ik},\theta_{ijk}) & = \lambda_{ijk} \epsilon_{ijk} \left[ \cos \theta_{ijk} -
                     \cos \theta_{0ijk} \right]^2
                     \exp \left( \frac{\gamma_{ij} \sigma_{ij}}{r_{ij} - a_{ij} \sigma_{ij}} \right)
                     \exp \left( \frac{\gamma_{ik} \sigma_{ik}}{r_{ik} - a_{ik} \sigma_{ik}} \right)
-
 
 where :math:`\phi_2` is a two-body term and :math:`\phi_3` is a
 three-body term.  The summations in the formula are over all neighbors J
 and K of atom I within a cutoff distance :math:`a `\sigma`.
 
-Only a single pair\_coeff command is used with the *sw* style which
+Only a single pair_coeff command is used with the *sw* style which
 specifies a Stillinger-Weber potential file with parameters for all
 needed elements.  These are mapped to LAMMPS atom types by specifying
-N additional arguments after the filename in the pair\_coeff command,
+N additional arguments after the filename in the pair_coeff command,
 where N is the number of LAMMPS atom types:
 
 * filename
 * N element names = mapping of SW elements to atom types
 
-See the :doc:`pair_coeff <pair_coeff>` doc page for alternate ways
+See the :doc:`pair_coeff <pair_coeff>` page for alternate ways
 to specify the path for the potential file.
 
 As an example, imagine a file SiC.sw has Stillinger-Weber values for
 Si and C.  If your LAMMPS simulation has 4 atoms types and you want
-the 1st 3 to be Si, and the 4th to be C, you would use the following
-pair\_coeff command:
+the first 3 to be Si, and the fourth to be C, you would use the following
+pair_coeff command:
 
 .. code-block:: LAMMPS
 
    pair_coeff * * SiC.sw Si Si Si C
 
-The 1st 2 arguments must be \* \* so as to span all LAMMPS atom types.
+The first 2 arguments must be \* \* so as to span all LAMMPS atom types.
 The first three Si arguments map LAMMPS atom types 1,2,3 to the Si
 element in the SW file.  The final C argument maps LAMMPS atom type 4
 to the C element in the SW file.  If a mapping value is specified as
@@ -128,7 +120,7 @@ can be separately controlled. If tol = 0.0, then the standard
 Stillinger-Weber cutoff is used.
 
 The Stillinger-Weber potential file must contain entries for all the
-elements listed in the pair\_coeff command.  It can also contain
+elements listed in the pair_coeff command.  It can also contain
 entries for additional elements not being used in a particular
 simulation; LAMMPS ignores those entries.
 
@@ -142,7 +134,7 @@ entries would be required, etc.
 As annotated above, the first element in the entry is the center atom
 in a three-body interaction.  Thus an entry for SiCC means a Si atom
 with 2 C atoms as neighbors.  The parameter values used for the
-two-body interaction come from the entry where the 2nd and 3rd
+two-body interaction come from the entry where the second and third
 elements are the same.  Thus the two-body parameters for Si
 interacting with C, comes from the SiCC entry.  The three-body
 parameters can in principle be specific to the three elements of the
@@ -160,43 +152,40 @@ order of the two neighbors is arbitrary, the three-body parameters for
 entries CSiC and CCSi should be the same.  Similarly, the two-body
 parameters for entries SiCC and CSiSi should also be the same.  The
 parameters used only for two-body interactions (A, B, p, and q) in
-entries whose 2nd and 3rd element are different (e.g. SiCSi) are not
+entries whose second and third element are different (e.g. SiCSi) are not
 used for anything and can be set to 0.0 if desired.
 This is also true for the parameters in :math:`\phi_3` that are
-taken from the ij and ik pairs (:math:`\sigma`, *a*\ , :math:`\gamma`)
-
+taken from the ij and ik pairs (:math:`\sigma`, *a*, :math:`\gamma`)
 
 ----------
 
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
+Styles with a *gpu*, *intel*, *kk*, *omp*, or *opt* suffix are
 functionally the same as the corresponding style without the suffix.
 They have been optimized to run faster, depending on your available
 hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
 page.  The accelerated styles take the same arguments and should
 produce the same results, except for round-off and precision issues.
 
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
+These accelerated styles are part of the GPU, INTEL, KOKKOS,
+OPENMP and OPT packages, respectively.  They are only enabled if
+LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` page for more info.
 
 You can specify the accelerated styles explicitly in your input script
 by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
 :doc:`suffix <suffix>` command in your input script.
 
-When using the USER-INTEL package with this style, there is an
+When using the INTEL package with this style, there is an
 additional 5 to 10 percent performance improvement when the
 Stillinger-Weber parameters p and q are set to 4 and 0 respectively.
 These parameters are common for modeling silicon and water.
 
-See the :doc:`Speed packages <Speed_packages>` doc page for more
+See the :doc:`Speed packages <Speed_packages>` page for more
 instructions on how to use the accelerated styles effectively.
-
 
 ----------
 
-
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 For atom type pairs I,J and I != J, where types I and J correspond to
 two different element types, mixing is performed by LAMMPS as
@@ -206,23 +195,20 @@ This pair style does not support the :doc:`pair_modify <pair_modify>`
 shift, table, and tail options.
 
 This pair style does not write its information to :doc:`binary restart files <restart>`, since it is stored in potential files.  Thus, you
-need to re-specify the pair\_style and pair\_coeff commands in an input
+need to re-specify the pair_style and pair_coeff commands in an input
 script that reads a restart file.
 
 This pair style can only be used via the *pair* keyword of the
 :doc:`run_style respa <run_style>` command.  It does not support the
-*inner*\ , *middle*\ , *outer* keywords.
-
+*inner*, *middle*, *outer* keywords.
 
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 This pair style is part of the MANYBODY package.  It is only enabled
-if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 This pair style requires the :doc:`newton <newton>` setting to be "on"
 for pair interactions.
@@ -231,21 +217,20 @@ The Stillinger-Weber potential files provided with LAMMPS (see the
 potentials directory) are parameterized for metal :doc:`units <units>`.
 You can use the SW potential with any LAMMPS units, but you would need
 to create your own SW potential file with coefficients listed in the
-appropriate units if your simulation doesn't use "metal" units.
+appropriate units if your simulation does not use "metal" units.
 
 Related commands
 """"""""""""""""
 
 :doc:`pair_coeff <pair_coeff>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Stillinger2:
-
-
 
 **(Stillinger)** Stillinger and Weber, Phys Rev B, 31, 5262 (1985).

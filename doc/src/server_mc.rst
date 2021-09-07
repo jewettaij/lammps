@@ -6,7 +6,6 @@ server mc command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    server mc
@@ -16,8 +15,7 @@ mc = the protocol argument to the :doc:`server <server>` command
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    server mc
 
@@ -29,7 +27,7 @@ expect messages from a separate "client" code that match the *mc*
 protocol for format and content explained below.  For each message
 LAMMPS receives it will send a message back to the client.
 
-The :doc:`Howto client/server <Howto_client_server>` doc page gives an
+The :doc:`Howto client/server <Howto_client_server>` page gives an
 overview of client/server coupling of LAMMPS with another code where
 one code is the "client" and sends request messages to a "server"
 code.  The server responds to each request with a reply message.  This
@@ -41,13 +39,11 @@ signals when it is done sending messages to LAMMPS, at which point the
 loop will exit, and the remainder of the LAMMPS script will be
 processed.
 
-The :doc:`server <server>` doc page gives other options for using LAMMPS
+The :doc:`server <server>` page gives other options for using LAMMPS
 See an example of how this command is used in
-examples/COUPLE/lammps\_mc/in.server.
-
+examples/COUPLE/lammps_mc/in.server.
 
 ----------
-
 
 When using this command, LAMMPS (as the server code) receives
 instructions from a Monte Carlo (MC) driver to displace random atoms,
@@ -61,18 +57,17 @@ runs.
 The format and content of the exchanged messages are explained here in
 a conceptual sense.  Python-style pseudo code for the library calls to
 the CSlib is shown, which performs the actual message exchange between
-the two codes.  See the `CSlib website <http://cslib.sandia.gov>`_ doc
+the two codes.  See the `CSlib website <https://cslib.sandia.gov>`_ doc
 pages for more details on the actual library syntax.  The "cs" object
 in this pseudo code is a pointer to an instance of the CSlib.
 
-See the src/MESSAGE/server\_mc.cpp file for details on how LAMMPS uses
-these messages.  See the examples/COUPLE/lammps\_mc/mc.cpp file for an
+See the src/MESSAGE/server_mc.cpp file for details on how LAMMPS uses
+these messages.  See the examples/COUPLE/lammps_mc/mc.cpp file for an
 example of how an MC driver code can use these messages.
 
 Define NATOMS=1, EINIT=2, DISPLACE=3, ACCEPT=4, RUN=5.
 
 **Client sends one of these kinds of message**\ :
-
 
 .. parsed-literal::
 
@@ -92,7 +87,6 @@ Define NATOMS=1, EINIT=2, DISPLACE=3, ACCEPT=4, RUN=5.
 
 **Server replies**\ :
 
-
 .. parsed-literal::
 
    cs->send(NATOMS,1)      # msgID = 1 with 1 field
@@ -109,16 +103,13 @@ Define NATOMS=1, EINIT=2, DISPLACE=3, ACCEPT=4, RUN=5.
 
    cs->send(RUN,0)         # msgID = 5 with no fields
 
-
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 This command is part of the MESSAGE package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 A script that uses this command must also use the
 :doc:`message <message>` command to setup the messaging protocol with
@@ -129,4 +120,7 @@ Related commands
 
 :doc:`message <message>`
 
-**Default:** none
+Default
+"""""""
+
+none

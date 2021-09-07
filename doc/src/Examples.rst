@@ -18,7 +18,7 @@ files and image files.
 
 If you uncomment the :doc:`dump <dump>` command in the input script, a
 text dump file will be produced, which can be animated by various
-`visualization programs <http://lammps.sandia.gov/viz.html>`_.
+`visualization programs <https://www.lammps.org/viz.html>`_.
 
 If you uncomment the :doc:`dump image <dump>` command in the input
 script, and assuming you have built LAMMPS with a JPG library, JPG
@@ -27,7 +27,7 @@ be quickly post-processed into a movie using commands described on the
 :doc:`dump image <dump_image>` doc page.
 
 Animations of many of the examples can be viewed on the Movies section
-of the `LAMMPS web site <lws_>`_.
+of the `LAMMPS web site <https://www.lammps.org/movies.html>`_.
 
 There are two kinds of sub-directories in the examples folder.  Lower
 case named directories contain one or a few simple, quick-to-run
@@ -38,9 +38,7 @@ particular quantity.
 
 Lists of both kinds of directories are given below.
 
-
 ----------
-
 
 Lowercase directories
 ---------------------
@@ -110,6 +108,8 @@ Lowercase directories
 +-------------+------------------------------------------------------------------+
 | msst        | MSST shock dynamics                                              |
 +-------------+------------------------------------------------------------------+
+| multi       | multi neighboring for systems with large interaction disparities |
++-------------+------------------------------------------------------------------+
 | nb3b        | use of non-bonded 3-body harmonic pair style                     |
 +-------------+------------------------------------------------------------------+
 | neb         | nudged elastic band (NEB) calculation for barrier finding        |
@@ -134,7 +134,7 @@ Lowercase directories
 +-------------+------------------------------------------------------------------+
 | reax        | RDX and TATB models using the ReaxFF                             |
 +-------------+------------------------------------------------------------------+
-| rerun       | use of rerun and read\_dump commands                             |
+| rerun       | use of rerun and read_dump commands                              |
 +-------------+------------------------------------------------------------------+
 | rigid       | rigid bodies modeled as independent or coupled                   |
 +-------------+------------------------------------------------------------------+
@@ -150,6 +150,8 @@ Lowercase directories
 +-------------+------------------------------------------------------------------+
 | threebody   | regression test input for a variety of manybody potentials       |
 +-------------+------------------------------------------------------------------+
+| tracker     | track interactions in LJ melt                                    |
++-------------+------------------------------------------------------------------+
 | vashishta   | use of the Vashishta potential                                   |
 +-------------+------------------------------------------------------------------+
 | voronoi     | Voronoi tesselation via compute voronoi/atom command             |
@@ -157,8 +159,7 @@ Lowercase directories
 
 Here is how you can run and visualize one of the sample problems:
 
-
-.. parsed-literal::
+.. code-block:: bash
 
    cd indent
    cp ../../src/lmp_linux .           # copy LAMMPS executable to this dir
@@ -166,28 +167,25 @@ Here is how you can run and visualize one of the sample problems:
 
 Running the simulation produces the files *dump.indent* and
 *log.lammps*\ .  You can visualize the dump file of snapshots with a
-variety of 3rd-party tools highlighted on the
-`Visualization <http://lammps.sandia.gov/viz.html>`_ page of the LAMMPS
+variety of third-party tools highlighted on the
+`Visualization <https://www.lammps.org/viz.html>`_ page of the LAMMPS
 web site.
 
 If you uncomment the :doc:`dump image <dump_image>` line(s) in the input
 script a series of JPG images will be produced by the run (assuming
 you built LAMMPS with JPG support; see the
-:doc:`Build\_settings <Build_settings>` doc page for details).  These can
+:doc:`Build_settings <Build_settings>` page for details).  These can
 be viewed individually or turned into a movie or animated by tools
 like ImageMagick or QuickTime or various Windows-based tools.  See the
-:doc:`dump image <dump_image>` doc page for more details.  E.g. this
+:doc:`dump image <dump_image>` page for more details.  E.g. this
 Imagemagick command would create a GIF file suitable for viewing in a
 browser.
 
+.. code-block:: bash
 
-.. parsed-literal::
-
-   % convert -loop 1 \*.jpg foo.gif
-
+   % convert -loop 1 *.jpg foo.gif
 
 ----------
-
 
 Uppercase directories
 ---------------------
@@ -201,7 +199,7 @@ Uppercase directories
 +------------+--------------------------------------------------------------------------------------------------+
 | ELASTIC    | compute elastic constants at zero temperature                                                    |
 +------------+--------------------------------------------------------------------------------------------------+
-| ELASTIC\_T | compute elastic constants at finite temperature                                                  |
+| ELASTIC_T  | compute elastic constants at finite temperature                                                  |
 +------------+--------------------------------------------------------------------------------------------------+
 | HEAT       | compute thermal conductivity for LJ and water via fix ehex                                       |
 +------------+--------------------------------------------------------------------------------------------------+
@@ -209,11 +207,11 @@ Uppercase directories
 +------------+--------------------------------------------------------------------------------------------------+
 | MC         | using LAMMPS in a Monte Carlo mode to relax the energy of a system                               |
 +------------+--------------------------------------------------------------------------------------------------+
+| PACKAGES   | examples for specific packages and contributed commands                                          |
++------------+--------------------------------------------------------------------------------------------------+
 | SPIN       | examples for features of the SPIN package                                                        |
 +------------+--------------------------------------------------------------------------------------------------+
 | UNITS      | examples that run the same simulation in lj, real, metal units                                   |
-+------------+--------------------------------------------------------------------------------------------------+
-| USER       | examples for USER packages and USER-contributed commands                                         |
 +------------+--------------------------------------------------------------------------------------------------+
 | VISCOSITY  | compute viscosity via several methods                                                            |
 +------------+--------------------------------------------------------------------------------------------------+
@@ -221,12 +219,11 @@ Uppercase directories
 Nearly all of these directories have README files which give more
 details on how to understand and use their contents.
 
-The USER directory has a large number of sub-directories which
-correspond by name to a USER package.  They contain scripts that
-illustrate how to use the command(s) provided in that package.  Many
+The PACKAGES directory has a large number of sub-directories which
+correspond by name to specific packages.  They contain scripts that
+illustrate how to use the command(s) provided in those packages.  Many
 of the sub-directories have their own README files which give further
-instructions.  See the :doc:`Packages\_details <Packages_details>` doc
-page for more info on specific USER packages.
+instructions.  See the :doc:`Packages_details <Packages_details>` doc
+page for more info on specific packages.
 
 .. _openkim: https://openkim.org
-.. _lws: http://lammps.sandia.gov

@@ -6,7 +6,6 @@ dump vtk command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    dump ID group-ID vtk N file args
@@ -21,11 +20,10 @@ Syntax
 Examples
 """"""""
 
+.. code-block:: LAMMPS
 
-.. parsed-literal::
-
-   dump dmpvtk all vtk 100 dump\*.myforce.vtk id type vx fx
-   dump dmpvtp flow vtk 100 dump\*.%.displace.vtp id type c_myD[1] c_myD[2] c_myD[3] v_ke
+   dump dmpvtk all vtk 100 dump*.myforce.vtk id type vx fx
+   dump dmpvtp flow vtk 100 dump*.%.displace.vtp id type c_myD[1] c_myD[2] c_myD[3] v_ke
 
 Description
 """""""""""
@@ -72,15 +70,13 @@ determine the kind of output.
    of which owns a subset of the atoms.
 
 For the *vtk* style, sorting is off by default. See the
-:doc:`dump_modify <dump_modify>` doc page for details.
-
+:doc:`dump_modify <dump_modify>` page for details.
 
 ----------
 
-
 The dimensions of the simulation box are written to a separate file
 for each snapshot (either in legacy VTK or XML format depending on the
-format of the main dump file) with the suffix *\_boundingBox* appended
+format of the main dump file) with the suffix *_boundingBox* appended
 to the given dump filename.
 
 For an orthogonal simulation box this information is saved as a
@@ -92,7 +88,7 @@ hexahedrons in either legacy .vtk or .vtu XML format.
 Style *vtk* allows you to specify a list of atom attributes to be
 written to the dump file for each atom.  The list of possible attributes
 is the same as for the :doc:`dump_style custom <dump>` command; see
-its doc page for a listing and an explanation of each attribute.
+its page for a listing and an explanation of each attribute.
 
 .. note::
 
@@ -109,9 +105,7 @@ a wildcard "\*" must be included in the filename, as discussed below.
 Otherwise the dump files will get overwritten with the new snapshot
 each time.
 
-
 ----------
-
 
 Dumps are performed on timesteps that are a multiple of N (including
 timestep 0) and on the last timestep of a minimization if the
@@ -140,8 +134,8 @@ in order with some post-processing tools.
 If a "%" character appears in the filename, then each of P processors
 writes a portion of the dump file, and the "%" character is replaced
 with the processor ID from 0 to P-1 preceded by an underscore character.
-For example, tmp.dump%.vtp becomes tmp.dump\_0.vtp, tmp.dump\_1.vtp, ...
-tmp.dump\_P-1.vtp, etc.  This creates smaller files and can be a fast
+For example, tmp.dump%.vtp becomes tmp.dump_0.vtp, tmp.dump_1.vtp, ...
+tmp.dump_P-1.vtp, etc.  This creates smaller files and can be a fast
 mode of output on parallel machines that support parallel I/O for output.
 
 By default, P = the number of processors meaning one file per
@@ -156,23 +150,20 @@ processor 0 does write files.
 Note that using the "\*" and "%" characters together can produce a
 large number of small dump files!
 
-If *dump\_modify binary* is used, the dump file (or files, if "\*" or
+If *dump_modify binary* is used, the dump file (or files, if "\*" or
 "%" is also used) is written in binary format.  A binary dump file
 will be about the same size as a text version, but will typically
 write out much faster.
 
-
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 The *vtk* style does not support writing of gzipped dump files.
 
-The *vtk* dump style is part of the USER-VTK package. It is only
-enabled if LAMMPS was built with that package. See the :doc:`Build package <Build_package>` doc page for more info.
+The *vtk* dump style is part of the VTK package. It is only
+enabled if LAMMPS was built with that package. See the :doc:`Build package <Build_package>` page for more info.
 
 To use this dump style, you also must link to the VTK library.  See
 the info in lib/vtk/README and insure the Makefile.lammps file in that

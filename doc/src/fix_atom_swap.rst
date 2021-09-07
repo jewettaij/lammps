@@ -6,7 +6,6 @@ fix atom/swap command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID atom/swap N X seed T keyword values ...
@@ -19,9 +18,9 @@ Syntax
 * T = scaling temperature of the MC swaps (temperature units)
 * one or more keyword/value pairs may be appended to args
 * keyword = *types* or *mu* or *ke* or *semi-grand* or *region*
-  
+
   .. parsed-literal::
-  
+
        *types* values = two or more atom types
        *mu* values = chemical potential of swap types (energy units)
        *ke* value = *no* or *yes*
@@ -33,13 +32,10 @@ Syntax
        *region* value = region-ID
          region-ID = ID of region to use as an exchange/move volume
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix 2 all atom/swap 1 1 29494 300.0 ke no types 1 2
    fix myFix all atom/swap 100 1 12345 298.0 region my_swap_region types 5 6
@@ -70,7 +66,7 @@ The *types* keyword is required. At least two atom types must be
 specified.
 
 The *ke* keyword can be set to *no* to turn off kinetic energy
-conservation for swaps. The default is *yes*\ , which means that swapped
+conservation for swaps. The default is *yes*, which means that swapped
 atoms have their velocities scaled by the ratio of the masses of the
 swapped atom types. This ensures that the kinetic energy of each atom
 is the same after the swap as it was before the swap, even though the
@@ -79,12 +75,12 @@ atom masses have changed.
 The *semi-grand* keyword can be set to *yes* to switch to the
 semi-grand canonical ensemble as discussed in :ref:`(Sadigh) <Sadigh>`. This
 means that the total number of each particle type does not need to be
-conserved. The default is *no*\ , which means that the only kind of swap
+conserved. The default is *no*, which means that the only kind of swap
 allowed exchanges an atom of one type with an atom of a different
 given type. In other words, the relative mole fractions of the swapped
 atoms remains constant. Whereas in the semi-grand canonical ensemble,
 the composition of the system can change. Note that when using
-*semi-grand*\ , atoms in the fix group whose type is not listed
+*semi-grand*, atoms in the fix group whose type is not listed
 in the *types* keyword are ineligible for attempted
 conversion. An attempt is made to switch
 the selected atom (if eligible) to one of the other listed types
@@ -112,10 +108,10 @@ non-zero molecule ID, but does not check for this at the time of
 swapping.
 
 If not using *semi-grand* this fix checks to ensure all atoms of the
-given types have the same atomic charge. LAMMPS doesn't enforce this
+given types have the same atomic charge. LAMMPS does not enforce this
 in general, but it is needed for this fix to simplify the
 swapping procedure. Successful swaps will swap the atom type and charge
-of the swapped atoms. Conversely, when using *semi-grand*\ , it is assumed that all the atom
+of the swapped atoms. Conversely, when using *semi-grand*, it is assumed that all the atom
 types involved in switches have the same charge. Otherwise, charge
 would not be conserved. As a consequence, no checks on atomic charges are
 performed, and successful switches update the atom type but not the
@@ -145,7 +141,8 @@ you MUST enable the :doc:`fix_modify <fix_modify>` *energy* option for
 that fix.  The doc pages for individual :doc:`fix <fix>` commands
 specify if this should be done.
 
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 This fix writes the state of the fix to :doc:`binary restart files <restart>`.  This includes information about the random
 number generator seed, the next timestep for MC exchanges, the number
@@ -178,7 +175,6 @@ the :doc:`run <run>` command.  This fix is not invoked during :doc:`energy minim
 Restrictions
 """"""""""""
 
-
 This fix is part of the MC package.  It is only enabled if LAMMPS was
 built with that package.  See the :doc:`Build package <Build_package>`
 doc page for more info.
@@ -196,13 +192,9 @@ Default
 The option defaults are ke = yes, semi-grand = no, mu = 0.0 for
 all atom types.
 
-
 ----------
 
-
 .. _Sadigh:
-
-
 
 **(Sadigh)** B Sadigh, P Erhart, A Stukowski, A Caro, E Martinez, and
 L Zepeda-Ruiz, Phys. Rev. B, 85, 184203 (2012).

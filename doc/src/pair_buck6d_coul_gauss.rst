@@ -1,4 +1,5 @@
 .. index:: pair_style buck6d/coul/gauss/dsf
+.. index:: pair_style buck6d/coul/gauss/long
 
 pair_style buck6d/coul/gauss/dsf command
 ========================================
@@ -9,14 +10,12 @@ pair_style buck6d/coul/gauss/long command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    pair_style style args
 
 * style = *buck6d/coul/gauss/dsf* or *buck6d/coul/gauss/long*
 * args = list of arguments for a particular style
-
 
 .. parsed-literal::
 
@@ -32,7 +31,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -53,7 +51,6 @@ computes a dispersion damped Buckingham potential:
 .. math::
 
    E = A e^{-\kappa r} - \frac{C}{r^6} \cdot \frac{1}{1 + D r^{14}} \qquad r < r_c \\
-
 
 where A and C are a force constant, :math:`\kappa` is an ionic-pair dependent
 reciprocal length parameter, D is a dispersion correction parameter,
@@ -83,7 +80,6 @@ is thus evaluated as:
 .. math::
 
    E = \frac{C_{q_i q_j}}{\epsilon r_{ij}}\,\, \textrm{erf}\left(\alpha_{ij} r_{ij}\right)\quad\quad\quad r < r_c
-
 
 where C is an energy-conversion constant, :math:`q_i` and :math:`q_j`
 are the charges on the 2 atoms, epsilon is the dielectric constant which
@@ -121,11 +117,10 @@ The second coefficient, :math:`\rho`, must be greater than zero. The
 latter coefficient is optional.  If not specified, the global vdW cutoff
 is used.
 
-
 ----------
 
-
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 These pair styles do not support mixing.  Thus, coefficients for all
 I,J pairs must be specified explicitly.
@@ -134,30 +129,29 @@ These styles do not support the :doc:`pair_modify <pair_modify>` shift
 option for the energy. Instead the smoothing function should be applied
 by setting the global smoothing parameter to a value < 1.0.
 
-These styles write their information to :doc:`binary restart files <restart>`, so pair\_style and pair\_coeff commands do not need
+These styles write their information to :doc:`binary restart files <restart>`, so pair_style and pair_coeff commands do not need
 to be specified in an input script that reads a restart file.
 
 Restrictions
 """"""""""""
 
-
-These styles are part of the USER-MOFFF package.  They are only
-enabled if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+These styles are part of the MOFFF package.  They are only
+enabled if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
 
 :doc:`pair_coeff <pair_coeff>`
 
-**Default:** none
+Default
+"""""""
+
+none
 
 .. _Schmid:
-
-
 
 .. _Fennell:
 
 **(Schmid)** S. Bureekaew, S. Amirjalayer, M. Tafipolsky, C. Spickermann, T.K. Roy and R. Schmid, Phys. Status Solidi B, 6, 1128 (2013).
-
 
 **(Fennell)** C. J. Fennell, J. D. Gezelter, J Chem Phys, 124, 234104 (2006).

@@ -6,7 +6,6 @@ dump_modify command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    dump_modify dump-ID keyword values ...
@@ -15,9 +14,9 @@ Syntax
 * one or more keyword/value pairs may be appended
 * these keywords apply to various dump styles
 * keyword = *append* or *at* or *buffer* or *delay* or *element* or *every* or *fileper* or *first* or *flush* or *format* or *image* or *label* or *maxfiles* or *nfile* or *pad* or *pbc* or *precision* or *region* or *refresh* or *scale* or *sfactor* or *sort* or *tfactor* or *thermo* or *thresh* or *time* or *units* or *unwrap*
-  
+
   .. parsed-literal::
-  
+
        *append* arg = *yes* or *no*
        *at* arg = N
          N = index of frame written upon first dump
@@ -67,10 +66,10 @@ Syntax
        *unwrap* arg = *yes* or *no*
 
 * these keywords apply only to the *image* and *movie* :doc:`styles <dump_image>`
-* keyword = *acolor* or *adiam* or *amap* or *backcolor* or *bcolor* or *bdiam* or *boxcolor* or *color* or *bitrate* or *framerate*
-  
+* keyword = *acolor* or *adiam* or *amap* or *backcolor* or *bcolor* or *bdiam* or *boxcolor* or *color* or *bitrate* or *framerate* or *header*
+
   .. parsed-literal::
-  
+
        *acolor* args = type color
          type = atom type or range of types (see below)
          color = name of color or color1/color2/...
@@ -114,12 +113,27 @@ Syntax
          rate = target bitrate for movie in kbps
        *framerate* arg = fps
          fps = frames per second for movie
+       *header* arg = *yes* or *no*
+         *yes* to write the header
+         *no* to not write the header
 
+* these keywords apply only to the */gz* and */zstd* dump styles
+* keyword = *compression_level*
 
+  .. parsed-literal::
+
+       *compression_level* args = level
+         level = integer specifying the compression level that should be used (see below for supported levels)
+
+* these keywords apply only to the */zstd* dump styles
+* keyword = *compression_level*
+
+  .. parsed-literal::
+
+       *checksum* args = *yes* or *no* (add checksum at end of zst file)
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -138,57 +152,49 @@ Description
 Modify the parameters of a previously defined dump command.  Not all
 parameters are relevant to all dump styles.
 
-As explained on the :doc:`dump <dump>` doc page, the *atom/mpiio*\ ,
-*custom/mpiio*\ , and *xyz/mpiio* dump styles are identical in command
+As explained on the :doc:`dump <dump>` doc page, the *atom/mpiio*,
+*custom/mpiio*, and *xyz/mpiio* dump styles are identical in command
 syntax and in the format of the dump files they create, to the
 corresponding styles without "mpiio", except the single dump file they
 produce is written in parallel via the MPI-IO library.  Thus if a
-dump\_modify option below is valid for the *atom* style, it is also
+dump_modify option below is valid for the *atom* style, it is also
 valid for the *atom/mpiio* style, and similarly for the other styles
 which allow for use of MPI-IO.
 
-
 ----------
-
 
 These keywords apply to various dump styles, including the :doc:`dump image <dump_image>` and :doc:`dump movie <dump_image>` styles.  The
 description gives details.
 
-
 ----------
-
 
 The *append* keyword applies to all dump styles except *cfg* and *xtc*
 and *dcd*\ .  It also applies only to text output files, not to binary
-or gzipped or image/movie files.  If specified as *yes*\ , then dump
+or gzipped or image/movie files.  If specified as *yes*, then dump
 snapshots are appended to the end of an existing dump file.  If
-specified as *no*\ , then a new dump file will be created which will
+specified as *no*, then a new dump file will be created which will
 overwrite an existing file with the same name.
 
-
 ----------
-
 
 The *at* keyword only applies to the *netcdf* dump style.  It can only
 be used if the *append yes* keyword is also used.  The *N* argument is
 the index of which frame to append to.  A negative value can be
-specified for *N*\ , which means a frame counted from the end of the
-file.  The *at* keyword can only be used if the dump\_modify command is
+specified for *N*, which means a frame counted from the end of the
+file.  The *at* keyword can only be used if the dump_modify command is
 before the first command that causes dump snapshots to be output,
 e.g. a :doc:`run <run>` or :doc:`minimize <minimize>` command.  Once the
 dump file has been opened, this keyword has no further effect.
 
-
 ----------
 
-
-The *buffer* keyword applies only to dump styles *atom*\ , *cfg*\ ,
-*custom*\ , *local*\ , and *xyz*\ .  It also applies only to text output
-files, not to binary or gzipped files.  If specified as *yes*\ , which
+The *buffer* keyword applies only to dump styles *atom*, *cfg*,
+*custom*, *local*, and *xyz*\ .  It also applies only to text output
+files, not to binary or gzipped files.  If specified as *yes*, which
 is the default, then each processor writes its output into an internal
 text buffer, which is then sent to the processor(s) which perform file
 writes, and written by those processors(s) as one large chunk of text.
-If specified as *no*\ , each processor sends its per-atom data in binary
+If specified as *no*, each processor sends its per-atom data in binary
 format to the processor(s) which perform file wirtes, and those
 processor(s) format and write it line by line into the output file.
 
@@ -197,9 +203,7 @@ relatively expensive task of formatting the output for its own atoms.
 However it requires about twice the memory (per processor) for the
 extra buffering.
 
-
 ----------
-
 
 The *delay* keyword applies to all dump styles.  No snapshots will be
 output until the specified *Dstep* timestep or later.  Specifying
@@ -207,20 +211,18 @@ output until the specified *Dstep* timestep or later.  Specifying
 way to turn off unwanted output early in a simulation, for example,
 during an equilibration phase.
 
-
 ----------
 
-
-The *element* keyword applies only to the dump *cfg*\ , *xyz*\ , and
+The *element* keyword applies only to the dump *cfg*, *xyz*, and
 *image* styles.  It associates element names (e.g. H, C, Fe) with
 LAMMPS atom types.  See the list of element names at the bottom of
 this page.
 
-In the case of dump *cfg*\ , this allows the `AtomEye <atomeye_>`_
+In the case of dump *cfg*, this allows the `AtomEye <atomeye_>`_
 visualization package to read the dump file and render atoms with the
 appropriate size and color.
 
-In the case of dump *image*\ , the output images will follow the same
+In the case of dump *image*, the output images will follow the same
 `AtomEye <atomeye_>`_ convention.  An element name is specified for each
 atom type (1 to Ntype) in the simulation.  The same element name can
 be given to multiple atom types.
@@ -229,19 +231,15 @@ In the case of *xyz* format dumps, there are no restrictions to what
 label can be used as an element name.  Any white-space separated text
 will be accepted.
 
-.. _atomeye: http://mt.seas.upenn.edu/Archive/Graphics/A
-
-
-
+.. _atomeye: http://li.mit.edu/Archive/Graphics/A/
 
 ----------
-
 
 The *every* keyword changes the dump frequency originally specified by
 the :doc:`dump <dump>` command to a new value.  The every keyword can be
 specified in one of two ways.  It can be a numeric value in which case
 it must be > 0.  Or it can be an :doc:`equal-style variable <variable>`,
-which should be specified as v\_name, where name is the variable name.
+which should be specified as v_name, where name is the variable name.
 
 In this case, the variable is evaluated at the beginning of a run to
 determine the next timestep at which a dump snapshot will be written
@@ -264,7 +262,6 @@ to the dump file.  The *every* keyword cannot be used with the dump
 For example, the following commands will
 write snapshots at timesteps 0,10,20,30,100,200,300,1000,2000,etc:
 
-
 .. code-block:: LAMMPS
 
    variable        s equal logfreq(10,3,10)
@@ -273,7 +270,6 @@ write snapshots at timesteps 0,10,20,30,100,200,300,1000,2000,etc:
 
 The following commands would write snapshots at the timesteps listed
 in file tmp.times:
-
 
 .. code-block:: LAMMPS
 
@@ -292,24 +288,20 @@ in file tmp.times:
    from the file is not a value greater than the current timestep.  Thus
    if you wanted output on steps 0,15,100 of a 100-timestep run, the file
    should contain the values 15,100,101 and you should also use the
-   dump\_modify first command.  Any final value > 100 could be used in
+   dump_modify first command.  Any final value > 100 could be used in
    place of 101.
 
-
 ----------
-
 
 The *first* keyword determines whether a dump snapshot is written on
 the very first timestep after the dump command is invoked.  This will
 always occur if the current timestep is a multiple of N, the frequency
 specified in the :doc:`dump <dump>` command, including timestep 0.  But
 if this is not the case, a dump snapshot will only be written if the
-setting of this keyword is *yes*\ .  If it is *no*\ , which is the
+setting of this keyword is *yes*\ .  If it is *no*, which is the
 default, then it will not be written.
 
-
 ----------
-
 
 The *flush* keyword determines whether a flush operation is invoked
 after a dump snapshot is written to the dump file.  A flush insures
@@ -317,13 +309,11 @@ the output in that file is current (no buffering by the OS), even if
 LAMMPS halts before the simulation completes.  Flushes cannot be
 performed with dump style *xtc*\ .
 
-
 ----------
 
-
-The *format* keyword can be used to change the default numeric format
-output by the text-based dump styles: *atom*\ , *custom*\ , *cfg*\ , and
-*xyz* styles, and their MPIIO variants.  Only the *line* or *none*
+The *format* keyword can be used to change the default numeric format output
+by the text-based dump styles: *atom*, *local*, *custom*, *cfg*, and
+*xyz* styles, and their MPIIO variants. Only the *line* or *none*
 options can be used with the *atom* and *xyz* styles.
 
 All the specified format strings are C-style formats, e.g. as used by
@@ -334,7 +324,7 @@ must enclose in quotes if it is more than one field.  The *int* and
 *float* keywords take a single format argument and are applied to all
 integer or floating-point quantities output.  The setting for *M
 string* also takes a single format argument which is used for the Mth
-value output in each line, e.g. the 5th column is output in high
+value output in each line, e.g. the fifth column is output in high
 precision for "format 5 %20.15g".
 
 .. note::
@@ -360,7 +350,7 @@ settings, reverting all values to their default format.
    values.  However, when specifying the *line* option or *format M
    string* option for those values, you should specify a format string
    appropriate for an 8-byte signed integer, e.g. one with "%ld", if
-   LAMMPS was compiled with the -DLAMMPS\_BIGBIG option for 8-byte IDs.
+   LAMMPS was compiled with the -DLAMMPS_BIGBIG option for 8-byte IDs.
 
 .. note::
 
@@ -371,32 +361,27 @@ settings, reverting all values to their default format.
    (large) integer, then you need to use an appropriate format.  For
    example, these commands:
 
-
 .. code-block:: LAMMPS
 
    compute     1 all property/local batom1 batom2
    dump        1 all local 100 tmp.bonds index c_1[1] c_1[2]
-   dump_modify 1 format "%d %0.0f %0.0f"
+   dump_modify 1 format line "%d %0.0f %0.0f"
 
 will output the two atom IDs for atoms in each bond as integers.  If
-the dump\_modify command were omitted, they would appear as
+the dump_modify command were omitted, they would appear as
 floating-point values, assuming they were large integers (more than 6
 digits).  The "index" keyword should use the "%d" format since it is
 not generated by a compute or fix, and is stored internally as an
 integer.
 
-
 ----------
-
 
 The *fileper* keyword is documented below with the *nfile* keyword.
 
-
 ----------
 
-
 The *image* keyword applies only to the dump *atom* style.  If the
-image value is *yes*\ , 3 flags are appended to each atom's coords which
+image value is *yes*, 3 flags are appended to each atom's coords which
 are the absolute box image of the atom in each dimension.  For
 example, an x image flag of -2 with a normalized coord of 0.5 means
 the atom is in the center of the box, but has passed through the box
@@ -405,15 +390,12 @@ current coordinate.  Note that for dump style *custom* these various
 values can be printed in the dump file by using the appropriate atom
 attributes in the dump command itself.
 
-
 ----------
-
 
 The *label* keyword applies only to the dump *local* style.  When
 it writes local information, such as bond or angle topology
 to a dump file, it will use the specified *label* to format
 the header.  By default this includes 2 lines:
-
 
 .. parsed-literal::
 
@@ -423,9 +405,7 @@ the header.  By default this includes 2 lines:
 The word "ENTRIES" will be replaced with the string specified,
 e.g. BONDS or ANGLES.
 
-
 ----------
-
 
 The *maxfiles* keyword can only be used when a '\*' wildcard is
 included in the dump file name, i.e. when writing a new file(s) for
@@ -439,13 +419,11 @@ timestep something bad will happen, e.g. when LAMMPS will exit with an
 error.  You can dump every timestep, and limit the number of dump
 files produced, even if you run for 1000s of steps.
 
-
 ----------
-
 
 The *nfile* or *fileper* keywords can be used in conjunction with the
 "%" wildcard character in the specified dump file name, for all dump
-styles except the *dcd*\ , *image*\ , *movie*\ , *xtc*\ , and *xyz* styles
+styles except the *dcd*, *image*, *movie*, *xtc*, and *xyz* styles
 (for which "%" is not allowed).  As explained on the :doc:`dump <dump>`
 command doc page, the "%" character causes the dump file to be written
 in pieces, one piece for each of P processors.  By default P = the
@@ -459,13 +437,11 @@ be written, by processors 0,25,50,75.  Each will collect information
 from itself and the next 24 processors and write it to a dump file.
 
 For the *fileper* keyword, the specified value of Np means write one
-file for every Np processors.  For example, if Np = 4, every 4th
+file for every Np processors.  For example, if Np = 4, every fourth
 processor (0,4,8,12,etc) will collect information from itself and the
 next 3 processors and write it to a dump file.
 
-
 ----------
-
 
 The *pad* keyword only applies when the dump filename is specified
 with a wildcard "\*" character which becomes the timestep.  If *pad* is
@@ -477,9 +453,7 @@ yield 0000100, 0012000, 2000000.  This can be useful so that
 post-processing programs can easily read the files in ascending
 timestep order.
 
-
 ----------
-
 
 The *pbc* keyword applies to all the dump styles.  As explained on the
 :doc:`dump <dump>` doc page, atom coordinates in a dump file may be
@@ -487,29 +461,25 @@ slightly outside the simulation box.  This is because periodic
 boundary conditions are enforced only on timesteps when neighbor lists
 are rebuilt, which will not typically coincide with the timesteps dump
 snapshots are written.  If the setting of this keyword is set to
-*yes*\ , then all atoms will be remapped to the periodic box before the
+*yes*, then all atoms will be remapped to the periodic box before the
 snapshot is written, then restored to their original position.  If it
 is set to *no* they will not be.  The *no* setting is the default
 because it requires no extra computation.
 
-
 ----------
-
 
 The *precision* keyword only applies to the dump *xtc* style.  A
 specified value of N means that coordinates are stored to 1/N
 nanometer accuracy, e.g. for N = 1000, the coordinates are written to
 1/1000 nanometer accuracy.
 
-
 ----------
 
-
-The *refresh* keyword only applies to the dump *custom*\ , *cfg*\ ,
-*image*\ , and *movie* styles.  It allows an "incremental" dump file to
+The *refresh* keyword only applies to the dump *custom*, *cfg*,
+*image*, and *movie* styles.  It allows an "incremental" dump file to
 be written, by refreshing a compute that is used as a threshold for
 determining which atoms are included in a dump snapshot.  The
-specified *c\_ID* gives the ID of the compute.  It is prefixed by "c\_"
+specified *c_ID* gives the ID of the compute.  It is prefixed by "c\_"
 to indicate a compute, which is the only current option.  At some
 point, other options may be added, e.g. fixes or variables.
 
@@ -534,7 +504,6 @@ any snapshot we only want to output atoms that have hopped since the
 last snapshot.  This can be accomplished with something the following
 commands:
 
-
 .. code-block:: LAMMPS
 
    variable        Dhop equal 0.6
@@ -552,7 +521,7 @@ Angstroms to be output on a given snapshot (assuming metal units).
 However, note that when an atom is output, we also need to update the
 reference position for that atom to its new coordinates.  So that it
 will not be output in every snapshot thereafter.  That reference
-position is stored by :doc:`compute displace/atom <compute_displace_atom>`.  So the dump\_modify
+position is stored by :doc:`compute displace/atom <compute_displace_atom>`.  So the dump_modify
 *refresh* option triggers a call to compute displace/atom at the end
 of every dump to perform that update.  The *refresh check* option
 shown as part of the :doc:`compute displace/atom <compute_displace_atom>` command enables the compute
@@ -560,25 +529,23 @@ to respond to the call from the dump command, and update the
 appropriate reference positions.  This is done be defining an
 :doc:`atom-style variable <variable>`, *check* in this example, which
 calculates a Boolean value (0 or 1) for each atom, based on the same
-criterion used by dump\_modify thresh.
+criterion used by dump_modify thresh.
 
 See the :doc:`compute displace/atom <compute_displace_atom>` command for
 more details, including an example of how to produce output that
 includes an initial snapshot with the reference position of all atoms.
 
 Note that only computes with a *refresh* option will work with
-dump\_modify refresh.  See individual compute doc pages for details.
+dump_modify refresh.  See individual compute doc pages for details.
 Currently, only compute displace/atom supports this option.  Others
-may be added at some point.  If you use a compute that doesn't support
-refresh operations, LAMMPS will not complain; dump\_modify refresh will
+may be added at some point.  If you use a compute that does not support
+refresh operations, LAMMPS will not complain; dump_modify refresh will
 simply do nothing.
-
 
 ----------
 
-
-The *region* keyword only applies to the dump *custom*\ , *cfg*\ ,
-*image*\ , and *movie* styles.  If specified, only atoms in the region
+The *region* keyword only applies to the dump *custom*, *cfg*,
+*image*, and *movie* styles.  If specified, only atoms in the region
 will be written to the dump file or included in the image/movie.  Only
 one region can be applied as a filter (the last one specified).  See
 the :doc:`region <region>` command for more details.  Note that a region
@@ -586,9 +553,7 @@ can be defined as the "inside" or "outside" of a geometric shape, and
 it can be the "union" or "intersection" of a series of simpler
 regions.
 
-
 ----------
-
 
 The *scale* keyword applies only to the dump *atom* style.  A scale
 value of *yes* means atom coords are written in normalized units from
@@ -597,9 +562,7 @@ value of *yes* means atom coords are written in normalized units from
 value of *no* means they are written in absolute distance units
 (e.g. Angstroms or sigma).
 
-
 ----------
-
 
 The *sfactor* and *tfactor* keywords only apply to the dump *xtc*
 style.  They allow customization of the unit conversion factors used
@@ -607,16 +570,14 @@ when writing to XTC files.  By default they are initialized for
 whatever :doc:`units <units>` style is being used, to write out
 coordinates in nanometers and time in picoseconds.  I.e. for *real*
 units, LAMMPS defines *sfactor* = 0.1 and *tfactor* = 0.001, since the
-Angstroms and fmsec used by *real* units are 0.1 nm and 0.001 psec
+Angstroms and fs used by *real* units are 0.1 nm and 0.001 ps
 respectively.  If you are using a units system with distance and time
-units far from nm and psec, you may wish to write XTC files with
+units far from nm and ps, you may wish to write XTC files with
 different units, since the compression algorithm used in XTC files is
 most effective when the typical magnitude of position data is between
 10.0 and 0.1.
 
-
 ----------
-
 
 The *sort* keyword determines whether lines of per-atom output in a
 snapshot are sorted or not.  A sort value of *off* means they will
@@ -629,7 +590,7 @@ order.
 
 The dump *local* style cannot be sorted by atom ID, since there are
 typically multiple lines of output per atom.  Some dump styles, such
-as *dcd* and *xtc*\ , require sorting by atom ID to format the output
+as *dcd* and *xtc*, require sorting by atom ID to format the output
 file correctly.  If multiple processors are writing the dump file, via
 the "%" wildcard in the dump filename, then sorting cannot be
 performed.
@@ -640,21 +601,17 @@ performed.
    output requires extra overhead in terms of CPU and communication cost,
    as well as memory, versus unsorted output.
 
-
 ----------
-
 
 The *thermo* keyword only applies the dump *netcdf* style.  It
 triggers writing of :doc:`thermo <thermo>` information to the dump file
 alongside per-atom data.  The values included in the dump file are
 identical to the values specified by :doc:`thermo_style <thermo_style>`.
 
-
 ----------
 
-
-The *thresh* keyword only applies to the dump *custom*\ , *cfg*\ ,
-*image*\ , and *movie* styles.  Multiple thresholds can be specified.
+The *thresh* keyword only applies to the dump *custom*, *cfg*,
+*image*, and *movie* styles.  Multiple thresholds can be specified.
 Specifying *none* turns off all threshold criteria.  If thresholds are
 specified, only atoms whose attributes meet all the threshold criteria
 are written to the dump file or included in the image.  The possible
@@ -669,14 +626,13 @@ produce continuous numeric values or effective Boolean 0/1 values
 which may be useful for the comparison operator.  Boolean values can
 be generated by variable formulas that use comparison or Boolean math
 operators or special functions like gmask() and rmask() and grmask().
-See the :doc:`variable <variable>` command doc page for details.
+See the :doc:`variable <variable>` command page for details.
 
 The specified value must be a simple numeric value or the word LAST.
 If LAST is used, it refers to the value of the attribute the last time
 the dump command was invoked to produce a snapshot.  This is a way to
 only dump atoms whose attribute has changed (or not changed).
 Three examples follow.
-
 
 .. code-block:: LAMMPS
 
@@ -687,7 +643,6 @@ simulation box since the last dump.  (Note that atoms that crossed
 once and then crossed back between the two dump timesteps would not be
 included.)
 
-
 .. code-block:: LAMMPS
 
    region foo sphere 10 20 10 15
@@ -696,7 +651,6 @@ included.)
 
 This will dump atoms which crossed the boundary of the spherical
 region since the last dump.
-
 
 .. code-block:: LAMMPS
 
@@ -714,15 +668,12 @@ In this context, XOR means that if either the attribute or value is
 0.0 and the other is non-zero, then the result is "true" and the
 threshold criterion is met.  Otherwise it is not met.
 
-
 ----------
 
-
-The *time* keyword only applies to the dump *atom*\ , *custom*\ , and
-*local* styles (and their COMPRESS package versions *atom/gz*\ ,
-*custom/gz* and *local/gz*\ ). If set to *yes*\ , each frame will will
+The *time* keyword only applies to the dump *atom*, *custom*, and
+*local* styles (and their COMPRESS package versions *atom/gz*,
+*custom/gz* and *local/gz*\ ). If set to *yes*, each frame will will
 contain two extra lines before the "ITEM: TIMESTEP" entry:
-
 
 .. parsed-literal::
 
@@ -735,15 +686,12 @@ This is to simplify post-processing of trajectories using a variable time
 step, e.g. when using :doc:`fix dt/reset <fix_dt_reset>`.
 The default setting is *no*\ .
 
-
 ----------
 
-
-The *units* keyword only applies to the dump *atom*\ , *custom*\ , and
-*local* styles (and their COMPRESS package versions *atom/gz*\ ,
-*custom/gz* and *local/gz*\ ). If set to *yes*\ , each individual dump
+The *units* keyword only applies to the dump *atom*, *custom*, and
+*local* styles (and their COMPRESS package versions *atom/gz*,
+*custom/gz* and *local/gz*\ ). If set to *yes*, each individual dump
 file will contain two extra lines at the very beginning with:
-
 
 .. parsed-literal::
 
@@ -755,33 +703,27 @@ to the dump file and thus allows visualization and post-processing
 tools to determine the choice of units of the data in the dump file.
 The default setting is *no*\ .
 
-
 ----------
 
-
 The *unwrap* keyword only applies to the dump *dcd* and *xtc* styles.
-If set to *yes*\ , coordinates will be written "unwrapped" by the image
+If set to *yes*, coordinates will be written "unwrapped" by the image
 flags for each atom.  Unwrapped means that if the atom has passed through
 a periodic boundary one or more times, the value is printed for what
 the coordinate would be if it had not been wrapped back into the
 periodic box.  Note that these coordinates may thus be far outside the
 box size stored with the snapshot.
 
-
 ----------
-
 
 These keywords apply only to the :doc:`dump image <dump_image>` and
 :doc:`dump movie <dump_image>` styles.  Any keyword that affects an
 image, also affects a movie, since the movie is simply a collection of
 images.  Some of the keywords only affect the :doc:`dump movie <dump_image>` style.  The descriptions give details.
 
-
 ----------
 
-
 The *acolor* keyword can be used with the :doc:`dump image <dump_image>`
-command, when its atom color setting is *type*\ , to set the color that
+command, when its atom color setting is *type*, to set the color that
 atoms of each type will be drawn in the image.
 
 The specified *type* should be an integer from 1 to Ntypes = the
@@ -796,18 +738,16 @@ all types from 1 to N.  A leading asterisk means all types from 1 to n
 
 The specified *color* can be a single color which is any of the 140
 pre-defined colors (see below) or a color name defined by the
-dump\_modify color option.  Or it can be two or more colors separated
+dump_modify color option.  Or it can be two or more colors separated
 by a "/" character, e.g. red/green/blue.  In the former case, that
 color is assigned to all the specified atom types.  In the latter
 case, the list of colors are assigned in a round-robin fashion to each
 of the specified atom types.
 
-
 ----------
 
-
 The *adiam* keyword can be used with the :doc:`dump image <dump_image>`
-command, when its atom diameter setting is *type*\ , to set the size
+command, when its atom diameter setting is *type*, to set the size
 that atoms of each type will be drawn in the image.  The specified
 *type* should be an integer from 1 to Ntypes.  As with the *acolor*
 keyword, a wildcard asterisk can be used as part of the *type*
@@ -815,9 +755,7 @@ argument to specify a range of atom types.  The specified *diam* is
 the size in whatever distance :doc:`units <units>` the input script is
 using, e.g. Angstroms.
 
-
 ----------
-
 
 The *amap* keyword can be used with the :doc:`dump image <dump_image>`
 command, with its *atom* keyword, when its atom setting is an
@@ -838,7 +776,7 @@ There are many possible options for the color map, enabled by the
 *amap* keyword.  Here are the details.
 
 The *lo* and *hi* settings determine the range of values allowed for
-the atom attribute.  If numeric values are used for *lo* and/or *hi*\ ,
+the atom attribute.  If numeric values are used for *lo* and/or *hi*,
 then values that are lower/higher than that value are set to the
 value.  I.e. the range is static.  If *lo* is specified as *min* or
 *hi* as *max* then the range is dynamic, and the lower and/or
@@ -870,14 +808,14 @@ for the sequential style; otherwise the value is ignored.  It
 specifies the bin size to use within the range for assigning
 consecutive colors to.  For example, if the range is from -10.0 to
 10.0 and a *delta* of 1.0 is used, then 20 colors will be assigned to
-the range.  The first will be from -10.0 <= color1 < -9.0, then 2nd
+the range.  The first will be from -10.0 <= color1 < -9.0, then second
 from -9.0 <= color2 < -8.0, etc.
 
 The *N* setting is how many entries follow.  The format of the entries
 depends on whether the color map style is continuous, discrete or
 sequential.  In all cases the *color* setting can be any of the 140
 pre-defined colors (see below) or a color name defined by the
-dump\_modify color option.
+dump_modify color option.
 
 For continuous color maps, each entry has a *value* and a *color*\ .
 The *value* is either a number within the range of values or *min* or
@@ -909,7 +847,7 @@ for the color map.
 Here is how the entries are used to determine the color of an
 individual atom, given the value X of its atom attribute.  The entries
 are scanned from first to last.  The first time that *lo* <= X <=
-*hi*\ , X is assigned the color associated with that entry.  You can
+*hi*, X is assigned the color associated with that entry.  You can
 think of the last entry as assigning a default color (since it will
 always be matched by X), and the earlier entries as colors that
 override the default.  Also note that no interpolation of a color RGB
@@ -934,7 +872,6 @@ atoms in individual molecules with a different color.  See the
 examples/pour/in.pour.2d.molecule input script for an example of how
 this is used.
 
-
 .. code-block:: LAMMPS
 
    variable        colors string &
@@ -948,20 +885,16 @@ this is used.
 In this case, 10 colors are defined, and molecule IDs are
 mapped to one of the colors, even if there are 1000s of molecules.
 
-
 ----------
-
 
 The *backcolor* sets the background color of the images.  The color
 name can be any of the 140 pre-defined colors (see below) or a color
-name defined by the dump\_modify color option.
-
+name defined by the dump_modify color option.
 
 ----------
 
-
 The *bcolor* keyword can be used with the :doc:`dump image <dump_image>`
-command, with its *bond* keyword, when its color setting is *type*\ , to
+command, with its *bond* keyword, when its color setting is *type*, to
 set the color that bonds of each type will be drawn in the image.
 
 The specified *type* should be an integer from 1 to Nbondtypes = the
@@ -976,18 +909,16 @@ all types from 1 to N.  A leading asterisk means all types from 1 to n
 
 The specified *color* can be a single color which is any of the 140
 pre-defined colors (see below) or a color name defined by the
-dump\_modify color option.  Or it can be two or more colors separated
+dump_modify color option.  Or it can be two or more colors separated
 by a "/" character, e.g. red/green/blue.  In the former case, that
 color is assigned to all the specified bond types.  In the latter
 case, the list of colors are assigned in a round-robin fashion to each
 of the specified bond types.
 
-
 ----------
 
-
 The *bdiam* keyword can be used with the :doc:`dump image <dump_image>`
-command, with its *bond* keyword, when its diam setting is *type*\ , to
+command, with its *bond* keyword, when its diam setting is *type*, to
 set the diameter that bonds of each type will be drawn in the image.
 The specified *type* should be an integer from 1 to Nbondtypes.  As
 with the *bcolor* keyword, a wildcard asterisk can be used as part of
@@ -995,9 +926,7 @@ the *type* argument to specify a range of bond types.  The specified
 *diam* is the size in whatever distance :doc:`units <units>` you are
 using, e.g. Angstroms.
 
-
 ----------
-
 
 The *bitrate* keyword can be used with the :doc:`dump movie <dump_image>` command to define the size of the resulting
 movie file and its quality via setting how many kbits per second are
@@ -1012,9 +941,7 @@ older compression formats.
    Not all movie file formats supported by dump movie allow the
    bitrate to be set.  If not, the setting is silently ignored.
 
-
 ----------
-
 
 The *boxcolor* keyword sets the color of the simulation box drawn
 around the atoms in each image as well as the color of processor
@@ -1022,16 +949,14 @@ sub-domain boundaries.  See the "dump image box" command for how to
 specify that a box be drawn via the *box* keyword, and the sub-domain
 boundaries via the *subbox* keyword.  The color name can be any of the
 140 pre-defined colors (see below) or a color name defined by the
-dump\_modify color option.
-
+dump_modify color option.
 
 ----------
-
 
 The *color* keyword allows definition of a new color name, in addition
 to the 140-predefined colors (see below), and associates 3
 red/green/blue RGB values with that color name.  The color name can
-then be used with any other dump\_modify keyword that takes a color
+then be used with any other dump_modify keyword that takes a color
 name as a value.  The RGB values should each be floating point values
 between 0.0 and 1.0 inclusive.
 
@@ -1040,9 +965,7 @@ names are searched first, then the 140 pre-defined color names.  This
 means you can also use the *color* keyword to overwrite one of the
 pre-defined color names with new RBG values.
 
-
 ----------
-
 
 The *framerate* keyword can be used with the :doc:`dump movie <dump_image>` command to define the duration of the resulting
 movie file.  Movie files written by the dump *movie* command have a
@@ -1055,9 +978,36 @@ frame rate higher than 24 is not recommended, as it will result in
 simply dropping the rendered images. It is more efficient to dump
 images less frequently.
 
+----------
+
+The *header* keyword toggles whether the dump file will include a header.
+Excluding a header will reduce the size of the dump file for fixes such as
+:doc:`fix pair/tracker <fix_pair_tracker>` which do not require the information
+typically written to the header.
 
 ----------
 
+The COMPRESS package offers both GZ and Zstd compression variants of styles
+atom, custom, local, cfg, and xyz. When using these styles the compression
+level can be controlled by the :code:`compression_level` parameter. File names
+with these styles have to end in either :code:`.gz` or :code:`.zst`.
+
+GZ supports compression levels from -1 (default), 0 (no compression), and 1 to
+9. 9 being the best compression. The COMPRESS :code:`/gz` styles use 9 as
+default compression level.
+
+Zstd offers a wider range of compression levels, including negative
+levels that sacrifice compression for performance. 0 is the
+default, positive levels are 1 to 22, with 22 being the most expensive
+compression. Zstd promises higher compression/decompression speeds for
+similar compression ratios. For more details see
+`http://facebook.github.io/zstd/`.
+
+In addition, Zstd compressed files can have a checksum of the entire
+contents. The Zstd enabled dump styles enable this feature by default and it
+can be disabled with the :code:`checksum` parameter.
+
+----------
 
 Restrictions
 """"""""""""
@@ -1074,7 +1024,7 @@ Default
 The option defaults are
 
 * append = no
-* buffer = yes for dump styles *atom*\ , *custom*\ , *loca*\ , and *xyz*
+* buffer = yes for dump styles *atom*, *custom*, *loca*, and *xyz*
 * element = "C" for every atom type
 * every = whatever it was set to via the :doc:`dump <dump>` command
 * fileper = # of processors
@@ -1090,8 +1040,8 @@ The option defaults are
 * precision = 1000
 * region = none
 * scale = yes
-* sort = off for dump styles *atom*\ , *custom*\ , *cfg*\ , and *local*
-* sort = id for dump styles *dcd*\ , *xtc*\ , and *xyz*
+* sort = off for dump styles *atom*, *custom*, *cfg*, and *local*
+* sort = id for dump styles *dcd*, *xtc*, and *xyz*
 * thresh = none
 * units = no
 * unwrap = no
@@ -1107,12 +1057,14 @@ The option defaults are
 * color = 140 color names are pre-defined as listed below
 * framerate = 24
 
+* compression_level = 9 (gz variants)
+* compression_level = 0 (zstd variants)
+* checksum = yes (zstd variants)
 
 ----------
 
-
 These are the standard 109 element names that LAMMPS pre-defines for
-use with the :doc:`dump image <dump_image>` and dump\_modify commands.
+use with the :doc:`dump image <dump_image>` and dump_modify commands.
 
 * 1-10 = "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne"
 * 11-20 = "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca"
@@ -1126,13 +1078,11 @@ use with the :doc:`dump image <dump_image>` and dump\_modify commands.
 * 91-100 = "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm"
 * 101-109 = "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt"
 
-
 ----------
 
-
 These are the 140 colors that LAMMPS pre-defines for use with the
-:doc:`dump image <dump_image>` and dump\_modify commands.  Additional
-colors can be defined with the dump\_modify color command.  The 3
+:doc:`dump image <dump_image>` and dump_modify commands.  Additional
+colors can be defined with the dump_modify color command.  The 3
 numbers listed for each name are the RGB (red/green/blue) values.
 Divide each value by 255 to get the equivalent 0.0 to 1.0 value.
 

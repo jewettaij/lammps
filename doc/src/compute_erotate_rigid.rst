@@ -6,7 +6,6 @@ compute erotate/rigid command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID erotate/rigid fix-ID
@@ -18,8 +17,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all erotate/rigid myRigid
 
@@ -40,11 +38,12 @@ compute command is ignored.  The rotational energy of all the rigid
 bodies defined by the fix rigid command in included in the
 calculation.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a global scalar (the summed rotational energy
 of all the rigid bodies).  This value can be used by any command that
-uses a global scalar value from a compute as input.  See the :doc:`Howto output <Howto_output>` doc page for an overview of LAMMPS output
+uses a global scalar value from a compute as input.  See the :doc:`Howto output <Howto_output>` page for an overview of LAMMPS output
 options.
 
 The scalar value calculated by this compute is "extensive".  The
@@ -53,13 +52,15 @@ scalar value will be in energy :doc:`units <units>`.
 Restrictions
 """"""""""""
 
-
 This compute is part of the RIGID package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
 
 :doc:`compute ke/rigid <compute_ke_rigid>`
 
-**Default:** none
+Default
+"""""""
+
+none

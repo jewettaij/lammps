@@ -6,7 +6,6 @@ compute erotate/sphere/atom command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID erotate/sphere/atom
@@ -17,8 +16,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all erotate/sphere/atom
 
@@ -41,11 +39,12 @@ The value of the rotational kinetic energy will be 0.0 for atoms not
 in the specified compute group or for point particles with a radius =
 0.0.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a per-atom vector, which can be accessed by
 any command that uses per-atom values from a compute as input.  See
-the :doc:`Howto output <Howto_output>` doc page for an overview of
+the :doc:`Howto output <Howto_output>` page for an overview of
 LAMMPS output options.
 
 The per-atom vector values will be in energy :doc:`units <units>`.
@@ -59,4 +58,7 @@ Related commands
 
 :doc:`dump custom <dump>`
 
-**Default:** none
+Default
+"""""""
+
+none

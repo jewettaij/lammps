@@ -6,7 +6,6 @@ fix imd command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID imd trate port keyword values ...
@@ -15,9 +14,9 @@ Syntax
 * imd = style name of this fix command
 * port = port number on which the fix listens for an IMD client
 * keyword = *unwrap* or *fscale* or *trate*
-  
+
   .. parsed-literal::
-  
+
        *unwrap* arg = *on* or *off*
          off = coordinates are wrapped back into the principal unit cell (default)
          on = "unwrapped" coordinates using the image flags used
@@ -28,13 +27,10 @@ Syntax
          off = LAMMPS waits to be connected to an IMD client before continuing (default)
          on = LAMMPS listens for an IMD client, but continues with the run
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix vmd all imd 5678
    fix comm all imd 8888 trate 5 unwrap on fscale 10.0
@@ -48,7 +44,7 @@ IMD protocol, as initially implemented in VMD and NAMD.  Specifically
 it allows LAMMPS to connect an IMD client, for example the `VMD visualization program <VMD_>`_, so that it can monitor the progress of the
 simulation and interactively apply forces to selected atoms.
 
-If LAMMPS is compiled with the pre-processor flag -DLAMMPS\_ASYNC\_IMD
+If LAMMPS is compiled with the pre-processor flag -DLAMMPS_ASYNC_IMD
 then fix imd will use POSIX threads to spawn a IMD communication
 thread on MPI rank 0 in order to offload data reading and writing
 from the main execution thread and potentially lower the inferred
@@ -56,7 +52,7 @@ latencies for slow communication links. This feature has only been
 tested under linux.
 
 There are example scripts for using this package with LAMMPS in
-examples/USER/imd. Additional examples and a driver for use with the
+examples/PACKAGES/imd. Additional examples and a driver for use with the
 Novint Falcon game controller as haptic device can be found at:
 http://sites.google.com/site/akohlmey/software/vrpn-icms.
 
@@ -82,7 +78,7 @@ fixes would be active at the same time, each needs to use a different
 port number.
 
 The *nowait* keyword controls the behavior of the fix when no IMD
-client is connected. With the default setting of *off*\ , LAMMPS will
+client is connected. With the default setting of *off*, LAMMPS will
 wait until a connection is made before continuing with the
 execution. Setting *nowait* to *on* will have the LAMMPS code be ready
 to connect to a client, but continue with the simulation. This can for
@@ -107,7 +103,6 @@ To connect VMD to a listening LAMMPS simulation on the same machine
 with fix imd enabled, one needs to start VMD and load a coordinate or
 topology file that matches the fix group.  When the VMD command
 prompts appears, one types the command line:
-
 
 .. parsed-literal::
 
@@ -138,17 +133,12 @@ screen output is active.
 
 .. _VMD: http://www.ks.uiuc.edu/Research/vmd
 
-
-
 .. _imdvmd: http://www.ks.uiuc.edu/Research/vmd/imd/
-
-
 
 .. _vrpnicms: http://sites.google.com/site/akohlmey/software/vrpn-icms
 
-
-
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 No information about this fix is written to :doc:`binary restart files <restart>`.  None of the :doc:`fix_modify <fix_modify>` options
 are relevant to this fix.  No global scalar or vector or per-atom
@@ -159,9 +149,8 @@ fix is not invoked during :doc:`energy minimization <minimize>`.
 Restrictions
 """"""""""""
 
-
-This fix is part of the USER-MISC package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+This fix is part of the MISC package.  It is only enabled if
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 When used in combination with VMD, a topology or coordinate file has
 to be loaded, which matches (in number and ordering of atoms) the
@@ -172,6 +161,13 @@ be assigned 0-based consecutive index numbers.
 When using multiple active IMD connections at the same time, each
 needs to use a different port number.
 
-**Related commands:** none
+Related commands
+""""""""""""""""
 
-**Default:** none
+none
+
+
+Default
+"""""""
+
+none

@@ -6,7 +6,6 @@ fix neb command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID neb Kspring keyword value
@@ -35,8 +34,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix 1 active neb 10.0
    fix 2 all neb 1.0 perp 1.0 end last
@@ -66,7 +64,6 @@ interatomic force Fi = -Grad(V) for each replica I is altered.  For
 all intermediate replicas (i.e. for 1 < I < N, except the climbing
 replica) the force vector becomes:
 
-
 .. parsed-literal::
 
    Fi = -Grad(V) + (Grad(V) dot T') T' + Fnudge_parallel + Fnudge_perp
@@ -78,10 +75,10 @@ roughly in the direction of (Ri+i - Ri-1); see the
 coordinates of replica I; Ri-1 and Ri+1 are the coordinates of its
 neighbor replicas.  The term (Grad(V) dot T') is used to remove the
 component of the gradient parallel to the path which would tend to
-distribute the replica unevenly along the path.  Fnudge\_parallel is an
+distribute the replica unevenly along the path.  Fnudge_parallel is an
 artificial nudging force which is applied only in the tangent
 direction and which maintains the equal spacing between replicas (see
-below for more information).  Fnudge\_perp is an optional artificial
+below for more information).  Fnudge_perp is an optional artificial
 spring which is applied in a direction perpendicular to the tangent
 direction and which prevent the paths from forming acute kinks (see
 below for more information).
@@ -90,22 +87,18 @@ In the second stage of the NEB calculation, the interatomic force Fi
 for the climbing replica (the replica of highest energy after the
 first stage) is changed to:
 
-
 .. parsed-literal::
 
-   Fi = -Grad(V) + 2 (Grad(V) dot T') T'
+   Fi = -Grad(V) + 2 (Grad(V) dot T') T' + Fnudge_perp
 
 and the relaxation procedure is continued to a new converged MEP.
 
-
 ----------
 
-
 The keyword *parallel* specifies how the parallel nudging force is
-computed.  With a value of *neigh*\ , the parallel nudging force is
+computed.  With a value of *neigh*, the parallel nudging force is
 computed as in :ref:`(Henkelman1) <Henkelman1>` by connecting each
 intermediate replica with the previous and the next image:
-
 
 .. parsed-literal::
 
@@ -114,9 +107,8 @@ intermediate replica with the previous and the next image:
 Note that in this case the specified *Kspring* is in force/distance
 units.
 
-With a value of *ideal*\ , the spring force is computed as suggested in
-ref`(WeinanE) <WeinanE>` 
-
+With a value of *ideal*, the spring force is computed as suggested in
+ref`(WeinanE) <WeinanE>`
 
 .. parsed-literal::
 
@@ -132,9 +124,7 @@ in force units.
 Note that the *ideal* form of nudging can often be more effective at
 keeping the replicas equally spaced.
 
-
 ----------
-
 
 The keyword *perp* specifies if and how a perpendicular nudging force
 is computed.  It adds a spring force perpendicular to the path in
@@ -144,7 +134,6 @@ resolution is poor.  I.e. when few replicas are used; see
 :ref:`(Maras) <Maras1>` for details.
 
 The perpendicular spring force is given by
-
 
 .. parsed-literal::
 
@@ -158,19 +147,16 @@ acute.  F(Ri-1 Ri R+1) is defined in :ref:`(Jonsson) <Jonsson>`.
 If *Kspring2* is set to 0.0 (the default) then no perpendicular spring
 force is added.
 
-
 ----------
-
 
 By default, no additional forces act on the first and last replicas
 during the NEB relaxation, so these replicas simply relax toward their
-respective local minima.  By using the key word *end*\ , additional
+respective local minima.  By using the key word *end*, additional
 forces can be applied to the first and/or last replicas, to enable
 them to relax toward a MEP while constraining their energy E to the
 target energy ETarget.
 
 If ETarget>E, the interatomic force Fi for the specified replica becomes:
-
 
 .. parsed-literal::
 
@@ -180,8 +166,8 @@ If ETarget>E, the interatomic force Fi for the specified replica becomes:
 The "spring" constant on the difference in energies is the specified
 *Kspring3* value.
 
-When *estyle* is specified as *first*\ , the force is applied to the
-first replica.  When *estyle* is specified as *last*\ , the force is
+When *estyle* is specified as *first*, the force is applied to the
+first replica.  When *estyle* is specified as *last*, the force is
 applied to the last replica.  Note that the *end* keyword can be used
 twice to add forces to both the first and last replicas.
 
@@ -189,13 +175,13 @@ For both these *estyle* settings, the target energy *ETarget* is set
 to the initial energy of the replica (at the start of the NEB
 calculation).
 
-If the *estyle* is specified as *last/efirst* or *last/efirst/middle*\ ,
+If the *estyle* is specified as *last/efirst* or *last/efirst/middle*,
 force is applied to the last replica, but the target energy *ETarget*
 is continuously set to the energy of the first replica, as it evolves
 during the NEB relaxation.
 
 The difference between these two *estyle* options is as follows.  When
-*estyle* is specified as *last/efirst*\ , no change is made to the
+*estyle* is specified as *last/efirst*, no change is made to the
 inter-replica force applied to the intermediate replicas (neither
 first or last).  If the initial path is too far from the MEP, an
 intermediate replica may relax "faster" and reach a lower energy than
@@ -209,7 +195,7 @@ than the first replica.  This should effectively prevent the
 intermediate replicas from over-relaxing.
 
 After converging a NEB calculation using an *estyle* of
-*last/efirst/middle*\ , you should check that all intermediate replicas
+*last/efirst/middle*, you should check that all intermediate replicas
 have a larger energy than the first replica. If this is not the case,
 the path is probably not a MEP.
 
@@ -217,7 +203,8 @@ Finally, note that the last replica may never reach the target energy
 if it is stuck in a local minima which has a larger energy than the
 target energy.
 
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 No information about this fix is written to :doc:`binary restart files <restart>`.  None of the :doc:`fix_modify <fix_modify>` options
 are relevant to this fix.  No global or per-atom quantities are stored
@@ -231,7 +218,6 @@ as invoked by the :doc:`minimize <minimize>` command via the
 
 Restrictions
 """"""""""""
-
 
 This command can only be used if LAMMPS was built with the REPLICA
 package.  See the :doc:`Build package <Build_package>` doc
@@ -248,40 +234,28 @@ Default
 The option defaults are parallel = neigh, perp = 0.0, ends is not
 specified (no inter-replica force on the end replicas).
 
-
 ----------
 
-
 .. _Henkelman1:
-
-
 
 **(Henkelman1)** Henkelman and Jonsson, J Chem Phys, 113, 9978-9985 (2000).
 
 .. _Henkelman2:
-
-
 
 **(Henkelman2)** Henkelman, Uberuaga, Jonsson, J Chem Phys, 113,
 9901-9904 (2000).
 
 .. _WeinanE:
 
-
-
 **(WeinanE)** E, Ren, Vanden-Eijnden, Phys Rev B, 66, 052301 (2002).
 
 .. _Jonsson:
-
-
 
 **(Jonsson)** Jonsson, Mills and Jacobsen, in Classical and Quantum
 Dynamics in Condensed Phase Simulations, edited by Berne, Ciccotti,
 and Coker World Scientific, Singapore, 1998, p 385.
 
 .. _Maras1:
-
-
 
 **(Maras)** Maras, Trushin, Stukowski, Ala-Nissila, Jonsson,
 Comp Phys Comm, 205, 13-21 (2016).

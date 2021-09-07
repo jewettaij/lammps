@@ -6,7 +6,6 @@ reset_timestep command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    reset_timestep N
@@ -15,7 +14,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -64,4 +62,7 @@ Related commands
 
 :doc:`rerun <rerun>`
 
-**Default:** none
+Default
+"""""""
+
+none

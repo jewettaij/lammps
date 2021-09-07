@@ -6,16 +6,15 @@ neigh_modify command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    neigh_modify keyword values ...
 
 * one or more keyword/value pairs may be listed
-  
+
   .. parsed-literal::
-  
-     keyword = *delay* or *every* or *check* or *once* or *cluster* or *include* or *exclude* or *page* or *one* or *binsize*
+
+     keyword = *delay* or *every* or *check* or *once* or *cluster* or *include* or *exclude* or *page* or *one* or *binsize* or *collection/type* or *collection/interval*
        *delay* value = N
          N = delay building until this many steps since last build
        *every* value = M
@@ -48,12 +47,15 @@ Syntax
          N = max number of neighbors of one atom
        *binsize* value = size
          size = bin size for neighbor list construction (distance units)
-
-
+       *collection/type* values = N arg1 ... argN
+         N = number of custom collections
+         arg = N separate lists of types (see below)
+       *collection/interval* values = N arg1 ... argN
+         N = number of custom collections
+         arg = N separate cutoffs for intervals (see below)
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -62,6 +64,8 @@ Examples
    neigh_modify exclude group frozen frozen check no
    neigh_modify exclude group residue1 chain3
    neigh_modify exclude molecule/intra rigid
+   neigh_modify collection/type 2 1*2,5 3*4
+   neigh_modify collection/interval 2 1.0 10.0
 
 Description
 """""""""""
@@ -71,13 +75,13 @@ pairwise neighbor lists.  Depending on what pair interactions and
 other commands are defined, a simulation may require one or more
 neighbor lists.
 
-The *every*\ , *delay*\ , *check*\ , and *once* options affect how often
+The *every*, *delay*, *check*, and *once* options affect how often
 lists are built as a simulation runs.  The *delay* setting means never
 build new lists until at least N steps after the previous build.  The
 *every* setting means build lists every M steps (after the delay has
-passed).  If the *check* setting is *no*\ , the lists are built on the
+passed).  If the *check* setting is *no*, the lists are built on the
 first step that satisfies the *delay* and *every* settings.  If the
-*check* setting is *yes*\ , then the *every* and *delay* settings
+*check* setting is *yes*, then the *every* and *delay* settings
 determine when a build may possibly be performed, but an actual build
 only occurs if some atom has moved more than half the skin distance
 (specified in the :doc:`neighbor <neighbor>` command) since the last
@@ -108,7 +112,7 @@ pairwise cutoff is so short that atoms that are part of the same
 interaction are not communicated as ghost atoms.  This is an unusual
 model (e.g. no pair interactions at all) and the problem can be fixed
 by use of the :doc:`comm_modify cutoff <comm_modify>` command.  Note
-that to save time, the default *cluster* setting is *no*\ , so that this
+that to save time, the default *cluster* setting is *no*, so that this
 check is not performed.
 
 The *include* option limits the building of pairwise neighbor lists to
@@ -131,7 +135,6 @@ sample scenarios where this is useful:
   to freeze a wall or portion of a bio-molecule.
 * When one or more rigid bodies are specified, interactions within each
   body can be turned off to save needless computation.  See the :doc:`fix rigid <fix_rigid>` command for more details.
-
 
 The *exclude type* option turns off the pairwise interaction if one
 atom is of type M and the other of type N.  M can equal N.  The
@@ -164,7 +167,7 @@ turning off bond interactions.
    long-range solver treats the interaction.  This is done correctly for
    pairwise interactions that are excluded (or weighted) via the
    :doc:`special_bonds <special_bonds>` command.  But it is not done for
-   interactions that are excluded via these neigh\_modify exclude options.
+   interactions that are excluded via these neigh_modify exclude options.
 
 The *page* and *one* options affect how memory is allocated for the
 neighbor lists.  For most simulations the default settings for these
@@ -182,7 +185,7 @@ atom can have.
    LAMMPS can crash without an error message if the number of
    neighbors for a single particle is larger than the *page* setting,
    which means it is much, much larger than the *one* setting.  This is
-   because LAMMPS doesn't error check these limits for every pairwise
+   because LAMMPS does not error check these limits for every pairwise
    interaction (too costly), but only after all the particle's neighbors
    have been found.  This problem usually means something is very wrong
    with the way you have setup your problem (particle spacing, cutoff
@@ -193,8 +196,9 @@ atom can have.
 The *binsize* option allows you to specify what size of bins will be
 used in neighbor list construction to sort and find neighboring atoms.
 By default, for :doc:`neighbor style bin <neighbor>`, LAMMPS uses bins
-that are 1/2 the size of the maximum pair cutoff.  For :doc:`neighbor style multi <neighbor>`, the bins are 1/2 the size of the minimum pair
-cutoff.  Typically these are good values for minimizing the time for
+that are 1/2 the size of the maximum pair cutoff.  For :doc:`neighbor style multi <neighbor>`,
+the bins are 1/2 the size of the collection interaction cutoff.
+Typically these are good values for minimizing the time for
 neighbor list construction.  This setting overrides the default.
 If you make it too big, there is little overhead due to
 looping over bins, but more atoms are checked.  If you make it too
@@ -202,9 +206,33 @@ small, the optimal number of atoms is checked, but bin overhead goes
 up.  If you set the binsize to 0.0, LAMMPS will use the default
 binsize of 1/2 the cutoff.
 
+The *collection/type* option allows you to define collections of atom
+types, used by the *multi* neighbor mode. By grouping atom types with
+similar physical size or interaction cutoff lengths, one may be able
+to improve performance by reducing
+overhead. You must first specify the number of collections N to be
+defined followed by N lists of types. Each list consists of a series of type
+ranges separated by commas. The range can be specified as a
+single numeric value, or a wildcard asterisk can be used to specify a range
+of values.  This takes the form "\*" or "\*n" or "n\*" or "m\*n".  For
+example, if M = the number of atom types, then an asterisk with no numeric
+values means all types from 1 to M.  A leading asterisk means all types
+from 1 to n (inclusive).  A trailing asterisk means all types from n to M
+(inclusive).  A middle asterisk means all types from m to n (inclusive).
+Note that all atom types must be included in exactly one of the N collections.
+
+The *collection/interval* option provides a similar capability.  This
+command allows a user to define collections by specifying a series of
+cutoff intervals. LAMMPS will automatically sort atoms into these
+intervals based on their type-dependent cutoffs or their finite size.
+You must first specify the number of collections N to be defined
+followed by N values representing the upper cutoff of each interval.
+This command is particularly useful for granular pair styles where the
+interaction distance of particles depends on their radius and may not
+depend on their atom type.
+
 Restrictions
 """"""""""""
-
 
 If the "delay" setting is non-zero, then it must be a multiple of the
 "every" setting.

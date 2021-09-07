@@ -6,7 +6,6 @@ fix append/atoms command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID append/atoms face ... keyword value ...
@@ -16,9 +15,9 @@ Syntax
 * face = *zhi*
 * zero or more keyword/value pairs may be appended
 * keyword = *basis* or *size* or *freq* or *temp* or *random* or *units*
-  
+
   .. parsed-literal::
-  
+
        *basis* values = M itype
          M = which basis atom
          itype = atom type (1-N) to assign to this basis atom
@@ -32,19 +31,16 @@ Syntax
          seed = random number seed for langevin kicks
          extent = extent of thermostatted region (distance units)
        *random* args = xmax ymax zmax seed
-         *xmax*\ , *ymax*\ , *zmax* = maximum displacement in particular direction (distance units)
+         *xmax*, *ymax*, *zmax* = maximum displacement in particular direction (distance units)
          *seed* = random number seed for random displacement
        *units* value = *lattice* or *box*
          *lattice* = the wall position is defined in lattice units
          *box* = the wall position is defined in simulation box units
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix 1 all append/atoms zhi size 5.0 freq 295 units lattice
    fix 4 all append/atoms zhi size 15.0 freq 5 units box
@@ -88,11 +84,10 @@ A *lattice* value means the distance units are in lattice spacings.
 The :doc:`lattice <lattice>` command must have been previously used to
 define the lattice spacings.
 
-
 ----------
 
-
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 No information about this fix is written to :doc:`binary restart files <restart>`.  None of the :doc:`fix_modify <fix_modify>` options
 are relevant to this fix.  No global or per-atom quantities are stored
@@ -103,9 +98,8 @@ the :doc:`run <run>` command.  This fix is not invoked during :doc:`energy minim
 Restrictions
 """"""""""""
 
-
 This fix style is part of the SHOCK package.  It is only enabled if
-LAMMPS was built with that package. See the :doc:`Build package <Build_package>` doc page for more info.
+LAMMPS was built with that package. See the :doc:`Build package <Build_package>` page for more info.
 
 The boundary on which atoms are added with append/atoms must be
 shrink/minimum.  The opposite boundary may be any boundary type other

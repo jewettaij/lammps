@@ -6,11 +6,9 @@ pair_style body/rounded/polygon command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    pair_style body/rounded/polygon c_n c_t mu delta_ua cutoff
-
 
 .. parsed-literal::
 
@@ -22,7 +20,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -37,7 +34,7 @@ Style *body/rounded/polygon* is for use with 2d models of body
 particles of style *rounded/polygon*\ .  It calculates pairwise
 body/body interactions which can include body particles modeled as
 1-vertex circular disks with a specified diameter.  See the
-:doc:`Howto body <Howto_body>` doc page for more details on using body
+:doc:`Howto body <Howto_body>` page for more details on using body
 rounded/polygon particles.
 
 This pairwise interaction between rounded polygons is described in
@@ -57,7 +54,7 @@ between two particles are defined with respect to the separation of
 their respective rounded surfaces, not by the separation of the
 vertices and edges themselves.
 
-This means that the specified cutoff in the pair\_style command is the
+This means that the specified cutoff in the pair_style command is the
 cutoff distance, :math:`r_c`, for the surface separation, :math:`\delta_n` (see figure
 below).  This is the distance at which two particles no longer
 interact.  If :math:`r_c` is specified as 0.0, then it is a contact-only
@@ -119,23 +116,24 @@ Effectively, :math:`k_n` and :math:`k_{na}` are the slopes of the red lines in t
 above for force versus surface separation, for :math:`\delta_n < 0` and
 :math:`0 < \delta_n < r_c` respectively.
 
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 This pair style does not support the :doc:`pair_modify <pair_modify>`
 mix, shift, table, and tail options.
 
-This pair style does not write its information to :doc:`binary restart files <restart>`.  Thus, you need to re-specify the pair\_style and
-pair\_coeff commands in an input script that reads a restart file.
+This pair style does not write its information to :doc:`binary restart files <restart>`.  Thus, you need to re-specify the pair_style and
+pair_coeff commands in an input script that reads a restart file.
 
 This pair style can only be used via the *pair* keyword of the
 :doc:`run_style respa <run_style>` command.  It does not support the
-*inner*\ , *middle*\ , *outer* keywords.
+*inner*, *middle*, *outer* keywords.
 
 Restrictions
 """"""""""""
 
 These pair styles are part of the BODY package.  They are only enabled
-if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 This pair style requires the :doc:`newton <newton>` setting to be "on"
 for pair interactions.
@@ -145,11 +143,12 @@ Related commands
 
 :doc:`pair_coeff <pair_coeff>`
 
-**Default:** none
+Default
+"""""""
+
+none
 
 .. _pair-Fraige:
-
-
 
 **(Fraige)** F. Y. Fraige, P. A. Langston, A. J. Matchett, J. Dodds,
 Particuology, 6, 455 (2008).

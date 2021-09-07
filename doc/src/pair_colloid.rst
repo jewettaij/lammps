@@ -1,17 +1,14 @@
 .. index:: pair_style colloid
+.. index:: pair_style colloid/gpu
+.. index:: pair_style colloid/omp
 
 pair_style colloid command
 ==========================
 
-pair_style colloid/gpu command
-==============================
-
-pair_style colloid/omp command
-==============================
+Accelerator Variants: *colloid/gpu*, *colloid/omp*
 
 Syntax
 """"""
-
 
 .. code-block:: LAMMPS
 
@@ -21,7 +18,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -47,7 +43,7 @@ The colloid-colloid interaction energy is given by
    \frac{2 a_1 a_2}{r^2-\left(a_1+a_2\right)^2}
    + \frac{2 a_1 a_2}{r^2 - \left(a_1 - a_2\right)^2}
      + \mathrm{ln}
-       \left( 
+       \left(
   \frac{r^2-\left(a_1+a_2\right)^2}{r^2-\left(a_1-a_2\right)^2}
    \right)
   \right] \\
@@ -75,11 +71,11 @@ The colloid-solvent interaction energy is given by
 
 .. math::
 
-   U = \frac{2 ~ a^3 ~ \sigma^3 ~ A_{cs}}{9 \left( a^2 - r^2 \right)^3} 
+   U = \frac{2 ~ a^3 ~ \sigma^3 ~ A_{cs}}{9 \left( a^2 - r^2 \right)^3}
    \left[ 1 - \frac{\left(5 ~ a^6+45~a^4~r^2+63~a^2~r^4+15~r^6\right) \sigma^6}
-   {15 \left(a-r\right)^6 \left( a+r \right)^6} \right], \quad r < r_c 
+   {15 \left(a-r\right)^6 \left( a+r \right)^6} \right], \quad r < r_c
 
-where :math:A_{cs}` is the Hamaker constant, *a* is the radius of the colloidal
+where :math:`A_{cs}` is the Hamaker constant, *a* is the radius of the colloidal
 particle, and :math:`r_c` is the cutoff.  This formula is derived from the
 colloid-colloid interaction, letting one of the particle sizes go to
 zero.
@@ -139,12 +135,12 @@ particle of size :math:`\sigma`.  If either d1 = 0 or d2 = 0 and the other is
 larger, then the pair interacts via the colloid-solvent formula.
 
 Note that the diameter of a particular particle type may appear in
-multiple pair\_coeff commands, as it interacts with other particle
+multiple pair_coeff commands, as it interacts with other particle
 types.  You should insure the particle diameter is specified
 consistently each time it appears.
 
 The last coefficient is optional.  If not specified, the global cutoff
-specified in the pair\_style command is used.  However, you typically
+specified in the pair_style command is used.  However, you typically
 want different cutoffs for interactions between different particle
 sizes.  E.g. if colloidal particles of diameter 10 are used with
 solvent particles of diameter 1, then a solvent-solvent cutoff of 2.5
@@ -155,45 +151,26 @@ colloid-solvent cutoff in this case.
 
 .. note::
 
-   When using pair\_style colloid for a mixture with 2 (or more)
+   When using pair_style colloid for a mixture with 2 (or more)
    widely different particles sizes (e.g. sigma=10 colloids in a
    background sigma=1 LJ fluid), you will likely want to use these
    commands for efficiency: :doc:`neighbor multi <neighbor>` and
    :doc:`comm_modify multi <comm_modify>`.
 
+----------
+
+.. include:: accel_styles.rst
 
 ----------
 
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
-
-----------
-
-
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 For atom type pairs I,J and I != J, the A, sigma, d1, and d2
 coefficients and cutoff distance for this pair style can be mixed.  A
 is an energy value mixed like a LJ epsilon.  D1 and d2 are distance
 values and are mixed like sigma.  The default mix value is
-*geometric*\ .  See the "pair\_modify" command for details.
+*geometric*\ .  See the "pair_modify" command for details.
 
 This pair style supports the :doc:`pair_modify <pair_modify>` shift
 option for the energy of the pair interaction.
@@ -205,48 +182,44 @@ This pair style does not support the :doc:`pair_modify <pair_modify>`
 tail option for adding long-range tail corrections to energy and
 pressure.
 
-This pair style writes its information to :doc:`binary restart files <restart>`, so pair\_style and pair\_coeff commands do not need
+This pair style writes its information to :doc:`binary restart files <restart>`, so pair_style and pair_coeff commands do not need
 to be specified in an input script that reads a restart file.
 
 This pair style can only be used via the *pair* keyword of the
 :doc:`run_style respa <run_style>` command.  It does not support the
-*inner*\ , *middle*\ , *outer* keywords.
-
+*inner*, *middle*, *outer* keywords.
 
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 This style is part of the COLLOID package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Normally, this pair style should be used with finite-size particles
 which have a diameter, e.g. see the :doc:`atom_style sphere <atom_style>` command.  However, this is not a requirement,
-since the only definition of particle size is via the pair\_coeff
+since the only definition of particle size is via the pair_coeff
 parameters for each type.  In other words, the physical radius of the
 particle is ignored.  Thus you should insure that the d1,d2 parameters
 you specify are consistent with the physical size of the particles of
 that type.
 
 Per-particle polydispersity is not yet supported by this pair style;
-only per-type polydispersity is enabled via the pair\_coeff parameters.
+only per-type polydispersity is enabled via the pair_coeff parameters.
 
 Related commands
 """"""""""""""""
 
 :doc:`pair_coeff <pair_coeff>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Everaers1:
-
-
 
 **(Everaers)** Everaers, Ejtehadi, Phys Rev E, 67, 041710 (2003).

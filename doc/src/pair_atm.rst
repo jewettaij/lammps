@@ -6,17 +6,15 @@ pair_style atm command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    pair_style atm cutoff cutoff_triple
 
 * cutoff = cutoff for each pair in 3-body interaction (distance units)
-* cutoff\_triple = additional cutoff applied to product of 3 pairwise distances (distance units)
+* cutoff_triple = additional cutoff applied to product of 3 pairwise distances (distance units)
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -39,7 +37,6 @@ potential for the energy E of a system of atoms as
 .. math::
 
    E & = \nu\frac{1+3\cos\gamma_1\cos\gamma_2\cos\gamma_3}{r_{12}^3r_{23}^3r_{31}^3} \\
-
 
 where :math:`\nu` is the three-body interaction strength.  The distances
 between pairs of atoms :math:`r_{12}`, :math:`r_{23}`, :math:`r_{31}` and the angles :math:`\gamma_1`, :math:`\gamma_2`,
@@ -74,7 +71,7 @@ above, or in the restart files read by the
 * :math:`\nu` = prefactor (energy/distance\^9 units)
 
 :math:`K` can be specified in one of two ways.  An explicit numeric value can
-be used, as in the 2nd example above.  :math:`J \leq K` is required.  LAMMPS
+be used, as in the second example above.  :math:`J \leq K` is required.  LAMMPS
 sets the coefficients for the other 5 symmetric interactions to the same
 values.  E.g. if :math:`I = 1`, :math:`J = 2`, :math:`K = 3`, then these 6
 values are set to the specified :math:`\nu`: :math:`\nu_{123}`,
@@ -95,7 +92,6 @@ Note that a pair_coeff command can override a previous setting for the
 same :math:`I,J,K` triplet.  For example, these commands set :math:`\nu` for all :math:`I,J.K`
 triplets, then overwrite nu for just the :math:`I,J,K = 2,3,4` triplet:
 
-
 .. code-block:: LAMMPS
 
    pair_coeff * * * 0.25
@@ -104,14 +100,12 @@ triplets, then overwrite nu for just the :math:`I,J,K = 2,3,4` triplet:
 Note that for a simulation with a single atom type, only a single
 entry is required, e.g.
 
-
 .. code-block:: LAMMPS
 
    pair_coeff 1 1 1 0.25
 
 For a simulation with two atom types, four pair_coeff commands will
 specify all possible nu values:
-
 
 .. code-block:: LAMMPS
 
@@ -122,7 +116,6 @@ specify all possible nu values:
 
 For a simulation with three atom types, ten pair_coeff commands will
 specify all possible nu values:
-
 
 .. code-block:: LAMMPS
 
@@ -145,13 +138,12 @@ combination and all its permutations.  However, as with all pair
 styles, it is required to specify a pair_coeff command for all :math:`I,J`
 combinations, else an error will result.
 
-
 ----------
 
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
-
-This pair styles do not support the :doc:`pair_modify <pair_modify>`
+This pair style do not support the :doc:`pair_modify <pair_modify>`
 mix, shift, table, and tail options.
 
 This pair style writes its information to :doc:`binary restart files
@@ -163,33 +155,29 @@ re-specified in the restart input script.
 
 This pair style can only be used via the *pair* keyword of the
 :doc:`run_style respa <run_style>` command.  It does not support the
-*inner* , *middle* , *outer* keywords.
-
+*inner*, *middle*, and *outer* keywords.
 
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 This pair style is part of the MANYBODY package.  It is only enabled
-if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
 
 :doc:`pair_coeff <pair_coeff>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Axilrod:
-
-
 
 **(Axilrod)**
 Axilrod and Teller, J Chem Phys, 11, 299 (1943);

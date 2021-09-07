@@ -1,37 +1,35 @@
 .. index:: pair_style born
+.. index:: pair_style born/omp
+.. index:: pair_style born/gpu
+.. index:: pair_style born/coul/long
+.. index:: pair_style born/coul/long/gpu
+.. index:: pair_style born/coul/long/omp
+.. index:: pair_style born/coul/msm
+.. index:: pair_style born/coul/msm/omp
+.. index:: pair_style born/coul/wolf
+.. index:: pair_style born/coul/wolf/gpu
+.. index:: pair_style born/coul/wolf/omp
+.. index:: pair_style born/coul/dsf
 
 pair_style born command
 =======================
 
-pair_style born/omp command
-===========================
-
-pair_style born/gpu command
-===========================
+Accelerator Variants: *born/omp*, *born/gpu*
 
 pair_style born/coul/long command
 =================================
 
-pair_style born/coul/long/gpu command
-=====================================
-
-pair_style born/coul/long/omp command
-=====================================
+Accelerator Variants: *born/coul/long/gpu*, *born/coul/long/omp*
 
 pair_style born/coul/msm command
 ================================
 
-pair_style born/coul/msm/omp command
-====================================
+Accelerator Variants: *born/coul/msm/omp*
 
 pair_style born/coul/wolf command
 =================================
 
-pair_style born/coul/wolf/gpu command
-=====================================
-
-pair_style born/coul/wolf/omp command
-=====================================
+Accelerator Variants: *born/coul/wolf/gpu*, *born/coul/wolf/omp*
 
 pair_style born/coul/dsf command
 ================================
@@ -39,14 +37,12 @@ pair_style born/coul/dsf command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    pair_style style args
 
 * style = *born* or *born/coul/long* or *born/coul/msm* or *born/coul/wolf*
 * args = list of arguments for a particular style
-
 
 .. parsed-literal::
 
@@ -69,7 +65,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -104,9 +99,8 @@ potential described in :ref:`(Fumi and Tosi) <FumiTosi>`, given by
 
 .. math::
 
-   E = A \exp \left(\frac{\sigma - r}{\rho} \right) - 
+   E = A \exp \left(\frac{\sigma - r}{\rho} \right) -
    \frac{C}{r^6} + \frac{D}{r^8} \qquad r < r_c
-
 
 where :math:`\sigma` is an interaction-dependent length parameter,
 :math:`\rho` is an ionic-pair dependent length parameter, and
@@ -151,40 +145,21 @@ commands, or by mixing as described below:
 The second coefficient, rho, must be greater than zero.
 
 The last coefficient is optional.  If not specified, the global A,C,D
-cutoff specified in the pair\_style command is used.
+cutoff specified in the pair_style command is used.
 
-For *born/coul/long*\ , *born/coul/wolf* and *born/coul/dsf* no
+For *born/coul/long*, *born/coul/wolf* and *born/coul/dsf* no
 Coulombic cutoff can be specified for an individual I,J type pair.
 All type pairs use the same global Coulombic cutoff specified in the
-pair\_style command.
-
-
-----------
-
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
+pair_style command.
 
 ----------
 
+.. include:: accel_styles.rst
 
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+----------
+
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 These pair styles do not support mixing.  Thus, coefficients for all
 I,J pairs must be specified explicitly.
@@ -197,41 +172,43 @@ The *born/coul/long* pair style supports the
 :doc:`pair_modify <pair_modify>` table option to tabulate the
 short-range portion of the long-range Coulombic interaction.
 
-These styles support the pair\_modify tail option for adding long-range
+These styles support the pair_modify tail option for adding long-range
 tail corrections to energy and pressure.
 
 Thess styles writes thei information to binary :doc:`restart <restart>`
-files, so pair\_style and pair\_coeff commands do not need to be
+files, so pair_style and pair_coeff commands do not need to be
 specified in an input script that reads a restart file.
 
-These styles can only be used via the *pair* keyword of the :doc:`run_style respa <run_style>` command.  They do not support the *inner*\ ,
-*middle*\ , *outer* keywords.
-
+These styles can only be used via the *pair* keyword of the :doc:`run_style respa <run_style>` command.  They do not support the *inner*,
+*middle*, *outer* keywords.
 
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 The *born/coul/long* style is part of the KSPACE package.  It is only
-enabled if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+enabled if LAMMPS was built with that package.  See the
+:doc:`Build package <Build_package>` page for more info.
+
+The *born/coul/dsf* and *born/coul/wolf* pair styles are part of the
+EXTRA-PAIR package.  They are only enabled if LAMMPS was built with
+that package.  See the :doc:`Build package <Build_package>` page
+for more info.
 
 Related commands
 """"""""""""""""
 
 :doc:`pair_coeff <pair_coeff>`, :doc:`pair_style buck <pair_buck>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _FumiTosi:
-
-
 
 Fumi and Tosi, J Phys Chem Solids, 25, 31 (1964),
 Fumi and Tosi, J Phys Chem Solids, 25, 45 (1964).

@@ -6,7 +6,6 @@ compute ptm/atom command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID ptm/atom structures threshold group2-ID
@@ -20,8 +19,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all ptm/atom default 0.1 all
    compute 1 all ptm/atom fcc-hcp-dcub-dhex 0.15 all
@@ -68,7 +66,6 @@ The deviation is calculated as:
    \text{RMSD}(\mathbf{u}, \mathbf{v}) = \min_{s, \mathbf{Q}} \sqrt{\frac{1}{N} \sum\limits_{i=1}^{N}
    {\left|\left| s[\vec{u_i} - \overline{\mathbf{u}}] - \mathbf{Q} \vec{v_i} \right|\right|}^2}
 
-
 Here, u and v contain the coordinates of the local and ideal structures respectively,
 s is a scale factor, and Q is a rotation.  The best match is identified by the
 lowest RMSD value, using the optimal scaling, rotation, and correspondence between the
@@ -87,11 +84,12 @@ too frequently or to have multiple compute/dump commands, each with a
 unless the optional *group2-ID* argument is given, then only members
 of that group are considered as neighbors.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a per-atom array, which can be accessed by
 any command that uses per-atom values from a compute as input.  See
-the :doc:`Howto output <Howto_output>` doc page for an overview of
+the :doc:`Howto output <Howto_output>` page for an overview of
 LAMMPS output options.
 
 Results are stored in the per-atom array in the following order:
@@ -108,15 +106,14 @@ The type is a number from -1 to 8.  The rmsd is a positive real number.
 The interatomic distance is computed from the scale factor in the RMSD equation.
 The (qw,qx,qy,qz) parameters represent the orientation of the local structure
 in quaternion form.  The reference coordinates for each template (from which the
-orientation is determined) can be found in the *ptm\_constants.h* file in the PTM source directory.
+orientation is determined) can be found in the *ptm_constants.h* file in the PTM source directory.
 For atoms that are not within the compute group-ID, all values are set to zero.
 
 Restrictions
 """"""""""""
 
-
-This fix is part of the USER-PTM package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+This fix is part of the PTM package.  It is only enabled if
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
@@ -124,14 +121,13 @@ Related commands
 :doc:`compute centro/atom <compute_centro_atom>`
 :doc:`compute cna/atom <compute_cna_atom>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Larsen:
-
-
 
 **(Larsen)** Larsen, Schmidt, Schiotz, Modelling Simul Mater Sci Eng, 24, 055007 (2016).

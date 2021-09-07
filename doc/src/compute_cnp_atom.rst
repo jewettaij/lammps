@@ -6,7 +6,6 @@ compute cnp/atom command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID cnp/atom cutoff
@@ -18,8 +17,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all cnp/atom 3.08
 
@@ -42,11 +40,10 @@ This parameter is computed using the following formula from
 
 .. math::
 
-   Q_{i} = \frac{1}{n_i}\sum_{j = 1}^{n_i} | \sum_{k = 1}^{n_{ij}}  \vec{R}_{ik} + \vec{R}_{jk} |^2
-
+   Q_{i} = \frac{1}{n_i}\sum_{j = 1}^{n_i} \left | \sum_{k = 1}^{n_{ij}}  \vec{R}_{ik} + \vec{R}_{jk} \right | ^{2}
 
 where the index *j* goes over the :math:`n_i` nearest neighbors of atom
-*i*\ , and the index *k* goes over the :math:`n_{ij}` common nearest neighbors
+*i*, and the index *k* goes over the :math:`n_{ij}` common nearest neighbors
 between atom *i* and atom *j*\ . :math:`\vec{R}_{ik}` and
 :math:`\vec{R}_{jk}` are the vectors connecting atom *k* to atoms *i*
 and *j*\ .  The quantity in the double sum is computed
@@ -65,7 +62,6 @@ obtain a good cutoff distance:
   r_{c}^{bcc} = & \frac{1}{2}(\sqrt{2} + 1) \mathrm{a} \simeq 1.207 \:\mathrm{a} \\
   r_{c}^{hcp} = & \frac{1}{2}\left(1+\sqrt{\frac{4+2x^{2}}{3}}\right) \mathrm{a}
 
-
 where a is the lattice constant for the crystal structure concerned
 and in the HCP case, x = (c/a) / 1.633, where 1.633 is the ideal c/a
 for HCP crystals.
@@ -77,7 +73,6 @@ following relation should also be satisfied:
 .. math::
 
   r_c + r_s > 2*{\rm cutoff}
-
 
 where :math:`r_c` is the cutoff distance of the potential, :math:`r_s` is
 the skin
@@ -91,16 +86,16 @@ is dumped).  Thus it can be inefficient to compute/dump this quantity
 too frequently or to have multiple compute/dump commands, each with a
 *cnp/atom* style.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a per-atom vector, which can be accessed by
 any command that uses per-atom values from a compute as input.  See
-the :doc:`Howto output <Howto_output>` doc page for an overview of
+the :doc:`Howto output <Howto_output>` page for an overview of
 LAMMPS output options.
 
 The per-atom vector values will be real positive numbers. Some typical CNP
 values:
-
 
 .. parsed-literal::
 
@@ -115,9 +110,8 @@ values:
 Restrictions
 """"""""""""
 
-
-This compute is part of the USER-MISC package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+This compute is part of the EXTRA-COMPUTE package.  It is only enabled if
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
@@ -125,14 +119,13 @@ Related commands
 :doc:`compute cna/atom <compute_cna_atom>`
 :doc:`compute centro/atom <compute_centro_atom>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Tsuzuki2:
-
-
 
 **(Tsuzuki)** Tsuzuki, Branicio, Rino, Comput Phys Comm, 177, 518 (2007).

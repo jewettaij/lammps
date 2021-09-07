@@ -6,14 +6,12 @@ pair_style lebedeva/z command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    pair_style [hybrid/overlay ...] lebedeva/z cutoff
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -40,26 +38,24 @@ which is to take all normals along the z-axis.
              & - A \left(\frac{z_0}{r_ij}\right)^6 + A \left( \frac{z_0}{r_c} \right)^6 \\
    \rho^2_{ij} = & x^2_{ij} + y^2_{ij} \qquad (\mathbf{n_i} \equiv \mathbf{\hat{z}})
 
-
-
 It is important to have a sufficiently large cutoff to ensure smooth forces.
 Energies are shifted so that they go continuously to zero at the cutoff assuming
 that the exponential part of :math:`V_{ij}` (first term) decays sufficiently fast.
 This shift is achieved by the last term in the equation for :math:`V_{ij}` above.
 
 The parameter file (e.g. CC.Lebedeva), is intended for use with metal
-:doc:`units <units>`, with energies in meV. An additional parameter, *S*\ ,
+:doc:`units <units>`, with energies in meV. An additional parameter, *S*,
 is available to facilitate scaling of energies.
 
 This potential must be used in combination with hybrid/overlay.
-Other interactions can be set to zero using pair\_style *none*\ .
+Other interactions can be set to zero using pair_style *none*\ .
 
 Restrictions
 """"""""""""
 
-
-This fix is part of the USER-MISC package.  It is only enabled if
-LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+This pair style is part of the INTERLAYER package.  It is only enabled
+if LAMMPS was built with that package.  See the :doc:`Build package
+<Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
@@ -72,14 +68,13 @@ Related commands
 :doc:`pair_style kolmogorov/crespi/z <pair_kolmogorov_crespi_z>`,
 :doc:`pair_style kolmogorov/crespi/full <pair_kolmogorov_crespi_full>`.
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Leb01:
-
-
 
 **(Lebedeva et al.)** I. V. Lebedeva, A. A. Knizhnik, A. M. Popov, Y. E. Lozovik, B. V. Potapkin, Phys. Rev. B, 84, 245437 (2011)

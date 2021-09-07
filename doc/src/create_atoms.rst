@@ -6,16 +6,15 @@ create_atoms command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    create_atoms type style args keyword values ...
 
 * type = atom type (1-Ntypes) of atoms to create (offset for molecule creation)
 * style = *box* or *region* or *single* or *random*
-  
+
   .. parsed-literal::
-  
+
        *box* args = none
        *region* args = region-ID
          region-ID = particles will only be created if contained in the region
@@ -28,9 +27,9 @@ Syntax
 
 * zero or more keyword/value pairs may be appended
 * keyword = *mol* or *basis* or *ratio* or *subset* or *remap* or *var* or *set* or *rotate* or *units*
-  
-  .. code-block:: LAMMPS
-  
+
+  .. parsed-literal::
+
        *mol* value = template-ID seed
          template-ID = ID of molecule template specified in a separate :doc:`molecule <molecule>` command
          seed = random # seed (positive integer)
@@ -55,11 +54,8 @@ Syntax
          *lattice* = the geometry is defined in lattice units
          *box* = the geometry is defined in simulation box units
 
-
-
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -84,7 +80,7 @@ with units = box or the *random* style.  For the remainder of this doc
 page, a created atom or molecule is referred to as a "particle".
 
 If created particles are individual atoms, they are assigned the
-specified atom *type*\ , though this can be altered via the *basis*
+specified atom *type*, though this can be altered via the *basis*
 keyword as discussed below.  If molecules are being created, the type
 of each atom in the created molecule is specified in the file read by
 the :doc:`molecule <molecule>` command, and those values are added to
@@ -92,7 +88,7 @@ the specified atom *type*\ .  E.g. if *type* = 2, and the file specifies
 atom types 1,2,3, then each created molecule will have atom types
 3,4,5.
 
-For the *box* style, the create\_atoms command fills the entire
+For the *box* style, the create_atoms command fills the entire
 simulation box with particles on the lattice.  If your simulation box
 is periodic, you should insure its size is a multiple of the lattice
 spacings, to avoid unwanted atom overlaps at the box boundaries.  If
@@ -120,7 +116,7 @@ positions.
 For the *random* style, N particles are added to the system at
 randomly generated coordinates, which can be useful for generating an
 amorphous system.  The particles are created one by one using the
-specified random number *seed*\ , resulting in the same set of particles
+specified random number *seed*, resulting in the same set of particles
 coordinates, independent of how many processors are being used in the
 simulation.  If the *region-ID* argument is specified as NULL, then
 the created particles will be anywhere in the simulation box.  If a
@@ -140,11 +136,11 @@ outside a geometric boundary.
 
 Note that this command adds particles to those that already exist.
 This means it can be used to add particles to a system previously read
-in from a data or restart file.  Or the create\_atoms command can be
+in from a data or restart file.  Or the create_atoms command can be
 used multiple times, to add multiple sets of particles to the
 simulation.  For example, grain boundaries can be created, by
-interleaving create\_atoms with :doc:`lattice <lattice>` commands
-specifying different orientations.  By using the create\_atoms command
+interleaving create_atoms with :doc:`lattice <lattice>` commands
+specifying different orientations.  By using the create_atoms command
 in conjunction with the :doc:`delete_atoms <delete_atoms>` command,
 reasonably complex geometries can be created, or a protein can be
 solvated with a surrounding box of water molecules.
@@ -161,15 +157,13 @@ used to remove overlapping atoms or molecules.
    LAMMPS.  This is true even if you are using shrink-wrapped box
    boundaries, as specified by the :doc:`boundary <boundary>` command.
    However, you can first use the :doc:`change_box <change_box>` command to
-   temporarily expand the box, then add atoms via create\_atoms, then
-   finally use change\_box command again if needed to re-shrink-wrap the
-   new atoms.  See the :doc:`change_box <change_box>` doc page for an
-   example of how to do this, using the create\_atoms *single* style to
+   temporarily expand the box, then add atoms via create_atoms, then
+   finally use change_box command again if needed to re-shrink-wrap the
+   new atoms.  See the :doc:`change_box <change_box>` page for an
+   example of how to do this, using the create_atoms *single* style to
    insert a new atom outside the current simulation box.
 
-
 ----------
-
 
 Individual atoms are inserted by this command, unless the *mol*
 keyword is used.  It specifies a *template-ID* previously defined
@@ -201,16 +195,14 @@ not overlap, regardless of their relative orientations.
 .. note::
 
    If the :doc:`create_box <create_box>` command is used to create
-   the simulation box, followed by the create\_atoms command with its
+   the simulation box, followed by the create_atoms command with its
    *mol* option for adding molecules, then you typically need to use the
    optional keywords allowed by the :doc:`create_box <create_box>` command
    for extra bonds (angles,etc) or extra special neighbors.  This is
    because by default, the :doc:`create_box <create_box>` command sets up a
-   non-molecular system which doesn't allow molecules to be added.
-
+   non-molecular system which does not allow molecules to be added.
 
 ----------
-
 
 This is the meaning of the other allowed keywords.
 
@@ -235,9 +227,9 @@ fashion.  Which lattice sites are selected will change with the number
 of processors used.
 
 The *remap* keyword only applies to the *single* style.  If it is set
-to *yes*\ , then if the specified position is outside the simulation
+to *yes*, then if the specified position is outside the simulation
 box, it will mapped back into the box, assuming the relevant
-dimensions are periodic.  If it is set to *no*\ , no remapping is done
+dimensions are periodic.  If it is set to *no*, no remapping is done
 and no particle is created if its position is outside the box.
 
 The *var* and *set* keywords can be used together to provide a
@@ -265,9 +257,7 @@ individual lattice points being "above" or "below" the mathematical
 expression for the sinusoidal curve.  If a finer lattice were used,
 the sinusoid would appear to be "smoother".  Also note the use of the
 "xlat" and "ylat" :doc:`thermo_style <thermo_style>` keywords which
-converts lattice spacings to distance.  Click on the image for a
-larger version.
-
+converts lattice spacings to distance.
 
 .. code-block:: LAMMPS
 
@@ -284,9 +274,13 @@ larger version.
    create_atoms    1 box var v set x xx set y yy
    write_dump      all atom sinusoid.lammpstrj
 
-.. image:: JPG/sinusoid_small.jpg
-   :target: JPG/sinusoid.jpg
+.. image:: img/sinusoid.jpg
+   :scale: 50%
    :align: center
+
+.. raw:: html
+
+   Click on the image for a larger version.
 
 The *rotate* keyword allows specification of the orientation
 at which molecules are inserted.  The axis of rotation is
@@ -294,7 +288,7 @@ determined by the rotation vector (Rx,Ry,Rz) that goes through the
 insertion point.  The specified *theta* determines the angle of
 rotation around that axis.  Note that the direction of rotation for
 the atoms around the rotation axis is consistent with the right-hand
-rule: if your right-hand's thumb points along *R*\ , then your fingers
+rule: if your right-hand's thumb points along *R*, then your fingers
 wrap around the axis in the direction of rotation.
 
 The *units* keyword determines the meaning of the distance units used
@@ -304,14 +298,12 @@ the :doc:`units <units>` command, e.g. Angstroms for units = real or
 metal.  A *lattice* value means the distance units are in lattice
 spacings.
 
-
 ----------
-
 
 Atom IDs are assigned to created atoms in the following way.  The
 collection of created atoms are assigned consecutive IDs that start
 immediately following the largest atom ID existing before the
-create\_atoms command was invoked.  This is done by the processor's
+create_atoms command was invoked.  This is done by the processor's
 communicating the number of atoms they each own, the first processor
 numbering its atoms from 1 to N1, the second processor from N1+1 to
 N2, etc.  Where N1 = number of atoms owned by the first processor, N2
@@ -358,13 +350,10 @@ and thus also set the mass for the particle to 1.0.
 The :doc:`set <set>` command can be used to override many of these
 default settings.
 
-
 ----------
-
 
 Restrictions
 """"""""""""
-
 
 An :doc:`atom_style <atom_style>` must be previously defined to use this
 command.

@@ -6,7 +6,6 @@ compute cna/atom command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID cna/atom cutoff
@@ -18,8 +17,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all cna/atom 3.08
 
@@ -57,7 +55,6 @@ obtain a good cutoff distance:
   r_{c}^{bcc} = & \frac{1}{2}(\sqrt{2} + 1) \mathrm{a} \simeq 1.207 \:\mathrm{a} \\
   r_{c}^{hcp} = & \frac{1}{2}\left(1+\sqrt{\frac{4+2x^{2}}{3}}\right) \mathrm{a}
 
-
 where a is the lattice constant for the crystal structure concerned
 and in the HCP case, x = (c/a) / 1.633, where 1.633 is the ideal c/a
 for HCP crystals.
@@ -69,7 +66,6 @@ following relation should also be satisfied:
 .. math::
 
   r_c + r_s > 2*{\rm cutoff}
-
 
 where :math:`r_c` is the cutoff distance of the potential, :math:`r_s`
 is the skin
@@ -83,11 +79,12 @@ is dumped).  Thus it can be inefficient to compute/dump this quantity
 too frequently or to have multiple compute/dump commands, each with a
 *cna/atom* style.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a per-atom vector, which can be accessed by
 any command that uses per-atom values from a compute as input.  See
-the :doc:`Howto output <Howto_output>` doc page for an overview of
+the :doc:`Howto output <Howto_output>` page for an overview of
 LAMMPS output options.
 
 The per-atom vector values will be a number from 0 to 5, as explained
@@ -102,20 +99,17 @@ Related commands
 
 :doc:`compute centro/atom <compute_centro_atom>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Faken:
-
-
 
 **(Faken)** Faken, Jonsson, Comput Mater Sci, 2, 279 (1994).
 
 .. _Tsuzuki1:
-
-
 
 **(Tsuzuki)** Tsuzuki, Branicio, Rino, Comput Phys Comm, 177, 518 (2007).

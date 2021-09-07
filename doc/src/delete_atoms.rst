@@ -6,15 +6,14 @@ delete_atoms command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    delete_atoms style args keyword value ...
 
 * style = *group* or *region* or *overlap* or *porosity*
-  
+
   .. parsed-literal::
-  
+
        *group* args = group-ID
        *region* args = region-ID
        *overlap* args = cutoff group1-ID group2-ID
@@ -28,18 +27,15 @@ Syntax
 
 * zero or more keyword/value pairs may be appended
 * keyword = *compress* or *bond* or *mol*
-  
+
   .. parsed-literal::
-  
+
        *compress* value = *no* or *yes*
        *bond* value = *no* or *yes*
        *mol* value = *no* or *yes*
 
-
-
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -56,9 +52,9 @@ Delete the specified atoms.  This command can be used to carve out
 voids from a block of material or to delete created atoms that are too
 close to each other (e.g. at a grain boundary).
 
-For style *group*\ , all atoms belonging to the group are deleted.
+For style *group*, all atoms belonging to the group are deleted.
 
-For style *region*\ , all atoms in the region volume are deleted.
+For style *region*, all atoms in the region volume are deleted.
 Additional atoms can be deleted if they are in a molecule for which
 one or more atoms were deleted within the region; see the *mol*
 keyword discussion below.
@@ -87,13 +83,13 @@ randomly.  There is no guarantee that the exact fraction of atoms will
 be deleted, or that the same atoms will be deleted when running on
 different numbers of processors.
 
-If the *compress* keyword is set to *yes*\ , then after atoms are
+If the *compress* keyword is set to *yes*, then after atoms are
 deleted, then atom IDs are re-assigned so that they run from 1 to the
 number of atoms in the system.  Note that this is not done for
 molecular systems (see the :doc:`atom_style <atom_style>` command),
 regardless of the *compress* setting, since it would foul up the bond
 connectivity that has already been assigned.  However, the
-:doc:`reset_ids <reset_ids>` command can be used after this command to
+:doc:`reset_atom_ids <reset_atom_ids>` command can be used after this command to
 accomplish the same thing.
 
 Note that the re-assignment of IDs is not really a compression, where
@@ -121,7 +117,7 @@ atoms.  Note that simply deleting interactions due to dangling bonds
 (e.g. at a surface) may result in a inaccurate or invalid model for
 the remaining atoms.
 
-It the *mol* keyword is set to *yes*\ , then for every atom that is
+It the *mol* keyword is set to *yes*, then for every atom that is
 deleted, all other atoms in the same molecule (with the same molecule
 ID) will also be deleted.  This is not done for atoms with molecule ID
 = 0, since such an ID is assumed to flag isolated atoms that are not
@@ -138,7 +134,6 @@ part of molecules.
 
 Restrictions
 """"""""""""
-
 
 The *overlap* styles requires inter-processor communication to acquire
 ghost atoms and build a neighbor list.  This means that your system
@@ -162,7 +157,7 @@ using molecule template files via the :doc:`molecule <molecule>` and
 Related commands
 """"""""""""""""
 
-:doc:`create_atoms <create_atoms>`, :doc:`reset_ids <reset_ids>`
+:doc:`create_atoms <create_atoms>`, :doc:`reset_atom_ids <reset_atom_ids>`
 
 Default
 """""""

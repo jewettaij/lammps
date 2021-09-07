@@ -1,4 +1,6 @@
 .. index:: pair_style dpd/fdt
+.. index:: pair_style dpd/fdt/energy
+.. index:: pair_style dpd/fdt/energy/kk
 
 pair_style dpd/fdt command
 ==========================
@@ -6,12 +8,10 @@ pair_style dpd/fdt command
 pair_style dpd/fdt/energy command
 =================================
 
-pair_style dpd/fdt/energy/kk command
-====================================
+Accelerator Variants: *dpd/fdt/energy/kk*
 
 Syntax
 """"""
-
 
 .. code-block:: LAMMPS
 
@@ -19,7 +19,6 @@ Syntax
 
 * style = *dpd/fdt* or *dpd/fdt/energy*
 * args = list of arguments for a particular style
-
 
 .. parsed-literal::
 
@@ -33,7 +32,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -62,7 +60,6 @@ given as a sum of 3 terms
    F^R      = & \sigma w(r) \alpha (\Delta t)^{-1/2} \\
    w(r)     = & 1 - r/r_c
 
-
 where :math:`F^C` is a conservative force, :math:`F^D` is a dissipative
 force, and :math:`F^R` is a random force.  :math:`r_{ij}` is a unit
 vector in the direction :math:`r_i - r_j`, :math:`V_{ij} is the vector
@@ -80,7 +77,7 @@ following functional form:
 Note that alternative definitions of the weighting function exist, but
 would have to be implemented as a separate pair style command.
 
-For style *dpd/fdt*\ , the fluctuation-dissipation theorem defines :math:`\gamma`
+For style *dpd/fdt*, the fluctuation-dissipation theorem defines :math:`\gamma`
 to be set equal to :math:`\sigma^2/(2 T)`, where T is the set point
 temperature specified as a pair style parameter in the above examples.
 The following coefficients must be defined for each pair of atoms types
@@ -107,10 +104,9 @@ energies are computed within style *dpd/fdt/energy* as:
 .. math::
 
    du_{i}^{cond}  = & \kappa_{ij}(\frac{1}{\theta_{i}}-\frac{1}{\theta_{j}})\omega_{ij}^{2} + \alpha_{ij}\omega_{ij}\zeta_{ij}^{q}(\Delta{t})^{-1/2} \\
-   du_{i}^{mech}  = & -\frac{1}{2}\gamma_{ij}\omega_{ij}^{2}(\frac{\vec{r_{ij}}}{r_{ij}}\bullet\vec{v_{ij}})^{2} - 
-   \frac{\sigma^{2}_{ij}}{4}(\frac{1}{m_{i}}+\frac{1}{m_{j}})\omega_{ij}^{2} - 
-   \frac{1}{2}\sigma_{ij}\omega_{ij}(\frac{\vec{r_{ij}}}{r_{ij}}\bullet\vec{v_{ij}})\zeta_{ij}(\Delta{t})^{-1/2} 
-
+   du_{i}^{mech}  = & -\frac{1}{2}\gamma_{ij}\omega_{ij}^{2}(\frac{\vec{r_{ij}}}{r_{ij}}\bullet\vec{v_{ij}})^{2} -
+   \frac{\sigma^{2}_{ij}}{4}(\frac{1}{m_{i}}+\frac{1}{m_{j}})\omega_{ij}^{2} -
+   \frac{1}{2}\sigma_{ij}\omega_{ij}(\frac{\vec{r_{ij}}}{r_{ij}}\bullet\vec{v_{ij}})\zeta_{ij}(\Delta{t})^{-1/2}
 
 where
 
@@ -119,7 +115,6 @@ where
    \alpha_{ij}^{2}  = & 2k_{B}\kappa_{ij} \\
    \sigma^{2}_{ij}  = & 2\gamma_{ij}k_{B}\Theta_{ij} \\
    \Theta_{ij}^{-1}  = & \frac{1}{2}(\frac{1}{\theta_{i}}+\frac{1}{\theta_{j}})
-
 
 :math:`\zeta_ij^q` is a second Gaussian random number with zero mean and unit
 variance that is used to compute the internal conductive energy. The
@@ -158,38 +153,17 @@ Shardlow splitting algorithm is advantageous, especially when
 performing DPD under isoenergetic conditions, as it allows
 significantly larger timesteps to be taken.
 
-
 ----------
 
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
+.. include:: accel_styles.rst
 
 ----------
-
 
 Restrictions
 """"""""""""
 
-
-These commands are part of the USER-DPD package.  They are only
-enabled if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+These commands are part of the DPD-REACT package.  They are only
+enabled if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Pair styles *dpd/fdt* and *dpd/fdt/energy* require use of the
 :doc:`comm_modify vel yes <comm_modify>` option so that velocities are
@@ -204,15 +178,14 @@ Related commands
 
 :doc:`pair_coeff <pair_coeff>`, :doc:`fix shardlow <fix_shardlow>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Lisal3:
-
-
 
 **(Lisal)** M. Lisal, J.K. Brennan, J. Bonet Avalos, "Dissipative
 particle dynamics at isothermal, isobaric, isoenergetic, and
