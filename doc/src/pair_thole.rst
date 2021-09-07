@@ -1,4 +1,6 @@
 .. index:: pair_style thole
+.. index:: pair_style lj/cut/thole/long
+.. index:: pair_style lj/cut/thole/long/omp
 
 pair_style thole command
 ========================
@@ -6,12 +8,10 @@ pair_style thole command
 pair_style lj/cut/thole/long command
 ====================================
 
-pair_style lj/cut/thole/long/omp command
-========================================
+Accelerator Variants: *lj/cut/thole/long/omp*
 
 Syntax
 """"""
-
 
 .. code-block:: LAMMPS
 
@@ -19,7 +19,6 @@ Syntax
 
 * style = *thole* or *lj/cut/thole/long* or *lj/cut/thole/long/omp*
 * args = list of arguments for a particular style
-
 
 .. parsed-literal::
 
@@ -34,7 +33,6 @@ Syntax
 Examples
 """"""""
 
-
 .. code-block:: LAMMPS
 
    pair_style hybrid/overlay ... thole 2.6 12.0
@@ -43,6 +41,8 @@ Examples
    pair_coeff * 2 thole 1.0 2.6
 
    pair_style lj/cut/thole/long 2.6 12.0
+
+Example input scripts available: examples/PACKAGES/drude
 
 Description
 """""""""""
@@ -59,7 +59,7 @@ containing *coul/cut* or *coul/long* in its style name.
 
 The *lj/cut/thole/long* pair style is equivalent to, but more convenient that
 the frequent combination *hybrid/overlay lj/cut/coul/long cutoff thole damp
-cutoff2*\ . It is not only a shorthand for this pair\_style combination, but
+cutoff2*\ . It is not only a shorthand for this pair_style combination, but
 it also allows for mixing pair coefficients instead of listing them all.
 The *lj/cut/thole/long* pair style is also a bit faster because it avoids an
 overlay and can benefit from OMP acceleration. Moreover, it uses a more
@@ -69,7 +69,6 @@ Drude particles.
 
 The *thole* pair styles compute the Coulomb interaction damped at
 short distances by a function
-
 
 .. math::
 
@@ -86,7 +85,6 @@ a value of 2.6, but in certain force fields the value can depend upon
 the atom types. The mixing rule for Thole damping parameters is the
 arithmetic average, and for polarizabilities the geometric average
 between the atom-specific values.
-
 
 .. math::
 
@@ -109,7 +107,7 @@ non-polarizable atoms are also subject to these weighting factors. The
 Drude particles inherit the 1-2, 1-3 and 1-4 neighbor relations from
 their respective cores.
 
-For pair\_style *thole*\ , the following coefficients must be defined for
+For pair_style *thole*, the following coefficients must be defined for
 each pair of atoms types via the :doc:`pair_coeff <pair_coeff>` command
 as in the example above.
 
@@ -118,11 +116,11 @@ as in the example above.
 * cutoff (distance units)
 
 The last two coefficients are optional.  If not specified the global
-Thole damping parameter or global cutoff specified in the pair\_style
+Thole damping parameter or global cutoff specified in the pair_style
 command are used. In order to specify a cutoff (third argument) a damp
 parameter (second argument) must also be specified.
 
-For pair style *lj/cut/thole/long*\ , the following coefficients must be
+For pair style *lj/cut/thole/long*, the following coefficients must be
 defined for each pair of atoms types via the :doc:`pair_coeff <pair_coeff>`
 command.
 
@@ -133,38 +131,20 @@ command.
 * LJ cutoff (distance units)
 
 The last two coefficients are optional and default to the global values from
-the *pair\_style* command line.
-
+the *pair_style* command line.
 
 ----------
 
+.. include:: accel_styles.rst
 
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
-**Mixing**\ :
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 The *thole* pair style does not support mixing.  Thus, coefficients
 for all I,J pairs must be specified explicitly.
 
 The *lj/cut/thole/long* pair style does support mixing. Mixed coefficients
 are defined using
-
 
 .. math::
 
@@ -175,11 +155,10 @@ are defined using
 Restrictions
 """"""""""""
 
+These pair styles are part of the DRUDE package. They are only
+enabled if LAMMPS was built with that package. See the :doc:`Build package <Build_package>` page for more info.
 
-These pair styles are part of the USER-DRUDE package. They are only
-enabled if LAMMPS was built with that package. See the :doc:`Build package <Build_package>` doc page for more info.
-
-This pair\_style should currently not be used with the :doc:`charmm dihedral style <dihedral_charmm>` if the latter has non-zero 1-4 weighting
+This pair_style should currently not be used with the :doc:`charmm dihedral style <dihedral_charmm>` if the latter has non-zero 1-4 weighting
 factors. This is because the *thole* pair style does not know which
 pairs are 1-4 partners of which dihedrals.
 
@@ -191,22 +170,19 @@ Related commands
 """"""""""""""""
 
 :doc:`fix drude <fix_drude>`, :doc:`fix langevin/drude <fix_langevin_drude>`, :doc:`fix drude/transform <fix_drude_transform>`, :doc:`compute temp/drude <compute_temp_drude>`
-:doc:`pair_style lj/cut/coul/long <pair_lj>`
+:doc:`pair_style lj/cut/coul/long <pair_lj_cut_coul>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Noskov1:
-
-
 
 **(Noskov)** Noskov, Lamoureux and Roux, J Phys Chem B, 109, 6705 (2005).
 
 .. _Thole1:
-
-
 
 **(Thole)** Chem Phys, 59, 341 (1981).

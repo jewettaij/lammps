@@ -1,4 +1,9 @@
 .. index:: pair_style oxdna2/excv
+.. index:: pair_style oxdna2/stk
+.. index:: pair_style oxdna2/hbond
+.. index:: pair_style oxdna2/xstk
+.. index:: pair_style oxdna2/coaxstk
+.. index:: pair_style oxdna2/dh
 
 pair_style oxdna2/excv command
 ==============================
@@ -21,7 +26,6 @@ pair_style oxdna2/dh command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    pair_style style1
@@ -32,7 +36,6 @@ Syntax
 
 * style2 = *oxdna2/excv* or *oxdna2/stk* or *oxdna2/hbond* or *oxdna2/xstk* or *oxdna2/coaxstk* or *oxdna2/dh*
 * args = list of arguments for these particular styles
-
 
 .. parsed-literal::
 
@@ -52,7 +55,6 @@ Syntax
 Examples
 """"""""
 
-
 .. code-block:: LAMMPS
 
    pair_style hybrid/overlay oxdna2/excv oxdna2/stk oxdna2/hbond oxdna2/xstk oxdna2/coaxstk oxdna2/dh
@@ -70,13 +72,13 @@ Description
 
 The *oxdna2* pair styles compute the pairwise-additive parts of the oxDNA force field
 for coarse-grained modelling of DNA. The effective interaction between the nucleotides consists of potentials for the
-excluded volume interaction *oxdna2/excv*\ , the stacking *oxdna2/stk*\ , cross-stacking *oxdna2/xstk*
-and coaxial stacking interaction *oxdna2/coaxstk*\ , electrostatic Debye-Hueckel interaction *oxdna2/dh*
+excluded volume interaction *oxdna2/excv*, the stacking *oxdna2/stk*, cross-stacking *oxdna2/xstk*
+and coaxial stacking interaction *oxdna2/coaxstk*, electrostatic Debye-Hueckel interaction *oxdna2/dh*
 as well as the hydrogen-bonding interaction *oxdna2/hbond* between complementary pairs of nucleotides on
 opposite strands. Average sequence or sequence-dependent stacking and base-pairing strengths
-are supported :ref:`(Sulc) <Sulc2>`. Quasi-unique base-pairing between nucleotides can be achieved by using 
-more complementary pairs of atom types like 5-8 and 6-7, 9-12 and 10-11, 13-16 and 14-15, etc. 
-This prevents the hybridization of in principle complementary bases within Ntypes/4 bases 
+are supported :ref:`(Sulc) <Sulc2>`. Quasi-unique base-pairing between nucleotides can be achieved by using
+more complementary pairs of atom types like 5-8 and 6-7, 9-12 and 10-11, 13-16 and 14-15, etc.
+This prevents the hybridization of in principle complementary bases within Ntypes/4 bases
 up and down along the backbone.
 
 The exact functional form of the pair styles is rather complex.
@@ -98,28 +100,34 @@ and  :ref:`(Ouldridge) <Ouldridge2>` for a detailed description of the oxDNA2 fo
    e.g. through :doc:`fix langevin <fix_langevin>` or :doc:`fix nve/dotc/langevin <fix_nve_dotc_langevin>`
    the temperature coefficients have to be matched to the one used in the fix.
 
-Example input and data files for DNA duplexes can be found in examples/USER/cgdna/examples/oxDNA/ and /oxDNA2/.
+.. note::
+
+   These pair styles have to be used with the *atom_style hybrid bond ellipsoid oxdna*
+   (see documentation of :doc:`atom_style <atom_style>`). The *atom_style oxdna*
+   stores the 3'-to-5' polarity of the nucleotide strand, which is set through
+   the bond topology in the data file. The first (second) atom in a bond definition
+   is understood to point towards the 3'-end (5'-end) of the strand.
+
+Example input and data files for DNA duplexes can be found in examples/PACKAGES/cgdna/examples/oxDNA/ and /oxDNA2/.
 A simple python setup tool which creates single straight or helical DNA strands,
-DNA duplexes or arrays of DNA duplexes can be found in examples/USER/cgdna/util/.
+DNA duplexes or arrays of DNA duplexes can be found in examples/PACKAGES/cgdna/util/.
 
 Please cite :ref:`(Henrich) <Henrich2>` in any publication that uses
 this implementation.  The article contains general information
 on the model, its implementation and performance as well as the structure of
 the data and input file. The preprint version of the article can be found
-`here <PDF/USER-CGDNA.pdf>`_.
+`here <PDF/CG-DNA.pdf>`_.
 Please cite also the relevant oxDNA2 publications
 :ref:`(Snodin) <Snodin2>` and :ref:`(Sulc) <Sulc2>`.
 
 ----------
 
-
 Restrictions
 """"""""""""
 
-
 These pair styles can only be used if LAMMPS was built with the
-USER-CGDNA package and the MOLECULE and ASPHERE package.  See the
-:doc:`Build package <Build_package>` doc page for more info.
+CG-DNA package and the MOLECULE and ASPHERE package.  See the
+:doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
@@ -127,10 +135,12 @@ Related commands
 :doc:`bond_style oxdna2/fene <bond_oxdna>`, :doc:`pair_coeff <pair_coeff>`,
 :doc:`bond_style oxdna/fene <bond_oxdna>`, :doc:`pair_style oxdna/excv <pair_oxdna>`,
 :doc:`bond_style oxrna2/fene <bond_oxdna>`, :doc:`pair_style oxrna2/excv <pair_oxrna2>`,
-:doc:`fix nve/dotc/langevin <fix_nve_dotc_langevin>`
+:doc:`atom_style oxdna <atom_style>`, :doc:`fix nve/dotc/langevin <fix_nve_dotc_langevin>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 

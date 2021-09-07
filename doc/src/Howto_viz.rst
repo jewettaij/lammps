@@ -13,24 +13,20 @@ by several popular visualization tools. The :doc:`dump image <dump_image>` and :
 output internally rendered images and convert a sequence of them to a
 movie during the MD run.  Several programs included with LAMMPS as
 auxiliary tools can convert between LAMMPS format files and other
-formats.  See the :doc:`Tools <Tools>` doc page for details.
+formats.  See the :doc:`Tools <Tools>` page for details.
 
 A Python-based toolkit distributed by our group can read native LAMMPS
 dump files, including custom dump files with additional columns of
 user-specified atom information, and convert them to various formats
 or pipe them into visualization software directly.  See the `Pizza.py WWW site <pizza_>`_ for details.  Specifically, Pizza.py can convert
-LAMMPS dump files into PDB, XYZ, `Ensight <ensight_>`_, and VTK formats.
+LAMMPS dump files into PDB, XYZ, `EnSight <ensight_>`_, and VTK formats.
 Pizza.py can pipe LAMMPS dump files directly into the Raster3d and
 RasMol visualization programs.  Pizza.py has tools that do interactive
 3d OpenGL visualization and one that creates SVG images of dump file
 snapshots.
 
-.. _pizza: http://www.sandia.gov/~sjplimp/pizza.html
+.. _pizza: https://lammps.github.io/pizza
 
+.. _ensight: https://www.ansys.com/products/fluids/ansys-ensight
 
-
-.. _ensight: http://www.ensight.com
-
-
-
-.. _atomeye: http://mt.seas.upenn.edu/Archive/Graphics/A
+.. _atomeye: http://li.mit.edu/Archive/Graphics/A/

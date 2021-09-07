@@ -6,7 +6,6 @@ compute gyration command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID gyration
@@ -17,8 +16,7 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 molecule gyration
 
@@ -35,7 +33,6 @@ the square root of the Rg\^2 value in this formula
 .. math::
 
  {R_g}^2 = \frac{1}{M} \sum_i m_i (r_i - r_{cm})^2
-
 
 where :math:`M` is the total mass of the group, :math:`r_{cm}` is the
 center-of-mass position of the group, and the sum is over all atoms in
@@ -59,12 +56,13 @@ and taking a sqrt() would be invalid.
    reset the image flags (e.g. to 0) before invoking this compute by
    using the :doc:`set image <set>` command.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a global scalar (:math:`R_g`) and a global vector of
 length 6 (:math:`{R_g}^2` tensor), which can be accessed by indices 1-6.  These
 values can be used by any command that uses a global scalar value or
-vector values from a compute as input.  See the :doc:`Howto output <Howto_output>` doc page for an overview of LAMMPS output
+vector values from a compute as input.  See the :doc:`Howto output <Howto_output>` page for an overview of LAMMPS output
 options.
 
 The scalar and vector values calculated by this compute are
@@ -81,4 +79,7 @@ Related commands
 :doc:`compute gyration/chunk <compute_gyration_chunk>`,
 :doc:`compute gyration/shape <compute_gyration_shape>`
 
-**Default:** none
+Default
+"""""""
+
+none

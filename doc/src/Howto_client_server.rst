@@ -62,7 +62,7 @@ below.  The MESSAGE package also wraps a client/server library called
 CSlib which enables two codes to exchange messages in different ways,
 either via files, sockets, or MPI.  The CSlib is provided with LAMMPS
 in the lib/message dir.  The CSlib has its own
-`website <http://cslib.sandia.gov>`_ with documentation and test
+`website <https://cslib.sandia.gov>`_ with documentation and test
 programs.
 
 .. note::
@@ -93,22 +93,22 @@ client or server code:
 
 * examples/message
 * examples/COUPLE/README
-* examples/COUPLE/lammps\_mc
-* examples/COUPLE/lammps\_nwchem
-* examples/COUPLE/lammps\_vasp
+* examples/COUPLE/lammps_mc
+* examples/COUPLE/lammps_nwchem
+* examples/COUPLE/lammps_vasp
 
 The examples/message directory couples a client instance of LAMMPS to a
 server instance of LAMMPS.
 
-The files in the *lammps\_mc* folder show how to couple LAMMPS as
+The files in the *lammps_mc* folder show how to couple LAMMPS as
 a server to a simple Monte Carlo client code as the driver.
 
-The files in the *lammps\_nwchem* folder show how to couple LAMMPS
+The files in the *lammps_nwchem* folder show how to couple LAMMPS
 as a client code running MD timestepping to NWChem acting as a
 server providing quantum DFT forces, through a Python wrapper script
 on NWChem.
 
-The files in the *lammps\_vasp* folder show how to couple LAMMPS as
+The files in the *lammps_vasp* folder show how to couple LAMMPS as
 a client code running MD timestepping to VASP acting as a server
 providing quantum DFT forces, through a Python wrapper script on VASP.
 
@@ -119,7 +119,7 @@ server code.  Another code could be substituted for either.
 
 The examples below show launching both codes from the same window (or
 batch script), using the "&" character to launch the first code in the
-background.  For all modes except *mpi/one*\ , you could also launch the
+background.  For all modes except *mpi/one*, you could also launch the
 codes in separate windows on your desktop machine.  It does not
 matter whether you launch the client or server first.
 
@@ -132,8 +132,7 @@ mpirun, even if one or both of them runs on a single processor.  This
 is so that MPI can figure out how to connect both MPI processes
 together to exchange MPI messages between them.
 
-For message exchange in *file*\ , *zmq*\ , or *mpi/two* modes:
-
+For message exchange in *file*, *zmq*, or *mpi/two* modes:
 
 .. code-block:: bash
 
@@ -149,7 +148,6 @@ For message exchange in *file*\ , *zmq*\ , or *mpi/two* modes:
 For message exchange in *mpi/one* mode:
 
 Launch both codes in a single mpirun command:
-
 
 .. code-block:: bash
 

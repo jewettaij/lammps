@@ -1,11 +1,12 @@
 Calculate viscosity
 ===================
 
-The shear viscosity eta of a fluid can be measured in at least 5 ways
+The shear viscosity eta of a fluid can be measured in at least 6 ways
 using various options in LAMMPS.  See the examples/VISCOSITY directory
 for scripts that implement the 5 methods discussed here for a simple
-Lennard-Jones fluid model.  Also, see the :doc:`Howto kappa <Howto_kappa>` doc page for an analogous discussion for
-thermal conductivity.
+Lennard-Jones fluid model and 1 method for SPC/E water model.
+Also, see the :doc:`page on calculating thermal conductivity <Howto_kappa>`
+for an analogous discussion for thermal conductivity.
 
 Eta is a measure of the propensity of a fluid to transmit momentum in
 a direction perpendicular to the direction of velocity or momentum
@@ -41,7 +42,7 @@ command, which determines grad(Vstream) in the equation above.
 E.g. the derivative in the y-direction of the Vx component of fluid
 motion or grad(Vstream) = dVx/dy.  The Pxy off-diagonal component of
 the pressure or stress tensor, as calculated by the :doc:`compute pressure <compute_pressure>` command, can also be monitored, which
-is the J term in the equation above.  See the :doc:`Howto nemd <Howto_nemd>` doc page for details on NEMD simulations.
+is the J term in the equation above.  See the :doc:`Howto nemd <Howto_nemd>` page for details on NEMD simulations.
 
 The third method is to perform a reverse non-equilibrium MD simulation
 using the :doc:`fix viscosity <fix_viscosity>` command which implements
@@ -61,7 +62,6 @@ simulation box.
 
 Here is an example input script that calculates the viscosity of
 liquid Ar via the GK formalism:
-
 
 .. code-block:: LAMMPS
 
@@ -131,13 +131,25 @@ time-integrated momentum fluxes play the role of Cartesian
 coordinates, whose mean-square displacement increases linearly
 with time at sufficiently long times.
 
+The sixth is periodic perturbation method. It is also a non-equilibrium MD method.
+However, instead of measure the momentum flux in response of applied velocity gradient,
+it measures the velocity profile in response of applied stress.
+A cosine-shaped periodic acceleration is added to the system via the
+:doc:`fix accelerate/cos <fix_accelerate_cos>` command,
+and the :doc:`compute viscosity/cos<compute_viscosity_cos>` command is used to monitor the
+generated velocity profile and remove the velocity bias before thermostatting.
+
+.. note::
+
+    An article by :ref:`(Hess) <Hess3>` discussed the accuracy and efficiency of these methods.
 
 ----------
 
-
 .. _Daivis-viscosity:
-
-
 
 **(Daivis and Todd)** Daivis and Todd, Nonequilibrium Molecular Dynamics (book),
 Cambridge University Press, https://doi.org/10.1017/9781139017848, (2017).
+
+.. _Hess3:
+
+**(Hess)** Hess, B. The Journal of Chemical Physics 2002, 116 (1), 209-217.

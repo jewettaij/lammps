@@ -1,20 +1,15 @@
 .. index:: pair_style zbl
+.. index:: pair_style zbl/gpu
+.. index:: pair_style zbl/kk
+.. index:: pair_style zbl/omp
 
 pair_style zbl command
 ======================
 
-pair_style zbl/gpu command
-==========================
-
-pair_style zbl/kk command
-=========================
-
-pair_style zbl/omp command
-==========================
+Accelerator Variants: *zbl/gpu*, *zbl/kk*, *zbl/omp*
 
 Syntax
 """"""
-
 
 .. code-block:: LAMMPS
 
@@ -25,7 +20,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -41,7 +35,7 @@ repulsion for describing high-energy collisions between atoms.
 :ref:`(Ziegler) <Ziegler>`. It includes an additional switching function
 that ramps the energy, force, and curvature smoothly to zero
 between an inner and outer cutoff. The potential
-energy due to a pair of atoms at a distance r\_ij is given by:
+energy due to a pair of atoms at a distance r_ij is given by:
 
 .. math::
 
@@ -73,7 +67,7 @@ When used with :doc:`hybrid/overlay <pair_hybrid>` and pairs are
 assigned
 to more than one sub-style, the mixing rule is not used and
 each pair of types interacting with the ZBL sub-style must
-be included in a pair\_coeff command.
+be included in a pair_coeff command.
 
 .. note::
 
@@ -85,33 +79,14 @@ be included in a pair\_coeff command.
    always be given as multiples of a proton's charge, e.g. 29.0 for
    copper.
 
+----------
+
+.. include:: accel_styles.rst
 
 ----------
 
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
-
-----------
-
-
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 For atom type pairs *i,j* and :math:`i \neq i`, the :math:`Z_i` and
 :math:`Z_j` coefficients
@@ -121,7 +96,7 @@ specified for
 with :doc:`hybrid/overlay <pair_hybrid>` and pairs are assigned
 to more than one sub-style, the mixing rule is not used and
 each pair of types interacting with the ZBL sub-style
-must be included in a pair\_coeff command.
+must be included in a pair_coeff command.
 The :doc:`pair_modify <pair_modify>` mix option has no effect on
 the mixing behavior
 
@@ -137,16 +112,14 @@ tail option for adding long-range tail corrections to energy and
 pressure, since there are no corrections for a potential that goes to
 0.0 at the cutoff.
 
-This pair style does not write information to :doc:`binary restart files <restart>`, so pair\_style and pair\_coeff commands must be
+This pair style does not write information to :doc:`binary restart files <restart>`, so pair_style and pair_coeff commands must be
 specified in an input script that reads a restart file.
 
 This pair style can only be used via the *pair* keyword of the
 :doc:`run_style respa <run_style>` command.  It does not support the
-*inner*\ , *middle*\ , *outer* keywords.
-
+*inner*, *middle*, *outer* keywords.
 
 ----------
-
 
 Restrictions
 """"""""""""
@@ -157,15 +130,14 @@ Related commands
 
 :doc:`pair_coeff <pair_coeff>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Ziegler:
-
-
 
 **(Ziegler)** J.F. Ziegler, J. P. Biersack and U. Littmark, "The
 Stopping and Range of Ions in Matter," Volume 1, Pergamon, 1985.

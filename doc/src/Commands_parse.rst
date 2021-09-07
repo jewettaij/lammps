@@ -47,7 +47,7 @@ LAMMPS:
    named "x" followed by an "x" character.
 
    How the variable is converted to a text string depends on what style
-   of variable it is; see the :doc:`variable <variable>` doc page for
+   of variable it is; see the :doc:`variable <variable>` page for
    details.  It can be a variable that stores multiple text strings, and
    return one of them.  The returned text string can be multiple "words"
    (space separated) which will then be interpreted as multiple
@@ -86,7 +86,6 @@ LAMMPS:
 
    This can be useful for formatting print output to a desired precision:
 
-
    .. code-block:: LAMMPS
 
       print "Final energy per atom: $(pe/atoms:%10.3f) eV/atom"
@@ -102,7 +101,7 @@ LAMMPS:
       print           "B2 = ${b$a}"
 
    Nor can you specify an expression like "$($x-1.0)" for an immediate
-   variable, but you could use $(v\_x-1.0), since the latter is valid
+   variable, but you could use $(v_x-1.0), since the latter is valid
    syntax for an :doc:`equal-style variable <variable>`.
 
    See the :doc:`variable <variable>` command for more details of how
@@ -116,7 +115,7 @@ LAMMPS:
    underscores, or punctuation characters.
 
 .. _five:
-   
+
 5. The first word is the command name.  All successive words in the line
    are arguments.
 
@@ -163,3 +162,26 @@ LAMMPS:
    triple quotes can be nested in the usual manner.  See the doc pages
    for those commands for examples.  Only one of level of nesting is
    allowed, but that should be sufficient for most use cases.
+
+.. admonition:: ASCII versus UTF-8
+   :class: note
+
+   LAMMPS expects and processes 7-bit ASCII format text internally.
+   Many modern environments use UTF-8 encoding, which is a superset
+   of the 7-bit ASCII character table and thus mostly compatible.
+   However, there are several non-ASCII characters that can look
+   very similar to their ASCII equivalents or are invisible (so they
+   look like a blank), but are encoded differently.  Web browsers,
+   PDF viewers, document editors are known to sometimes replace one
+   with the other for a better looking output.  However, that can
+   lead to problems, for instance, when using cut-n-paste of input
+   file examples from web pages, or when using a document editor
+   (not a dedicated plain text editor) for writing LAMMPS inputs.
+   LAMMPS will try to detect this and substitute the non-ASCII
+   characters with their ASCII equivalents where known.  There also
+   is going to be a warning printed, if this occurs.  It is
+   recommended to avoid such characters altogether in LAMMPS input,
+   data and potential files.  The replacement tables are likely
+   incomplete and dependent on users reporting problems processing
+   correctly looking input containing UTF-8 encoded non-ASCII
+   characters.

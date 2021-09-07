@@ -1,10 +1,15 @@
 .. index:: fix wall/lj93
+.. index:: fix wall/lj93/kk
+.. index:: fix wall/lj126
+.. index:: fix wall/lj1043
+.. index:: fix wall/colloid
+.. index:: fix wall/harmonic
+.. index:: fix wall/morse
 
 fix wall/lj93 command
 =====================
 
-fix wall/lj93/kk command
-========================
+Accelerator Variants: *wall/lj93/kk*
 
 fix wall/lj126 command
 ======================
@@ -24,7 +29,6 @@ fix wall/morse command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID style face args ... keyword value ...
@@ -34,9 +38,9 @@ Syntax
 * one or more face/arg pairs may be appended
 * face = *xlo* or *xhi* or *ylo* or *yhi* or *zlo* or *zhi*
 * args for styles *lj93* or *lj126* or *lj1043* or *colloid* or *harmonic*
-  
+
   .. parsed-literal::
-  
+
          args = coord epsilon sigma cutoff
          coord = position of wall = EDGE or constant or variable
            EDGE = current lo or hi edge of simulation box
@@ -49,9 +53,9 @@ Syntax
          cutoff = distance from wall at which wall-particle interaction is cut off (distance units)
 
 * args for style *morse*
-  
+
   .. parsed-literal::
-  
+
          args = coord D_0 alpha r_0 cutoff
          coord = position of wall = EDGE or constant or variable
            EDGE = current lo or hi edge of simulation box
@@ -67,9 +71,9 @@ Syntax
 
 * zero or more keyword/value pairs may be appended
 * keyword = *units* or *fld*
-  
+
   .. parsed-literal::
-  
+
        *units* value = *lattice* or *box*
          *lattice* = the wall position is defined in lattice units
          *box* = the wall position is defined in simulation box units
@@ -80,13 +84,10 @@ Syntax
          *yes* = allow periodic boundary in a wall dimension
          *no* = require non-perioidic boundaries in any wall dimension
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix wallhi all wall/lj93 xlo -1.0 1.0 1.0 2.5 units box
    fix wallhi all wall/lj93 xhi EDGE 1.0 1.0 2.5
@@ -102,69 +103,63 @@ wall that interacts with the atoms in the group by generating a force
 on the atom in a direction perpendicular to the wall.  The energy of
 wall-particle interactions depends on the style.
 
-For style *wall/lj93*\ , the energy E is given by the 9/3 potential:
+For style *wall/lj93*, the energy E is given by the 9/3 potential:
 
 .. math::
 
- E = \epsilon \left[ \frac{2}{15} \left(\frac{\sigma}{r}\right)^{9} - 
+ E = \epsilon \left[ \frac{2}{15} \left(\frac{\sigma}{r}\right)^{9} -
                        \left(\frac{\sigma}{r}\right)^3 \right]
                        \qquad r < r_c
 
-
-For style *wall/lj126*\ , the energy E is given by the 12/6 potential:
+For style *wall/lj126*, the energy E is given by the 12/6 potential:
 
 .. math::
 
- E = 4 \epsilon \left[ \left(\frac{\sigma}{r}\right)^{12} - 
+ E = 4 \epsilon \left[ \left(\frac{\sigma}{r}\right)^{12} -
                        \left(\frac{\sigma}{r}\right)^6 \right]
                        \qquad r < r_c
 
-
-For style *wall/lj1043*\ , the energy E is given by the 10/4/3 potential:
+For style *wall/lj1043*, the energy E is given by the 10/4/3 potential:
 
 .. math::
 
- E = 2 \pi \epsilon \left[ \frac{2}{5} \left(\frac{\sigma}{r}\right)^{10} - 
+ E = 2 \pi \epsilon \left[ \frac{2}{5} \left(\frac{\sigma}{r}\right)^{10} -
                        \left(\frac{\sigma}{r}\right)^4 -
                        \frac{\sqrt(2)\sigma^3}{3\left(r+\left(0.61/\sqrt(2)\right)\sigma\right)^3}\right]
                        \qquad r < r_c
 
-
-For style *wall/colloid*\ , the energy E is given by an integrated form
+For style *wall/colloid*, the energy E is given by an integrated form
 of the :doc:`pair_style colloid <pair_colloid>` potential:
 
 .. math::
 
-   E = & \epsilon \left[ \frac{\sigma^{6}}{7560} 
+   E = & \epsilon \left[ \frac{\sigma^{6}}{7560}
    \left(\frac{6R-D}{D^{7}} + \frac{D+8R}{(D+2R)^{7}} \right) \right. \\
     & \left. - \frac{1}{6} \left(\frac{2R(D+R) + D(D+2R)
-    \left[ \ln D - \ln (D+2R) \right]}{D(D+2R)} \right) \right] \qquad r < r_c 
+    \left[ \ln D - \ln (D+2R) \right]}{D(D+2R)} \right) \right] \qquad r < r_c
 
-
-For style *wall/harmonic*\ , the energy E is given by a harmonic spring
+For style *wall/harmonic*, the energy E is given by a harmonic spring
 potential:
 
 .. math::
 
  E = \epsilon \quad (r - r_c)^2 \qquad r < r_c
 
-
-For style *wall/morse*\ , the energy E is given by a Morse potential:
+For style *wall/morse*, the energy E is given by a Morse potential:
 
 .. math::
 
    E = D_0 \left[ e^{- 2 \alpha (r - r_0)} - 2 e^{- \alpha (r - r_0)} \right]
        \qquad r < r_c
 
-
 In all cases, *r* is the distance from the particle to the wall at
-position *coord*\ , and :math:`r_c` is the *cutoff* distance at which the
+position *coord*, and :math:`r_c` is the *cutoff* distance at which the
 particle and wall no longer interact.  The energy of the wall
 potential is shifted so that the wall-particle interaction energy is
 0.0 at the cutoff distance.
 
-Up to 6 walls or faces can be specified in a single command: *xlo*\ ,
-*xhi*\ , *ylo*\ , *yhi*\ , *zlo*\ , *zhi*\ .  A *lo* face interacts with
+Up to 6 walls or faces can be specified in a single command: *xlo*,
+*xhi*, *ylo*, *yhi*, *zlo*, *zhi*\ .  A *lo* face interacts with
 particles near the lower side of the simulation box in that dimension.
 A *hi* face interacts with particles near the upper side of the
 simulation box in that dimension.
@@ -175,7 +170,7 @@ EDGE is used, then the corresponding boundary of the current
 simulation box is used.  If a numeric constant is specified then the
 wall is placed at that position in the appropriate dimension (x, y, or
 z).  In both the EDGE and constant cases, the wall will never move.
-If the wall position is a variable, it should be specified as v\_name,
+If the wall position is a variable, it should be specified as v_name,
 where name is an :doc:`equal-style variable <variable>` name.  In this
 case the variable is evaluated each timestep and the result becomes
 the current position of the reflecting wall.  Equal-style variables
@@ -232,7 +227,7 @@ inverse distance units, and :math:`r_0` distance units.
 For any wall, the :math:`\epsilon` and/or :math:`\sigma` and/or :math:`\alpha` parameter can
 be specified
 as an :doc:`equal-style variable <variable>`, in which case it should be
-specified as v\_name, where name is the variable name.  As with a
+specified as v_name, where name is the variable name.  As with a
 variable wall position, the variable is evaluated each timestep and
 the result becomes the current epsilon or sigma of the wall.
 Equal-style variables can specify formulas with various mathematical
@@ -272,13 +267,13 @@ The *fld* keyword can be used with a *yes* setting to invoke the wall
 constraint before pairwise interactions are computed.  This allows an
 implicit FLD model using :doc:`pair_style lubricateU <pair_lubricateU>`
 to include the wall force in its calculations.  If the setting is
-*no*\ , wall forces are imposed after pairwise interactions, in the
+*no*, wall forces are imposed after pairwise interactions, in the
 usual manner.
 
 The *pbc* keyword can be used with a *yes* setting to allow walls to
 be specified in a periodic dimension.  See the
 :doc:`boundary <boundary>` command for options on simulation box
-boundaries.  The default for *pbc* is *no*\ , which means the system
+boundaries.  The default for *pbc* is *no*, which means the system
 must be non-periodic when using a wall.  But you may wish to use a
 periodic box.  E.g. to allow some particles to interact with the wall
 via the fix group-ID, and others to pass through it and wrap around a
@@ -288,17 +283,14 @@ then particles may interact with both the wall and with periodic
 images on the other side of the box, which is probably not what you
 want.
 
-
 ----------
-
 
 Here are examples of variable definitions that move the wall position
 in a time-dependent fashion using equal-style
 :doc:`variables <variable>`.  The wall interaction parameters (epsilon,
 sigma) could be varied with additional variable definitions.
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    variable ramp equal ramp(0,10)
    fix 1 all wall xlo v_ramp 1.0 1.0 2.5
@@ -312,53 +304,60 @@ sigma) could be varied with additional variable definitions.
    variable wiggle equal cwiggle(0.0,5.0,3.0)
    fix 1 all wall xlo v_wiggle 1.0 1.0 2.5
 
-The ramp(lo,hi) function adjusts the wall position linearly from lo to
-hi over the course of a run.  The vdisplace(c0,velocity) function does
-something similar using the equation position = c0 + velocity\*delta,
-where delta is the elapsed time.
+The *ramp(lo,hi)* function adjusts the wall position linearly from *lo* to
+*hi* over the course of a run.  The *vdisplace(c0,velocity)* function does
+something similar using the equation *position = c0 + velocity\*delta*,
+where *delta* is the elapsed time.
 
-The swiggle(c0,A,period) function causes the wall position to
-oscillate sinusoidally according to this equation, where omega = 2 PI
-/ period:
-
+The *swiggle(c0,A,period)* function causes the wall position to
+oscillate sinusoidally according to this equation, where *omega = 2 PI
+/ period*\ :
 
 .. parsed-literal::
 
    position = c0 + A sin(omega\*delta)
 
-The cwiggle(c0,A,period) function causes the wall position to
+The *cwiggle(c0,A,period)* function causes the wall position to
 oscillate sinusoidally according to this equation, which will have an
 initial wall velocity of 0.0, and thus may impose a gentler
 perturbation on the particles:
-
 
 .. parsed-literal::
 
    position = c0 + A (1 - cos(omega\*delta))
 
-
 ----------
 
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+No information about this fix is written to :doc:`binary restart files
+<restart>`.
 
-No information about this fix is written to :doc:`binary restart files <restart>`.
+The :doc:`fix_modify <fix_modify>` *energy* option is supported by
+this fix to add the energy of interaction between atoms and all the
+specified walls to the global potential energy of the system as part
+of :doc:`thermodynamic output <thermo_style>`.  The default setting
+for this fix is :doc:`fix_modify energy no <fix_modify>`.
 
-The :doc:`fix_modify <fix_modify>` *energy* option is supported by this
-fix to add the energy of interaction between atoms and each wall to
-the system's potential energy as part of :doc:`thermodynamic output <thermo_style>`.
-
-The :doc:`fix_modify <fix_modify>` *virial* option is supported by this
-fix to add the contribution due to the interaction between
-atoms and each wall to the system's virial as part of :doc:`thermodynamic output <thermo_style>`. The default is *virial no*
+The :doc:`fix_modify <fix_modify>` *virial* option is supported by
+this fix to add the contribution due to the interaction between atoms
+and all the specified walls to both the global pressure and per-atom
+stress of the system via the :doc:`compute pressure
+<compute_pressure>` and :doc:`compute stress/atom
+<compute_stress_atom>` commands.  The former can be accessed by
+:doc:`thermodynamic output <thermo_style>`.  The default setting for
+this fix is :doc:`fix_modify virial no <fix_modify>`.
 
 The :doc:`fix_modify <fix_modify>` *respa* option is supported by this
-fix. This allows to set at which level of the :doc:`r-RESPA <run_style>`
-integrator the fix is adding its forces. Default is the outermost level.
+fix. This allows to set at which level of the :doc:`r-RESPA
+<run_style>` integrator the fix is adding its forces. Default is the
+outermost level.
 
 This fix computes a global scalar energy and a global vector of
-forces, which can be accessed by various :doc:`output commands <Howto_output>`.  Note that the scalar energy is the sum
-of interactions with all defined walls.  If you want the energy on a
+forces, which can be accessed by various :doc:`output commands
+<Howto_output>`.  Note that the scalar energy is the sum of
+interactions with all defined walls.  If you want the energy on a
 per-wall basis, you need to use multiple fix wall commands.  The
 length of the vector is equal to the number of walls defined by the
 fix.  Each vector value is the normal force on a specific wall.  Note
@@ -379,31 +378,11 @@ invoked by the :doc:`minimize <minimize>` command.
    minimized), you MUST enable the :doc:`fix_modify <fix_modify>` *energy*
    option for this fix.
 
-
 ----------
 
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
+.. include:: accel_styles.rst
 
 ----------
-
 
 Restrictions
 """"""""""""
@@ -421,13 +400,9 @@ Default
 
 The option defaults units = lattice, fld = no, and pbc = no.
 
-
 ----------
 
-
 .. _Magda:
-
-
 
 **(Magda)** Magda, Tirrell, Davis, J Chem Phys, 83, 1888-1901 (1985);
 erratum in JCP 84, 2901 (1986).

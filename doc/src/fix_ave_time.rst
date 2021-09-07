@@ -6,7 +6,6 @@ fix ave/time command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID ave/time Nevery Nrepeat Nfreq value1 value2 ... keyword args ...
@@ -17,10 +16,10 @@ Syntax
 * Nrepeat = # of times to use input values for calculating averages
 * Nfreq = calculate averages every this many timesteps
 * one or more input values can be listed
-* value = c\_ID, c\_ID[N], f\_ID, f\_ID[N], v\_name
-  
+* value = c_ID, c_ID[N], f_ID, f_ID[N], v_name
+
   .. parsed-literal::
-  
+
        c_ID = global scalar or vector calculated by a compute with ID
        c_ID[I] = Ith component of global vector or Ith column of global array calculated by a compute with ID, I can include wildcard (see below)
        f_ID = global scalar or vector calculated by a fix with ID
@@ -30,9 +29,9 @@ Syntax
 
 * zero or more keyword/arg pairs may be appended
 * keyword = *mode* or *file* or *ave* or *start* or *off* or *overwrite* or *title1* or *title2* or *title3*
-  
+
   .. parsed-literal::
-  
+
        *mode* arg = *scalar* or *vector*
          scalar = all input values are global scalars
          vector = all input values are global vectors or global arrays
@@ -56,18 +55,15 @@ Syntax
        *title3* arg = string
          string = text to print as 3rd line of output file, only for vector mode
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix 1 all ave/time 100 5 1000 c_myTemp c_thermo_temp file temp.profile
    fix 1 all ave/time 100 5 1000 c_thermo_press[2] ave window 20 &
                                  title1 "My output values"
-   fix 1 all ave/time 100 5 1000 c_thermo_press[\*]
+   fix 1 all ave/time 100 5 1000 c_thermo_press[*]
    fix 1 all ave/time 1 100 1000 f_indent f_indent[1] file temp.indent off 1
 
 Description
@@ -132,18 +128,15 @@ vector or columns of the array had been listed one by one.  E.g. these
 2 fix ave/time commands are equivalent, since the :doc:`compute rdf <compute_rdf>` command creates, in this case, a global array
 with 3 columns, each of length 50:
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute myRDF all rdf 50 1 2
-   fix 1 all ave/time 100 1 100 c_myRDF[\*] file tmp1.rdf mode vector
+   fix 1 all ave/time 100 1 100 c_myRDF[*] file tmp1.rdf mode vector
    fix 2 all ave/time 100 1 100 c_myRDF[1] c_myRDF[2] c_myRDF[3] file tmp2.rdf mode vector
-
 
 ----------
 
-
-The *Nevery*\ , *Nrepeat*\ , and *Nfreq* arguments specify on what
+The *Nevery*, *Nrepeat*, and *Nfreq* arguments specify on what
 timesteps the input values will be used in order to contribute to the
 average.  The final averaged quantities are generated on timesteps
 that are a multiple of *Nfreq*\ .  The average is over *Nrepeat*
@@ -160,9 +153,7 @@ timestep 200, etc.  If Nrepeat=1 and Nfreq = 100, then no time
 averaging is done; values are simply generated on timesteps
 100,200,etc.
 
-
 ----------
-
 
 If a value begins with "c\_", a compute ID must follow which has been
 previously defined in the input script.  If *mode* = scalar, then if
@@ -194,7 +185,7 @@ for how I can be specified with a wildcard asterisk to effectively
 specify multiple values.
 
 Note that some fixes only produce their values on certain timesteps,
-which must be compatible with *Nevery*\ , else an error will result.
+which must be compatible with *Nevery*, else an error will result.
 Users can also write code for their own fix styles and :doc:`add them to LAMMPS <Modify>`.
 
 If a value begins with "v\_", a variable name must follow which has
@@ -212,29 +203,27 @@ keywords, or they can invoke other computes, fixes, or variables when
 they are evaluated, so this is a very general means of specifying
 quantities to time average.
 
-
 ----------
-
 
 Additional optional keywords also affect the operation of this fix.
 
-If the *mode* keyword is set to *scalar*\ , then all input values must
+If the *mode* keyword is set to *scalar*, then all input values must
 be global scalars, or elements of global vectors.  If the *mode*
-keyword is set to *vector*\ , then all input values must be global
+keyword is set to *vector*, then all input values must be global
 vectors, or columns of global arrays.  They can also be global arrays,
 which are converted into a series of global vectors (one per column),
 as explained above.
 
 The *ave* keyword determines how the values produced every *Nfreq*
 steps are averaged with values produced on previous steps that were
-multiples of *Nfreq*\ , before they are accessed by another output
+multiples of *Nfreq*, before they are accessed by another output
 command or written to a file.
 
-If the *ave* setting is *one*\ , then the values produced on timesteps
+If the *ave* setting is *one*, then the values produced on timesteps
 that are multiples of *Nfreq* are independent of each other; they are
 output as-is without further averaging.
 
-If the *ave* setting is *running*\ , then the values produced on
+If the *ave* setting is *running*, then the values produced on
 timesteps that are multiples of *Nfreq* are summed and averaged in a
 cumulative sense before being output.  Each output value is thus the
 average of the value produced on that timestep with all preceding
@@ -242,7 +231,7 @@ values.  This running average begins when the fix is defined; it can
 only be restarted by deleting the fix via the :doc:`unfix <unfix>`
 command, or by re-defining the fix by re-specifying it.
 
-If the *ave* setting is *window*\ , then the values produced on
+If the *ave* setting is *window*, then the values produced on
 timesteps that are multiples of *Nfreq* are summed and averaged within
 a moving "window" of time, so that the last M values are used to
 produce the output.  E.g. if M = 3 and Nfreq = 1000, then the output
@@ -290,7 +279,6 @@ default values for each of these, so they do not need to be specified.
 
 By default, these header lines are as follows for *mode* = scalar:
 
-
 .. parsed-literal::
 
    # Time-averaged data for fix ID
@@ -303,7 +291,6 @@ so the *title3* setting is ignored when *mode* = scalar.
 
 By default, these header lines are as follows for *mode* = vector:
 
-
 .. parsed-literal::
 
    # Time-averaged data for fix ID
@@ -315,11 +302,10 @@ describes the two values that are printed at the first of each section
 of output.  In the third line the values are replaced with the
 appropriate fields from the fix ave/time command.
 
-
 ----------
 
-
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 No information about this fix is written to :doc:`binary restart files <restart>`.  None of the :doc:`fix_modify <fix_modify>` options
 are relevant to this fix.
@@ -346,7 +332,7 @@ element are "intensive" or "extensive".  If the fix produces an array,
 then all elements in the array must be the same, either "intensive" or
 "extensive".  If a compute or fix provides the value being time
 averaged, then the compute or fix determines whether the value is
-intensive or extensive; see the doc page for that compute or fix for
+intensive or extensive; see the page for that compute or fix for
 further info.  Values produced by a variable are treated as intensive.
 
 No parameter of this fix can be used with the *start/stop* keywords of

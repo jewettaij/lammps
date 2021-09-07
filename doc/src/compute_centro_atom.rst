@@ -6,7 +6,6 @@ compute centro/atom command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID centro/atom lattice keyword value ...
@@ -23,13 +22,10 @@ Syntax
        *no* = do not calculate 3 symmetry axes
        *yes* = calculate 3 symmetry axes
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all centro/atom fcc
 
@@ -56,7 +52,6 @@ This parameter is computed using the following formula from
 
    CS = \sum_{i = 1}^{N/2} | \vec{R}_i + \vec{R}_{i+N/2} |^2
 
-
 where the :math:`N` nearest neighbors of each atom are identified and
 :math:`\vec{R}_i` and :math:`\vec{R}_{i+N/2}` are vectors from the
 central atom to a particular pair of nearest neighbors.  There are
@@ -81,7 +76,7 @@ positive parameter.  If the atom does not have :math:`N` neighbors
 (within the potential cutoff), then its centro-symmetry parameter is
 set to 0.0.
 
-If the keyword *axes* has the setting *yes*\ , then this compute also
+If the keyword *axes* has the setting *yes*, then this compute also
 estimates three symmetry axes for each atom's local neighborhood.  The
 first two of these are the vectors joining the two pairs of neighbor
 atoms with smallest contributions to the centrosymmetry parameter,
@@ -106,14 +101,15 @@ is dumped).  Thus it can be inefficient to compute/dump this quantity
 too frequently or to have multiple compute/dump commands, each with a
 *centro/atom* style.
 
-**Output info:**
+Output info
+"""""""""""
 
 By default, this compute calculates the centrosymmetry value for each
 atom as a per-atom vector, which can be accessed by any command that
-uses per-atom values from a compute as input.  See the :doc:`Howto output <Howto_output>` doc page for an overview of LAMMPS output
+uses per-atom values from a compute as input.  See the :doc:`Howto output <Howto_output>` page for an overview of LAMMPS output
 options.
 
-If the *axes* keyword setting is *yes*\ , then a per-atom array is
+If the *axes* keyword setting is *yes*, then a per-atom array is
 calculated. The first column is the centrosymmetry parameter.  The
 next three columns are the x, y, and z components of the first
 symmetry axis, followed by the second, and third symmetry axes in
@@ -130,7 +126,6 @@ Here are typical centro-symmetry values, from a nanoindentation
 simulation into gold (FCC).  These were provided by Jon Zimmerman
 (Sandia):
 
-
 .. parsed-literal::
 
    Bulk lattice = 0
@@ -138,9 +133,8 @@ simulation into gold (FCC).  These were provided by Jon Zimmerman
    Stacking faults ~ 5.0 (4.0 to 6.0)
    Free surface ~ 23.0
 
-These values are \*not\* normalized by the square of the lattice
+These values are **not** normalized by the square of the lattice
 parameter.  If they were, normalized values would be:
-
 
 .. parsed-literal::
 
@@ -167,12 +161,8 @@ Default
 
 The default value for the optional keyword is axes = no.
 
-
 ----------
 
-
 .. _Kelchner:
-
-
 
 **(Kelchner)** Kelchner, Plimpton, Hamilton, Phys Rev B, 58, 11085 (1998).

@@ -16,8 +16,8 @@ Compute commands
 
 An alphabetic list of all LAMMPS :doc:`compute <compute>` commands.
 Some styles have accelerated versions.  This is indicated by
-additional letters in parenthesis: g = GPU, i = USER-INTEL, k =
-KOKKOS, o = USER-OMP, t = OPT.
+additional letters in parenthesis: g = GPU, i = INTEL, k =
+KOKKOS, o = OPENMP, t = OPT.
 
 .. table_from_list::
    :columns: 5
@@ -42,22 +42,25 @@ KOKKOS, o = USER-OMP, t = OPT.
    * :doc:`com <compute_com>`
    * :doc:`com/chunk <compute_com_chunk>`
    * :doc:`contact/atom <compute_contact_atom>`
-   * :doc:`coord/atom <compute_coord_atom>`
+   * :doc:`coord/atom (k) <compute_coord_atom>`
    * :doc:`damage/atom <compute_damage_atom>`
    * :doc:`dihedral <compute_dihedral>`
    * :doc:`dihedral/local <compute_dihedral_local>`
    * :doc:`dilatation/atom <compute_dilatation_atom>`
+   * :doc:`dipole <compute_dipole>`
    * :doc:`dipole/chunk <compute_dipole_chunk>`
    * :doc:`displace/atom <compute_displace_atom>`
    * :doc:`dpd <compute_dpd>`
    * :doc:`dpd/atom <compute_dpd_atom>`
    * :doc:`edpd/temp/atom <compute_edpd_temp_atom>`
+   * :doc:`efield/atom <compute_efield_atom>`
    * :doc:`entropy/atom <compute_entropy_atom>`
    * :doc:`erotate/asphere <compute_erotate_asphere>`
    * :doc:`erotate/rigid <compute_erotate_rigid>`
    * :doc:`erotate/sphere <compute_erotate_sphere>`
    * :doc:`erotate/sphere/atom <compute_erotate_sphere_atom>`
    * :doc:`event/displace <compute_event_displace>`
+   * :doc:`fabric <compute_fabric>`
    * :doc:`fep <compute_fep>`
    * :doc:`force/tally <compute_tally>`
    * :doc:`fragment/atom <compute_cluster_atom>`
@@ -69,6 +72,7 @@ KOKKOS, o = USER-OMP, t = OPT.
    * :doc:`gyration/shape/chunk <compute_gyration_shape_chunk>`
    * :doc:`heat/flux <compute_heat_flux>`
    * :doc:`heat/flux/tally <compute_tally>`
+   * :doc:`heat/flux/virial/tally <compute_tally>`
    * :doc:`hexorder/atom <compute_hexorder_atom>`
    * :doc:`hma <compute_hma>`
    * :doc:`improper <compute_improper>`
@@ -79,15 +83,14 @@ KOKKOS, o = USER-OMP, t = OPT.
    * :doc:`ke/atom/eff <compute_ke_atom_eff>`
    * :doc:`ke/eff <compute_ke_eff>`
    * :doc:`ke/rigid <compute_ke_rigid>`
-   * :doc:`meso/e/atom <compute_meso_e_atom>`
-   * :doc:`meso/rho/atom <compute_meso_rho_atom>`
-   * :doc:`meso/t/atom <compute_meso_t_atom>`
+   * :doc:`mesont <compute_mesont>`
+   * :doc:`mliap <compute_mliap>`
    * :doc:`momentum <compute_momentum>`
    * :doc:`msd <compute_msd>`
    * :doc:`msd/chunk <compute_msd_chunk>`
    * :doc:`msd/nongauss <compute_msd_nongauss>`
    * :doc:`omega/chunk <compute_omega_chunk>`
-   * :doc:`orientorder/atom <compute_orientorder_atom>`
+   * :doc:`orientorder/atom (k) <compute_orientorder_atom>`
    * :doc:`pair <compute_pair>`
    * :doc:`pair/local <compute_pair_local>`
    * :doc:`pe <compute_pe>`
@@ -124,6 +127,7 @@ KOKKOS, o = USER-OMP, t = OPT.
    * :doc:`smd/tlsph/strain/rate <compute_smd_tlsph_strain_rate>`
    * :doc:`smd/tlsph/stress <compute_smd_tlsph_stress>`
    * :doc:`smd/triangle/vertices <compute_smd_triangle_vertices>`
+   * :doc:`smd/ulsph/effm <compute_smd_ulsph_effm>`
    * :doc:`smd/ulsph/num/neighs <compute_smd_ulsph_num_neighs>`
    * :doc:`smd/ulsph/strain <compute_smd_ulsph_strain>`
    * :doc:`smd/ulsph/strain/rate <compute_smd_ulsph_strain_rate>`
@@ -133,6 +137,9 @@ KOKKOS, o = USER-OMP, t = OPT.
    * :doc:`sna/atom <compute_sna_atom>`
    * :doc:`snad/atom <compute_sna_atom>`
    * :doc:`snav/atom <compute_sna_atom>`
+   * :doc:`sph/e/atom <compute_sph_e_atom>`
+   * :doc:`sph/rho/atom <compute_sph_rho_atom>`
+   * :doc:`sph/t/atom <compute_sph_t_atom>`
    * :doc:`spin <compute_spin>`
    * :doc:`stress/atom <compute_stress_atom>`
    * :doc:`stress/mop <compute_stress_mop>`
@@ -145,7 +152,7 @@ KOKKOS, o = USER-OMP, t = OPT.
    * :doc:`temp/chunk <compute_temp_chunk>`
    * :doc:`temp/com <compute_temp_com>`
    * :doc:`temp/cs <compute_temp_cs>`
-   * :doc:`temp/deform <compute_temp_deform>`
+   * :doc:`temp/deform (k) <compute_temp_deform>`
    * :doc:`temp/deform/eff <compute_temp_deform_eff>`
    * :doc:`temp/drude <compute_temp_drude>`
    * :doc:`temp/eff <compute_temp_eff>`
@@ -161,5 +168,6 @@ KOKKOS, o = USER-OMP, t = OPT.
    * :doc:`torque/chunk <compute_torque_chunk>`
    * :doc:`vacf <compute_vacf>`
    * :doc:`vcm/chunk <compute_vcm_chunk>`
+   * :doc:`viscosity/cos <compute_viscosity_cos>`
    * :doc:`voronoi/atom <compute_voronoi_atom>`
    * :doc:`xrd <compute_xrd>`

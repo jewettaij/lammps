@@ -6,7 +6,6 @@ fix controller command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    fix ID group-ID controller Nevery alpha Kp Ki Kd pvar setpoint cvar
@@ -18,10 +17,10 @@ Syntax
 * Kp = proportional gain in PID equation (unitless)
 * Ki = integral gain in PID equation (unitless)
 * Kd = derivative gain in PID equation (unitless)
-* pvar = process variable of form c\_ID, c\_ID[I], f\_ID, f\_ID[I], or v\_name
-  
+* pvar = process variable of form c_ID, c_ID[I], f_ID, f_ID[I], or v_name
+
   .. parsed-literal::
-  
+
        c_ID = global scalar calculated by a compute with ID
        c_ID[I] = Ith component of global vector calculated by a compute with ID
        f_ID = global scalar calculated by a fix with ID
@@ -31,12 +30,10 @@ Syntax
 * setpoint = desired value of process variable (same units as process variable)
 * cvar = name of control variable
 
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix 1 all controller 100 1.0 0.5 0.0 0.0 c_thermo_temp 1.5 tcontrol
    fix 1 all controller 100 0.2 0.5 0 100.0 v_pxxwall 1.01325 xwall
@@ -100,7 +97,7 @@ the following dynamic equation:
 .. math::
 
    \frac{dc}{dt}  = \hat{E} -\alpha (K_p e + K_i \int_0^t e \, dt + K_d \frac{de}{dt} )
-   
+
 where *c* is the continuous time analog of the control variable,
 *e* =\ *pvar*\ -\ *setpoint* is the error in the process variable, and
 :math:`\alpha`, :math:`K_p`, :math:`K_i` , and :math:`K_d` are constants
@@ -110,7 +107,6 @@ keywords described above. The discretized version of this equation is:
 .. math::
 
    c_n  = \hat{E} c_{n-1} -\alpha \left( K_p \tau e_n + K_i \tau^2 \sum_{i=1}^n e_i + K_d (e_n - e_{n-1}) \right)
-
 
 where :math:`\tau = \mathtt{Nevery} \cdot \mathtt{timestep}` is the time
 interval between updates,
@@ -131,17 +127,17 @@ When choosing the values of the four constants, it is best to first
 pick a value and sign for :math:`\alpha` that is consistent with the
 magnitudes and signs of *pvar* and *cvar*\ .  The magnitude of :math:`K_p`
 should then be tested over a large positive range keeping :math:`K_i = K_d =0`.
-A good value for :math:`K_p` will produce a fast response in *pvar*\ ,
+A good value for :math:`K_p` will produce a fast response in *pvar*,
 without overshooting the *setpoint*\ .  For many applications, proportional
 feedback is sufficient, and so :math:`K_i` = K_d =0` can be used. In cases
 where there is a substantial lag time in the response of *pvar* to a change
-in *cvar*\ , this can be counteracted by increasing :math:`K_d`. In situations
-where *pvar* plateaus without reaching *setpoint*\ , this can be
+in *cvar*, this can be counteracted by increasing :math:`K_d`. In situations
+where *pvar* plateaus without reaching *setpoint*, this can be
 counteracted by increasing :math:`K_i`.  In the language of Charles Dickens,
 :math:`K_p` represents the error of the present, :math:`K_i` the error of
 the past, and :math:`K_d` the error yet to come.
 
-Because this fix updates *cvar*\ , but does not initialize its value,
+Because this fix updates *cvar*, but does not initialize its value,
 the initial value is that assigned by the user in the input script via
 the :doc:`internal-style variable <variable>` command.  This value is
 used (by the other LAMMPS command that used the variable) until this
@@ -149,9 +145,7 @@ fix performs its first update of *cvar* after *Nevery* timesteps.  On
 the first update, the value of the derivative term is set to zero,
 because the value of :math:`e_n-1` is not yet defined.
 
-
 ----------
-
 
 The process variable *pvar* can be specified as the output of a
 :doc:`compute <compute>` or :doc:`fix <fix>` or the evaluation of a
@@ -168,7 +162,7 @@ used.  Users can also write code for their own compute styles and :doc:`add them
 
 If *pvar* begins with "f\_", a fix ID must follow which has been
 previously defined in the input script and which generates a global
-scalar or vector.  See the individual :doc:`fix <fix>` doc page for
+scalar or vector.  See the individual :doc:`fix <fix>` page for
 details.  Note that some fixes only produce their values on certain
 timesteps, which must be compatible with when fix controller
 references the values, or else an error results.  If no bracketed integer
@@ -194,11 +188,10 @@ variable.  It must be an internal-style variable, because this fix
 updates its value directly.  Note that other commands can use an
 equal-style versus internal-style variable interchangeably.
 
-
 ----------
 
-
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Currently, no information about this fix is written to :doc:`binary restart files <restart>`.  None of the :doc:`fix_modify <fix_modify>` options
 are relevant to this fix.
@@ -222,11 +215,16 @@ the :doc:`run <run>` command.  This fix is not invoked during :doc:`energy minim
 
 Restrictions
 """"""""""""
- none
+
+This fix is part of the EXTRA-FIX package.  It is only enabled if LAMMPS
+was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
 
 :doc:`fix adapt <fix_adapt>`
 
-**Default:** none
+Default
+"""""""
+
+none

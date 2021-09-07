@@ -1,14 +1,13 @@
 .. index:: pair_style adp
+.. index:: pair_style adp/omp
 
 pair_style adp command
 ======================
 
-pair_style adp/omp command
-==========================
+Accelerator Variants: *adp/omp*
 
 Syntax
 """"""
-
 
 .. code-block:: LAMMPS
 
@@ -16,7 +15,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -39,7 +37,6 @@ which is a generalization of the :doc:`embedded atom method (EAM) potential <pai
    \lambda_i^{st} & = \sum_{j\neq i}w_{\alpha\beta}(r_{ij})r_{ij}^sr_{ij}^t\\
    \nu_i          & = \sum_s\lambda_i^{ss}
 
-
 where :math:`F` is the embedding energy which is a function of the atomic
 electron density :math:`\rho`, :math:`\phi` is a pair potential interaction,
 :math:`\alpha` and :math:`\beta` are the element types of atoms :math:`I` and
@@ -49,7 +46,7 @@ and quadruple distortions of the local atomic environment which extend the
 original EAM framework by introducing angular forces.
 
 Note that unlike for other potentials, cutoffs for ADP potentials are
-not set in the pair\_style or pair\_coeff command; they are specified in
+not set in the pair_style or pair_coeff command; they are specified in
 the ADP potential files themselves.  Likewise, the ADP potential files
 list atomic masses; thus you do not need to use the :doc:`mass <mass>`
 command to specify them.
@@ -59,37 +56,37 @@ command to specify them.
 * The NIST WWW site at http://www.ctcms.nist.gov/potentials.
   Note that ADP potentials obtained from NIST must be converted
   into the extended DYNAMO *setfl* format discussed below.
-* The OpenKIM Project at https://openkim.org/browse/models/by-type provides
-  ADP potentials that can be used directly in LAMMPS with the :doc:`kim_commands interface <kim_commands>`.
+* The OpenKIM Project at
+  `https://openkim.org/browse/models/by-type <https://openkim.org/browse/models/by-type>`_
+  provides ADP potentials that can be used directly in LAMMPS with the
+  :doc:`kim command <kim_commands>` interface.
 
 ----------
 
-
-Only a single pair\_coeff command is used with the *adp* style which
+Only a single pair_coeff command is used with the *adp* style which
 specifies an extended DYNAMO *setfl* file, which contains information
 for :math:`M` elements.  These are mapped to LAMMPS atom types by specifying :math:`N`
-additional arguments after the filename in the pair\_coeff command,
+additional arguments after the filename in the pair_coeff command,
 where :math:`N` is the number of LAMMPS atom types:
 
 * filename
 * :math:`N` element names = mapping of extended *setfl* elements to atom types
 
-See the :doc:`pair_coeff <pair_coeff>` doc page for alternate ways to
+See the :doc:`pair_coeff <pair_coeff>` page for alternate ways to
 specify the path for the potential file.
 
 As an example, the potentials/AlCu.adp file, included in the
 potentials directory of the LAMMPS distribution, is an extended *setfl*
 file which has tabulated ADP values for w elements and their alloy
 interactions: Cu and Al.  If your LAMMPS simulation has 4 atoms types
-and you want the 1st 3 to be Al, and the 4th to be Cu, you would use
-the following pair\_coeff command:
-
+and you want the first 3 to be Al, and the fourth to be Cu, you would use
+the following pair_coeff command:
 
 .. code-block:: LAMMPS
 
    pair_coeff * * AlCu.adp Al Al Al Cu
 
-The 1st 2 arguments must be \* \* so as to span all LAMMPS atom types.
+The first 2 arguments must be \* \* so as to span all LAMMPS atom types.
 The first three Al arguments map LAMMPS atom types 1,2,3 to the Al
 element in the extended *setfl* file.  The final Cu argument maps
 LAMMPS atom type 4 to the Al element in the extended *setfl* file.
@@ -110,13 +107,13 @@ command for further details on the *setfl* format.
 
 * lines 1,2,3 = comments (ignored)
 * line 4: :math:`N_{\text{elements}}` Element1 Element2 ... ElementN
-* line 5: :math:`N_\rho`, :math:`d_\rho`, :math:`N_r`, :math:`d_r`, cutoff
+* line 5: :math:`N_{\rho}`, :math:`d_{\rho}`, :math:`N_r`, :math:`d_r`, cutoff
 
 Following the 5 header lines are :math:`N_{\text{elements}}` sections, one for each
 element, each with the following format:
 
 * line 1 = atomic number, mass, lattice constant, lattice type (e.g. FCC)
-* embedding function :math:`F(\rho)` (:math:`N_\rho` values)
+* embedding function :math:`F(\rho)` (:math:`N_{\rho}` values)
 * density function :math:`\rho(r)` (:math:`N_r` values)
 
 Following the :math:`N_{\text{elements}}` sections, :math:`N_r` values for each pair potential
@@ -137,33 +134,14 @@ same order with the same assumptions of symmetry.  Directly following
 the :math:`u(r)`, the :math:`w(r)` arrays are listed.  Note that :math:`\phi(r)` is the only
 array tabulated with a scaling by :math:`r`.
 
+----------
+
+.. include:: accel_styles.rst
 
 ----------
 
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
-
-----------
-
-
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 For atom type pairs I,J and I != J, where types I and J correspond to
 two different element types, no special mixing rules are needed, since
@@ -173,20 +151,17 @@ This pair style does not support the :doc:`pair_modify <pair_modify>`
 shift, table, and tail options.
 
 This pair style does not write its information to :doc:`binary restart files <restart>`, since it is stored in tabulated potential files.
-Thus, you need to re-specify the pair\_style and pair\_coeff commands in
+Thus, you need to re-specify the pair_style and pair_coeff commands in
 an input script that reads a restart file.
 
 This pair style can only be used via the *pair* keyword of the
 :doc:`run_style respa <run_style>` command.  It does not support the
-*inner*\ , *middle*\ , *outer* keywords.
-
+*inner*, *middle*, *outer* keywords.
 
 ----------
 
-
 Restrictions
 """"""""""""
-
 
 This pair style is part of the MANYBODY package.  It is only enabled
 if LAMMPS was built with that package.
@@ -196,21 +171,18 @@ Related commands
 
 :doc:`pair_coeff <pair_coeff>`, :doc:`pair_eam <pair_eam>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Mishin:
-
-
 
 **(Mishin)** Mishin, Mehl, and Papaconstantopoulos, Acta Mater, 53, 4029
 (2005).
 
 .. _Singh:
-
-
 
 **(Singh)** Singh and Warner, Acta Mater, 58, 5797-5805 (2010),

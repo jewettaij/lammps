@@ -6,7 +6,6 @@ compute hexorder/atom command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID hexorder/atom keyword values ...
@@ -14,21 +13,18 @@ Syntax
 * ID, group-ID are documented in :doc:`compute <compute>` command
 * hexorder/atom = style name of this compute command
 * one or more keyword/value pairs may be appended
-  
+
   .. parsed-literal::
-  
+
      keyword = *degree* or *nnn* or *cutoff*
        *cutoff* value = distance cutoff
        *nnn* value = number of nearest neighbors
        *degree* value = degree *n* of order parameter
 
-
-
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute 1 all hexorder/atom
    compute 1 all hexorder/atom degree 4 nnn 4 cutoff 1.2
@@ -46,14 +42,13 @@ is a complex number (stored as two real numbers) defined as follows:
 
    q_n = \frac{1}{nnn}\sum_{j = 1}^{nnn} e^{n i \theta({\bf r}_{ij})}
 
-
 where the sum is over the *nnn* nearest neighbors
 of the central atom. The angle :math:`\theta`
 is formed by the bond vector :math:`r_{ij}` and the *x* axis.
 :math:`\theta` is calculated only using the *x* and *y* components,
 whereas the distance from the
 central atom is calculated using all three
-*x*\ , *y*\ , and *z* components of the bond vector.
+*x*, *y*, and *z* components of the bond vector.
 Neighbor atoms not in the group
 are included in the order parameter of atoms in the group.
 
@@ -102,7 +97,8 @@ too frequently.
    :doc:`special_bonds <special_bonds>` command that includes all pairs in
    the neighbor list.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a per-atom array with 2 columns, giving the
 real and imaginary parts :math:`q_n`, a complex number restricted to the
@@ -114,7 +110,9 @@ page for an overview of LAMMPS output options.
 
 Restrictions
 """"""""""""
- none
+
+This compute is part of the EXTRA-COMPUTE package.  It is only enabled if
+LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
@@ -126,12 +124,8 @@ Default
 
 The option defaults are *cutoff* = pair style cutoff, *nnn* = 6, *degree* = 6
 
-
 ----------
 
-
 .. _Nelson:
-
-
 
 **(Nelson)** Nelson, Halperin, Phys Rev B, 19, 2457 (1979).

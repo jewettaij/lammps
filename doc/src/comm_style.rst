@@ -6,7 +6,6 @@ comm_style command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    comm_style style
@@ -15,7 +14,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -57,9 +55,7 @@ commands.  The decomposition can be changed via the
 Restrictions
 """"""""""""
 
-
-Communication style *tiled* cannot be used with *triclinic* simulation
-cells.
+None
 
 Related commands
 """"""""""""""""

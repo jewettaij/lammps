@@ -1,59 +1,43 @@
 .. index:: pair_style buck
+.. index:: pair_style buck/gpu
+.. index:: pair_style buck/intel
+.. index:: pair_style buck/kk
+.. index:: pair_style buck/omp
+.. index:: pair_style buck/coul/cut
+.. index:: pair_style buck/coul/cut/gpu
+.. index:: pair_style buck/coul/cut/intel
+.. index:: pair_style buck/coul/cut/kk
+.. index:: pair_style buck/coul/cut/omp
+.. index:: pair_style buck/coul/long
+.. index:: pair_style buck/coul/long/gpu
+.. index:: pair_style buck/coul/long/intel
+.. index:: pair_style buck/coul/long/kk
+.. index:: pair_style buck/coul/long/omp
+.. index:: pair_style buck/coul/msm
+.. index:: pair_style buck/coul/msm/omp
 
 pair_style buck command
-========================
+=======================
 
-pair_style buck/gpu command
-============================
-
-pair_style buck/intel command
-==============================
-
-pair_style buck/kk command
-===========================
-
-pair_style buck/omp command
-============================
+Accelerator Variants: *buck/gpu*, *buck/intel*, *buck/kk*, *buck/omp*
 
 pair_style buck/coul/cut command
-=================================
+================================
 
-pair_style buck/coul/cut/gpu command
-=====================================
-
-pair_style buck/coul/cut/intel command
-=======================================
-
-pair_style buck/coul/cut/kk command
-====================================
-
-pair_style buck/coul/cut/omp command
-=====================================
+Accelerator Variants: *buck/coul/cut/gpu*, *buck/coul/cut/intel*, *buck/coul/cut/kk*, *buck/coul/cut/omp*
 
 pair_style buck/coul/long command
-==================================
-
-pair_style buck/coul/long/gpu command
-======================================
-
-pair_style buck/coul/long/intel command
-========================================
-
-pair_style buck/coul/long/kk command
-=====================================
-
-pair_style buck/coul/long/omp command
-======================================
-
-pair_style buck/coul/msm command
 =================================
 
-pair_style buck/coul/msm/omp command
-=====================================
+Accelerator Variants: *buck/coul/long/gpu*, *buck/coul/long/intel*, *buck/coul/long/kk*, *buck/coul/long/omp*
+
+pair_style buck/coul/msm command
+================================
+
+Accelerator Variants: *buck/coul/msm/omp*
 
 Syntax
 """"""
-
 
 .. code-block:: LAMMPS
 
@@ -61,7 +45,6 @@ Syntax
 
 * style = *buck* or *buck/coul/cut* or *buck/coul/long* or *buck/coul/msm*
 * args = list of arguments for a particular style
-
 
 .. parsed-literal::
 
@@ -79,7 +62,6 @@ Syntax
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -113,13 +95,12 @@ Lennard-Jones 12/6) given by
 
    E = A e^{-r / \rho} - \frac{C}{r^6} \qquad r < r_c
 
-
 where :math:`\rho` is an ionic-pair dependent length parameter, and
 :math:`r_c` is the cutoff on both terms.
 
 The styles with *coul/cut* or *coul/long* or *coul/msm* add a
 Coulombic term as described for the :doc:`lj/cut <pair_lj>` pair styles.
-For *buck/coul/long* and *buc/coul/msm*\ , an additional damping factor
+For *buck/coul/long* and *buc/coul/msm*, an additional damping factor
 is applied to the Coulombic term so it can be used in conjunction with
 the :doc:`kspace_style <kspace_style>` command and its *ewald* or *pppm*
 or *msm* option.  The Coulombic cutoff specified for this style means
@@ -155,7 +136,7 @@ commands:
 * cutoff2 (distance units)
 
 The second coefficient, :math:`\rho`, must be greater than zero.
-The coefficients A,:math:`\rho`, and C can be written as analytical expressions
+The coefficients A, :math:`\rho`, and C can be written as analytical expressions
 of :math:`\epsilon` and :math:`\sigma`, in analogy to the Lennard-Jones potential
 :ref:`(Khrapak) <Khrapak>`.
 
@@ -164,39 +145,20 @@ A,C and Coulombic cutoffs are used.  If only one cutoff is specified,
 it is used as the cutoff for both A,C and Coulombic interactions for
 this type pair.  If both coefficients are specified, they are used as
 the A,C and Coulombic cutoffs for this type pair.  You cannot specify
-2 cutoffs for style *buck*\ , since it has no Coulombic terms.
+2 cutoffs for style *buck*, since it has no Coulombic terms.
 For *buck/coul/long* only the LJ cutoff can be specified since a
 Coulombic cutoff cannot be specified for an individual I,J type pair.
 All type pairs use the same global Coulombic cutoff specified in the
-pair\_style command.
-
-
-----------
-
-
-Styles with a *gpu*\ , *intel*\ , *kk*\ , *omp*\ , or *opt* suffix are
-functionally the same as the corresponding style without the suffix.
-They have been optimized to run faster, depending on your available
-hardware, as discussed on the :doc:`Speed packages <Speed_packages>` doc
-page.  The accelerated styles take the same arguments and should
-produce the same results, except for round-off and precision issues.
-
-These accelerated styles are part of the GPU, USER-INTEL, KOKKOS,
-USER-OMP and OPT packages, respectively.  They are only enabled if
-LAMMPS was built with those packages.  See the :doc:`Build package <Build_package>` doc page for more info.
-
-You can specify the accelerated styles explicitly in your input script
-by including their suffix, or you can use the :doc:`-suffix command-line switch <Run_options>` when you invoke LAMMPS, or you can use the
-:doc:`suffix <suffix>` command in your input script.
-
-See the :doc:`Speed packages <Speed_packages>` doc page for more
-instructions on how to use the accelerated styles effectively.
-
+pair_style command.
 
 ----------
 
+.. include:: accel_styles.rst
 
-**Mixing, shift, table, tail correction, restart, rRESPA info**\ :
+----------
+
+Mixing, shift, table, tail correction, restart, rRESPA info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 These pair styles do not support mixing.  Thus, coefficients for all
 I,J pairs must be specified explicitly.
@@ -208,32 +170,32 @@ The *buck/coul/long* pair style supports the
 :doc:`pair_modify <pair_modify>` table option to tabulate the
 short-range portion of the long-range Coulombic interaction.
 
-These styles support the pair\_modify tail option for adding long-range
+These styles support the pair_modify tail option for adding long-range
 tail corrections to energy and pressure for the A,C terms in the
 pair interaction.
 
-These styles write their information to :doc:`binary restart files <restart>`, so pair\_style and pair\_coeff commands do not need
+These styles write their information to :doc:`binary restart files <restart>`, so pair_style and pair_coeff commands do not need
 to be specified in an input script that reads a restart file.
 
-These styles can only be used via the *pair* keyword of the :doc:`run_style respa <run_style>` command.  They do not support the *inner*\ ,
-*middle*\ , *outer* keywords.
+These styles can only be used via the *pair* keyword of the :doc:`run_style respa <run_style>` command.  They do not support the *inner*,
+*middle*, *outer* keywords.
 
 Restrictions
 """"""""""""
 
-
 The *buck/coul/long* style is part of the KSPACE package.  They are
-only enabled if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` doc page for more info.
+only enabled if LAMMPS was built with that package.  See the :doc:`Build package <Build_package>` page for more info.
 
 Related commands
 """"""""""""""""
 
 :doc:`pair_coeff <pair_coeff>`, :doc:`pair_style born <pair_born>`
 
-**Default:** none
+Default
+"""""""
+
+none
 
 .. _Khrapak:
-
-
 
 **(Khrapak)** Khrapak, Chaudhuri, and Morfill, J Chem Phys, 134, 054120 (2011).

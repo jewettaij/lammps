@@ -1,4 +1,5 @@
 .. index:: fix drude/transform/direct
+.. index:: fix drude/transform/inverse
 
 fix drude/transform/direct command
 ==================================
@@ -8,7 +9,6 @@ fix drude/transform/inverse command
 
 Syntax
 """"""
-
 
 .. parsed-literal::
 
@@ -20,11 +20,12 @@ Syntax
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix 3 all drude/transform/direct
    fix 1 all drude/transform/inverse
+
+Example input scripts available: examples/PACKAGES/drude
 
 Description
 """""""""""
@@ -54,12 +55,11 @@ Masses:
 
 .. math::
 
-    M' = M + m 
-
+    M' = M + m
 
 .. math::
 
-    m' = \frac {M\, m } {M'} 
+    m' = \frac {M\, m } {M'}
 
 Positions:
 
@@ -67,10 +67,9 @@ Positions:
 
     X' = \frac {M\, X + m\, x} {M'}
 
-
 .. math::
 
-    x' = x - X 
+    x' = x - X
 
 Velocities:
 
@@ -78,17 +77,15 @@ Velocities:
 
     V' = \frac {M\, V + m\, v} {M'}
 
-
 .. math::
 
-    v' = v - V 
+    v' = v - V
 
 Forces:
 
 .. math::
 
-    F' = F + f 
-
+    F' = F + f
 
 .. math::
 
@@ -99,17 +96,15 @@ This transform conserves the total kinetic energy
 .. math::
 
     \frac 1 2 \, (M\, V^2\ + m\, v^2)
-   = \frac 1 2 \, (M'\, V'^2\ + m'\, v'^2) 
+   = \frac 1 2 \, (M'\, V'^2\ + m'\, v'^2)
 
 and the virial defined with absolute positions
 
 .. math::
 
-    X\, F + x\, f = X'\, F' + x'\, f' 
-
+    X\, F + x\, f = X'\, F' + x'\, f'
 
 ----------
-
 
 This fix requires each atom know whether it is a Drude particle or
 not.  You must therefore use the :doc:`fix drude <fix_drude>` command to
@@ -123,9 +118,7 @@ specify the Drude status of each atom type.
    electrons or non-polarizable atoms in the group. The non-polarizable
    atoms will simply not be transformed.
 
-
 ----------
-
 
 This fix does NOT perform time integration. It only transform masses,
 coordinates, velocities and forces. Thus you must use separate time
@@ -142,8 +135,7 @@ acting on two distinct groups.
 
 Example:
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix fDIRECT all drude/transform/direct
    fix fNVT gCORES nvt temp 300.0 300.0 100
@@ -160,16 +152,15 @@ temperatures of cores and Drude particles, in center-of-mass and
 relative coordinates, are calculated using :doc:`compute temp/drude <compute_temp_drude>`
 
 In addition, if you want to use a barostat to simulate a system at
-constant pressure, only one of the Nose-Hoover fixes must be *npt*\ ,
+constant pressure, only one of the Nose-Hoover fixes must be *npt*,
 the other one should be *nvt*\ . You must add a *compute temp/com* and a
-*fix\_modify* command so that the temperature of the *npt* fix be just
+*fix_modify* command so that the temperature of the *npt* fix be just
 that of its group (the Drude cores) but the pressure be the overall
-pressure *thermo\_press*.
+pressure *thermo_press*.
 
 Example:
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute cTEMP_CORE gCORES temp/com
    fix fDIRECT all drude/transform/direct
@@ -188,16 +179,14 @@ In order to avoid the flying ice cube problem (irreversible transfer
 of linear momentum to the center of mass of the system), you may need
 to add a *fix momentum* command:
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    fix fMOMENTUM all momentum 100 linear 1 1 1
 
-
 ----------
 
-
-**Restart, fix\_modify, output, run start/stop, minimize info:**
+Restart, fix_modify, output, run start/stop, minimize info
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 No information about this fix is written to :doc:`binary restart files <restart>`.
 
@@ -213,14 +202,13 @@ Related commands
 :doc:`compute temp/drude <compute_temp_drude>`,
 :doc:`pair_style thole <pair_thole>`
 
-**Default:** none
+Default
+"""""""
 
+none
 
 ----------
 
-
 .. _Lamoureux1:
-
-
 
 **(Lamoureux)** Lamoureux and Roux, J Chem Phys, 119, 3025-3039 (2003).

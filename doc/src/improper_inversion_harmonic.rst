@@ -6,14 +6,12 @@ improper_style inversion/harmonic command
 Syntax
 """"""
 
-
 .. code-block:: LAMMPS
 
    improper_style inversion/harmonic
 
 Examples
 """"""""
-
 
 .. code-block:: LAMMPS
 
@@ -29,7 +27,6 @@ out-of-plane angle definition and uses an harmonic potential:
 .. math::
 
    E = K \left(\omega - \omega_0\right)^2
-
 
 where :math:`K` is the force constant and :math:`\omega` is the angle
 evaluated for all three axis-plane combinations centered around the atom I.
@@ -55,16 +52,13 @@ If :math:`\omega_0 = 0` the potential term has a single minimum for
 the planar structure.  Otherwise it has two minima at +/- :math:`\omega_0`,
 with a barrier in between.
 
-
 ----------
-
 
 Restrictions
 """"""""""""
 
-
 This improper style can only be used if LAMMPS was built with the
-USER-MOFFF package.  See the :doc:`Build package <Build_package>` doc
+MOFFF package.  See the :doc:`Build package <Build_package>` doc
 page for more info.
 
 Related commands
@@ -72,4 +66,7 @@ Related commands
 
 :doc:`improper_coeff <improper_coeff>`
 
-**Default:** none
+Default
+"""""""
+
+none

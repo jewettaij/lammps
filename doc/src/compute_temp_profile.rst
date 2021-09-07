@@ -6,7 +6,6 @@ compute temp/profile command
 Syntax
 """"""
 
-
 .. parsed-literal::
 
    compute ID group-ID temp/profile xflag yflag zflag binstyle args
@@ -15,9 +14,9 @@ Syntax
 * temp/profile = style name of this compute command
 * xflag,yflag,zflag = 0/1 for whether to exclude/include this dimension
 * binstyle = *x* or *y* or *z* or *xy* or *yz* or *xz* or *xyz*
-  
+
   .. parsed-literal::
-  
+
        *x* arg = Nx
        *y* arg = Ny
        *z* arg = Nz
@@ -29,18 +28,15 @@ Syntax
 
 * zero or more keyword/value pairs may be appended
 * keyword = *out*
-  
+
   .. parsed-literal::
-  
+
        *out* value = *tensor* or *bin*
-
-
 
 Examples
 """"""""
 
-
-.. parsed-literal::
+.. code-block:: LAMMPS
 
    compute myTemp flow temp/profile 1 1 1 x 10
    compute myTemp flow temp/profile 1 1 1 x 10 out bin
@@ -58,14 +54,14 @@ flow, e.g. via a profile-unbiased thermostat (PUT) as described in
 that computes a temperature, e.g. :doc:`thermo_modify <thermo_modify>`,
 :doc:`fix temp/rescale <fix_temp_rescale>`, :doc:`fix npt <fix_nh>`, etc.
 
-The *xflag*\ , *yflag*\ , *zflag* settings determine which components of
+The *xflag*, *yflag*, *zflag* settings determine which components of
 average velocity are subtracted out.
 
-The *binstyle* setting and its *Nx*\ , *Ny*\ , *Nz* arguments determine
+The *binstyle* setting and its *Nx*, *Ny*, *Nz* arguments determine
 how bins are setup to perform spatial averaging.  "Bins" can be 1d
 slabs, 2d pencils, or 3d bricks depending on which *binstyle* is used.
 The simulation box is partitioned conceptually into *Nx* by *Ny* by
-*Nz* bins.  Depending on the *binstyle*\ , you may only specify one or
+*Nz* bins.  Depending on the *binstyle*, you may only specify one or
 two of these values; the others are effectively set to 1 (no binning
 in that dimension).  For non-orthogonal (triclinic) simulation boxes,
 the bins are "tilted" slabs or pencils or bricks that are parallel to
@@ -126,23 +122,24 @@ needed, the subtracted degrees-of-freedom can be altered using the
 
 .. note::
 
-   When using the *out* keyword with a value of *bin*\ , the
+   When using the *out* keyword with a value of *bin*, the
    calculated temperature for each bin does not include the
    degrees-of-freedom adjustment described in the preceding paragraph,
    for fixes that constrain molecular motion.  It does include the
    adjustment due to the *extra* option, which is applied to each bin.
 
-See the :doc:`Howto thermostat <Howto_thermostat>` doc page for a
+See the :doc:`Howto thermostat <Howto_thermostat>` page for a
 discussion of different ways to compute temperature and perform
 thermostatting.  Using this compute in conjunction with a
 thermostatting fix, as explained there, will effectively implement a
 profile-unbiased thermostat (PUT), as described in :ref:`(Evans) <Evans1>`.
 
-**Output info:**
+Output info
+"""""""""""
 
 This compute calculates a global scalar (the temperature).  Depending
 on the setting of the *out* keyword, it also calculates a global
-vector or array.  For *out* = *tensor*\ , it calculates a vector of
+vector or array.  For *out* = *tensor*, it calculates a vector of
 length 6 (KE tensor), which can be accessed by indices 1-6.  For *out*
 = *bin* it calculates a global array which has 2 columns and N rows,
 where N is the number of bins.  The first column contains the number
@@ -155,7 +152,7 @@ indices ix,iy,iz = 2,3,4 would map to row M = (iz-1)\*10\*10 + (iy-1)\*10
 indices are numbered from 1 to 10 in each dimension.
 
 These values can be used by any command that uses global scalar or
-vector or array values from a compute as input.  See the :doc:`Howto output <Howto_output>` doc page for an overview of LAMMPS output
+vector or array values from a compute as input.  See the :doc:`Howto output <Howto_output>` page for an overview of LAMMPS output
 options.
 
 The scalar value calculated by this compute is "intensive".  The
@@ -168,7 +165,6 @@ temperature :doc:`units <units>`.
 
 Restrictions
 """"""""""""
-
 
 You should not use too large a velocity-binning grid, especially in
 3d.  In the current implementation, the binned velocity averages are
@@ -186,12 +182,8 @@ Default
 
 The option default is out = tensor.
 
-
 ----------
 
-
 .. _Evans1:
-
-
 
 **(Evans)** Evans and Morriss, Phys Rev Lett, 56, 2172-2175 (1986).
