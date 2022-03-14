@@ -952,7 +952,7 @@ void FixBondModify::post_integrate()
 
   // reverse comm of partner info
 
-  if (force->newton_bond) comm->reverse_comm_fix(this);
+  if (force->newton_bond) comm->reverse_comm(this);
 
   // each atom now knows its winning partner
   // for prob check, generate random value for each atom with a bond partner
@@ -964,8 +964,8 @@ void FixBondModify::post_integrate()
   }
 
   commflag = 1;
-  //comm->forward_comm_fix(this,2);
-  comm->forward_comm_fix(this,4);
+  //comm->forward_comm(this,2);
+  comm->forward_comm(this,4);
 
   // break bonds
   // if both atoms list each other as winning bond partner
@@ -1030,7 +1030,7 @@ void FixBondModify::post_integrate()
     //  if (modify->n_pre_neighbor) modify->pre_neighbor();
     //  neighbor->build();
     //} else {
-    comm->forward_comm_fix(this);  //<---????
+    comm->forward_comm(this);  //<---????
     //}
 
   } //if (check_individual_atoms) {
@@ -1142,7 +1142,7 @@ void FixBondModify::post_integrate()
       //  if (modify->n_pre_neighbor) modify->pre_neighbor();
       //  neighbor->build();
       //} else {
-      comm->forward_comm_fix(this);  // <---- ????
+      comm->forward_comm(this);  // <---- ????
       //}
 
       
@@ -1232,7 +1232,7 @@ void FixBondModify::post_integrate()
   // 1-2 neighs already reflect broken bonds
 
   commflag = 2;
-  comm->forward_comm_fix(this);
+  comm->forward_comm(this);
 
   // create list of broken bonds that influence my owned atoms
   //   even if between owned-ghost or ghost-ghost atoms
